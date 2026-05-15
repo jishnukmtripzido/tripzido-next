@@ -1,12 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
 
 /* ── Brand theme (Tailwind v4 config lives here, not in tailwind.config.ts) ── */
 @theme {
   --color-brand-yellow: #ffc107;
-
-  --font-family-sans: "Inter", sans-serif;
-  --font-family-heading: "Nunito", "Inter", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "Nunito", "Inter", sans-serif;
 }
 
 /* ── Carousel: hide scrollbar cross-browser ── */

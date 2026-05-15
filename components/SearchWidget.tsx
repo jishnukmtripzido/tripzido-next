@@ -79,7 +79,7 @@ export default function SearchWidget() {
         <div className="bg-white rounded-xl shadow-xl p-4 border border-gray-400">
           <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
             {/* ── City ── */}
-            <div className="relative w-full md:flex-1 min-w-0">
+            <div className="relative w-full md:flex-1 min-w-0 ">
               <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
                 Select City
               </label>
@@ -215,7 +215,7 @@ export default function SearchWidget() {
             {/* Search */}
             <div className="shrink-0 w-full md:w-auto">
               <Link href="/search">
-                <button className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-2 px-5 rounded-lg transition-colors whitespace-nowrap">
+                <button className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-2 px-5 rounded-lg transition-colors whitespace-nowrap hover:cursor-pointer">
                   Search
                 </button>
               </Link>
@@ -272,7 +272,7 @@ function TriggerButton({
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center justify-between border border-gray-300 rounded-lg p-2 bg-white hover:border-[#ffc107] transition-colors text-left"
+      className="w-full flex items-center justify-between border border-gray-300 rounded-lg p-2 bg-white hover:border-[#ffc107] hover:cursor-pointer transition-colors text-left"
     >
       <div className="flex items-center min-w-0 flex-1">{children}</div>
       <svg

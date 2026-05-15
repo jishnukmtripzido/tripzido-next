@@ -1,8 +1,10 @@
+import { ReactElement } from "react";
+
 interface Step {
   step: number;
   title: string;
   description: string;
-  icon: JSX.Element;
+  icon: ReactElement;
   active?: boolean;
 }
 
@@ -15,8 +17,18 @@ const STEPS: Step[] = [
     active: true,
     icon: (
       <>
-        <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-        <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <path
+          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
+        <path
+          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
       </>
     ),
   },
@@ -26,7 +38,12 @@ const STEPS: Step[] = [
     description:
       "Select your package and choose from the available payment options. Instant confirmation, no waiting.",
     icon: (
-      <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      <path
+        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
     ),
   },
   {
@@ -36,8 +53,18 @@ const STEPS: Step[] = [
       "Receive ride details via SMS & email. Reach the pick-up point on time, pay the security deposit (if applicable), and enjoy every moment.",
     icon: (
       <>
-        <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-        <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <path
+          d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
+        <path
+          d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
       </>
     ),
   },
@@ -47,7 +74,12 @@ const STEPS: Step[] = [
     description:
       "Drop the vehicle at the pick-up point. Security deposit is refunded after checking for damages and challans, if any.",
     icon: (
-      <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      <path
+        d="M5 13l4 4L19 7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
     ),
   },
 ];
@@ -56,8 +88,12 @@ export default function HowItWorks() {
   return (
     <section className="pt-12 px-4 lg:px-8 mx-auto xl:mx-[121.5px] xl:px-0">
       <div className="mb-10">
-        <h2 className="text-2xl font-extrabold text-gray-900">How it works</h2>
-        <p className="text-sm text-gray-700 mt-1">Rent a bike in 4 simple steps — no hassle, no hidden surprises</p>
+        <h2 className="text-[1.37rem] md:text-2xl font-extrabold text-gray-900">
+          How it works
+        </h2>
+        <p className="text-sm text-gray-700 mt-1">
+          Rent a bike in 4 simple steps — no hassle, no hidden surprises
+        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 relative">
@@ -68,7 +104,9 @@ export default function HowItWorks() {
           <div
             key={s.step}
             className={`relative flex flex-col items-start px-6 pb-8 lg:pb-0 group ${
-              i > 0 ? "border-t border-gray-100 lg:border-t-0 lg:border-l lg:border-gray-100" : ""
+              i > 0
+                ? "border-t border-gray-100 lg:border-t-0 lg:border-l lg:border-gray-100"
+                : ""
             }`}
           >
             {/* Icon circle */}
@@ -81,7 +119,9 @@ export default function HowItWorks() {
             >
               <svg
                 className={`w-6 h-6 transition-colors duration-200 ${
-                  s.active ? "text-white" : "text-gray-500 group-hover:text-[#ffc107]"
+                  s.active
+                    ? "text-white"
+                    : "text-gray-500 group-hover:text-[#ffc107]"
                 }`}
                 fill="none"
                 stroke="currentColor"
@@ -101,8 +141,12 @@ export default function HowItWorks() {
               </span>
             </div>
 
-            <h3 className="font-extrabold text-gray-900 text-[15px] mb-2">{s.title}</h3>
-            <p className="text-sm text-gray-700 leading-relaxed">{s.description}</p>
+            <h3 className="font-extrabold text-gray-900 text-[15px] mb-2">
+              {s.title}
+            </h3>
+            <p className="text-sm text-gray-700 leading-relaxed">
+              {s.description}
+            </p>
           </div>
         ))}
       </div>
