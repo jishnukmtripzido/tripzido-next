@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import CityPickerModal from "@/components/CityPickerModal";
-import DatePickerModal, { DateRange } from "@/components/DatePickerModal";
-import TimePickerModal from "@/components/TimePickerModal";
+import CityPickerModal from "@/components/search/CityPickerModal";
+import DatePickerModal, { DateRange } from "@/components/search/DatePickerModal";
+import TimePickerModal from "@/components/search/TimePickerModal";
 
 /* ── Default dates: today + 2hrs, tomorrow + 2hrs ── */
 function getDefaults() {
@@ -214,7 +214,7 @@ export default function SearchWidget() {
 
             {/* Search */}
             <div className="shrink-0 w-full md:w-auto">
-              <Link href="/search">
+              <Link href="/searchresult">
                 <button className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-2 px-5 rounded-lg transition-colors whitespace-nowrap hover:cursor-pointer">
                   Search
                 </button>
