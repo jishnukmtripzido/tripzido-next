@@ -152,7 +152,7 @@ export default function CityPickerModal({
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const filtered = CITIES.filter((c) =>
-    c.name.toLowerCase().includes(query.toLowerCase()),
+    c.name.toLowerCase().includes(query.toLowerCase())
   );
 
   /* Auto-focus search on open */
@@ -181,7 +181,7 @@ export default function CityPickerModal({
     (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     },
-    [onClose],
+    [onClose]
   );
   useEffect(() => {
     window.addEventListener("keydown", handleKey);
@@ -327,7 +327,7 @@ export default function CityPickerModal({
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-15">
               {filtered.map((city) => {
                 const isSelected = selectedCity === city.name;
                 const isHighlighted = highlighted === city.name;
@@ -340,7 +340,7 @@ export default function CityPickerModal({
                     className={`
                       relative rounded-xl overflow-hidden aspect-[4/3] text-left
                       focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffc107]
-                      transition-transform duration-150
+                      transition-transform duration-150 cursor-pointer
                       ${isHighlighted ? "scale-[1.03]" : "scale-100"}
                     `}
                     aria-pressed={isSelected}
@@ -349,11 +349,14 @@ export default function CityPickerModal({
                     <img
                       src={city.imageUrl}
                       alt={city.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover "
                       loading="lazy"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                          `https://placehold.co/400x300/f3f4f6/9ca3af?text=${encodeURIComponent(city.name)}`;
+                        (
+                          e.target as HTMLImageElement
+                        ).src = `https://placehold.co/400x300/f3f4f6/9ca3af?text=${encodeURIComponent(
+                          city.name
+                        )}`;
                       }}
                     />
 
@@ -400,7 +403,7 @@ export default function CityPickerModal({
           {selectedCity ? (
             <button
               onClick={onClose}
-              className="w-full bg-[#ffc107] hover:bg-yellow-500 active:bg-yellow-600 text-black font-semibold py-3 rounded-xl transition-colors text-sm"
+              className="w-full cursor-pointer bg-[#ffc107] hover:bg-yellow-500 active:bg-yellow-600 text-black font-semibold py-3 rounded-xl transition-colors text-sm"
             >
               Continue with {selectedCity}
             </button>
