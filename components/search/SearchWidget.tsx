@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import CityPickerModal from "@/components/search/CityPickerModal";
 import DatePickerModal, { DateRange } from "@/components/search/DatePickerModal";
 import TimePickerModal from "@/components/search/TimePickerModal";
+import { City } from "@/types/city"; // ← shared type (see below)
 
 /* ── Default dates: today + 2hrs, tomorrow + 2hrs ── */
 function getDefaults() {
   const now = new Date();
   const pickup = new Date(now);
-  pickup.setHours(now.getHours() + 2, 0, 0, 0); // round to top of hour + 2hrs
+  pickup.setHours(now.getHours() + 2, 0, 0, 0);
 
   const dropoff = new Date(pickup);
   dropoff.setDate(dropoff.getDate() + 1);
@@ -22,18 +23,8 @@ function getDefaults() {
 function formatDate(d: Date) {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ];
   return `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()}`;
 }
@@ -47,11 +38,24 @@ function formatTime(h: number, m: number) {
 /* ── Modal types ── */
 type ModalType = "city" | "date" | "pickup-time" | "dropoff-time" | null;
 
+/* ── Selected city shape (id + name for form submission) ── */
+export interface SelectedCity {
+  id: number;
+  name: string;
+}
+
 export default function SearchWidget() {
   const defaults = getDefaults();
 
   const [openModal, setOpenModal] = useState<ModalType>(null);
-  const [selectedCity, setSelectedCity] = useState("Wayanad");
+
+  /* City state */
+  const [cities, setCities] = useState<City[]>([]);
+  const [citiesLoading, setCitiesLoading] = useState(true);
+  const [citiesError, setCitiesError] = useState<string | null>(null);
+  const [selectedCity, setSelectedCity] = useState<SelectedCity | null>(null);
+
+  /* Date / time state */
   const [dateRange, setDateRange] = useState<DateRange>({
     start: defaults.pickup,
     end: defaults.dropoff,
@@ -65,12 +69,47 @@ export default function SearchWidget() {
     minute: 0,
   });
 
-  function handleDateSelect(range: DateRange) {
-    setDateRange(range);
-    // If end < start after picking, auto-fix
-    if (range.end < range.start) {
-      setDateRange({ start: range.start, end: range.start });
+  /* ── Fetch cities on mount ── */
+  useEffect(() => {
+    async function fetchCities() {
+      try {
+        setCitiesLoading(true);
+        setCitiesError(null);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/locations/cities/`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        // API shape: { success, data: { results: City[] } }
+        setCities(json.data.results as City[]);
+      } catch (err) {
+        console.error("Failed to load cities:", err);
+        setCitiesError("Could not load cities. Please try again.");
+      } finally {
+        setCitiesLoading(false);
+      }
     }
+    fetchCities();
+  }, []);
+
+  function handleDateSelect(range: DateRange) {
+    setDateRange(
+      range.end < range.start
+        ? { start: range.start, end: range.start }
+        : range
+    );
+  }
+
+  /* ── For use as a form: collect all values here ── */
+  function handleSearch() {
+    const formValues = {
+      city_id: selectedCity?.id ?? null,
+      city_name: selectedCity?.name ?? null,
+      pickup_date: dateRange.start.toISOString(),
+      dropoff_date: dateRange.end.toISOString(),
+      pickup_time: `${pickupTime.hour}:${pickupTime.minute.toString().padStart(2, "0")}`,
+      dropoff_time: `${dropoffTime.hour}:${dropoffTime.minute.toString().padStart(2, "0")}`,
+    };
+    console.log("Search form values:", formValues);
+    // Navigate or submit — wire up as needed
   }
 
   return (
@@ -78,12 +117,16 @@ export default function SearchWidget() {
       <section className="relative z-20 px-4 lg:px-8 -mt-12 mx-auto xl:mx-[121.5px] xl:px-0">
         <div className="bg-white rounded-xl shadow-xl p-4 border border-gray-400">
           <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
+
             {/* ── City ── */}
-            <div className="relative w-full md:flex-1 min-w-0 ">
+            <div className="relative w-full md:flex-1 min-w-0">
               <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
                 Select City
               </label>
-              <TriggerButton onClick={() => setOpenModal("city")}>
+              <TriggerButton
+                onClick={() => setOpenModal("city")}
+                disabled={citiesLoading}
+              >
                 <svg
                   className="w-5 h-5 text-gray-400 mr-2 shrink-0"
                   fill="none"
@@ -104,7 +147,11 @@ export default function SearchWidget() {
                   />
                 </svg>
                 <span className="flex-1 text-sm font-medium text-gray-900 truncate">
-                  {selectedCity}
+                  {citiesLoading
+                    ? "Loading cities…"
+                    : citiesError
+                    ? "Failed to load"
+                    : selectedCity?.name ?? "Select a city"}
                 </span>
               </TriggerButton>
             </div>
@@ -212,10 +259,13 @@ export default function SearchWidget() {
               </div>
             </div>
 
-            {/* Search */}
+            {/* ── Search button ── */}
             <div className="shrink-0 w-full md:w-auto">
               <Link href="/searchresult">
-                <button className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-2 px-5 rounded-lg transition-colors whitespace-nowrap hover:cursor-pointer">
+                <button
+                  onClick={handleSearch}
+                  className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-2 px-5 rounded-lg transition-colors whitespace-nowrap hover:cursor-pointer"
+                >
                   Search
                 </button>
               </Link>
@@ -224,12 +274,15 @@ export default function SearchWidget() {
         </div>
       </section>
 
-      {/* ── Modals (portaled to body) ── */}
+      {/* ── Modals ── */}
       <CityPickerModal
         isOpen={openModal === "city"}
         onClose={() => setOpenModal(null)}
-        onSelect={(city) => setSelectedCity(city)}
-        selectedCity={selectedCity}
+        onSelect={(city) => setSelectedCity({ id: city.id, name: city.name })}
+        selectedCityId={selectedCity?.id ?? null}
+        cities={cities}
+        loading={citiesLoading}
+        error={citiesError}
       />
 
       <DatePickerModal
@@ -264,18 +317,21 @@ export default function SearchWidget() {
 function TriggerButton({
   onClick,
   children,
+  disabled = false,
 }: {
   onClick: () => void;
   children: React.ReactNode;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center justify-between border border-gray-300 rounded-lg p-2 bg-white hover:border-[#ffc107] hover:cursor-pointer transition-colors text-left"
+      disabled={disabled}
+      className="w-full flex items-center justify-between border border-gray-300 rounded-lg p-2 bg-white hover:border-[#ffc107] hover:cursor-pointer transition-colors text-left disabled:opacity-60 disabled:cursor-not-allowed"
     >
       <div className="flex items-center min-w-0 flex-1">{children}</div>
-      <svg
+      {/* <svg
         className="w-3 h-3 text-gray-400 shrink-0 ml-1"
         fill="none"
         stroke="currentColor"
@@ -287,7 +343,7 @@ function TriggerButton({
           strokeLinejoin="round"
           strokeWidth="2"
         />
-      </svg>
+      </svg> */}
     </button>
   );
 }
