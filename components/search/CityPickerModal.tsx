@@ -74,14 +74,14 @@ export default function CityPickerModal({
       aria-modal="true"
       aria-label="Select city"
     >
-      {/* Dim overlay */}
+      {/* Dim overlay — hidden on mobile since modal is full screen */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-black/50 backdrop-blur-[2px] hidden sm:block"
         onClick={onClose}
       />
 
-      {/* Modal panel */}
-      <div className="relative z-10 w-full bg-white rounded-t-2xl max-h-[92dvh] sm:rounded-2xl sm:max-w-4xl sm:mx-6 sm:h-[85vh] sm:max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
+      {/* Modal panel — full screen on mobile, centered sheet on sm+ */}
+      <div className="relative z-10 w-full h-[100dvh] sm:h-[85vh] bg-white sm:rounded-2xl sm:max-w-4xl sm:mx-6 sm:max-h-[85vh] flex flex-col overflow-hidden sm:shadow-2xl">
 
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100 shrink-0">
@@ -134,7 +134,7 @@ export default function CityPickerModal({
         {/* ── City grid / states ── */}
         <div
           ref={scrollRef}
-          className="flex-1 overflow-y-auto px-5 pb-4 overscroll-contain min-h-[320px] sm:min-h-0"
+          className="flex-1 overflow-y-auto px-5 pb-4 overscroll-contain"
         >
           {/* Loading skeleton */}
           {loading && (
