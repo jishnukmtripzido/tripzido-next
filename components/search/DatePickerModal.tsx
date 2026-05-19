@@ -85,8 +85,8 @@ function CalendarMonth({
 }) {
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
-  const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
-  const offset = (firstDay + 6) % 7; // convert to Mon=0
+  const firstDay = new Date(year, month, 1).getDay();
+  const offset = (firstDay + 6) % 7;
   const daysInMonth = getDaysInMonth(year, month);
   const today = new Date();
 
@@ -94,7 +94,6 @@ function CalendarMonth({
   for (let i = 0; i < offset; i++) cells.push(null);
   for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(year, month, d));
 
-  // Effective range for highlighting (while hovering during selection)
   const effStart = pendingStart ?? range.start;
   const effEnd =
     pendingStart && hoverDate
@@ -112,7 +111,6 @@ function CalendarMonth({
       <p className="text-center font-bold text-gray-900 mb-3 text-sm">
         {MONTHS[month]} {year}
       </p>
-      {/* Day headers */}
       <div className="grid grid-cols-7 mb-1">
         {DAYS.map((d) => (
           <div
@@ -123,7 +121,6 @@ function CalendarMonth({
           </div>
         ))}
       </div>
-      {/* Day cells */}
       <div className="grid grid-cols-7">
         {cells.map((date, i) => {
           if (!date) return <div key={`e-${i}`} />;
@@ -196,7 +193,6 @@ export default function DatePickerModal({
     setMounted(true);
   }, []);
 
-  // Sync when initialRange changes (e.g. on open)
   useEffect(() => {
     if (isOpen) {
       setRange(initialRange);
@@ -206,7 +202,6 @@ export default function DatePickerModal({
     }
   }, [isOpen]);
 
-  // Body scroll lock
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => {
@@ -214,7 +209,6 @@ export default function DatePickerModal({
     };
   }, [isOpen]);
 
-  // Escape key
   const handleKey = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -247,7 +241,6 @@ export default function DatePickerModal({
     onClose();
   }
 
-  // Desktop: show 2 months; Mobile: 1 month
   const month1 = viewMonth;
   const month2 = addMonths(viewMonth, 1);
 
@@ -260,25 +253,21 @@ export default function DatePickerModal({
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-      {/* Backdrop */}
+      {/* Backdrop — hidden on mobile since modal is full screen */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-black/50 backdrop-blur-[2px] hidden sm:block"
         onClick={onClose}
       />
 
-      {/* Panel */}
-      <div className="relative z-10 w-full bg-white rounded-t-2xl sm:rounded-2xl sm:max-w-3xl sm:mx-6 flex flex-col shadow-2xl max-h-[95dvh] sm:max-h-[90vh]">
+      {/* Panel — full screen on mobile, centered sheet on sm+ */}
+      <div className="relative z-10 w-full h-[100dvh] sm:h-auto bg-white sm:rounded-2xl sm:max-w-3xl sm:mx-6 flex flex-col sm:shadow-2xl sm:max-h-[90vh]">
+
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100 shrink-0">
           <div>
             <h2 className="font-bold text-gray-900 text-base">
               Choose your rental dates
             </h2>
-            {/* <p className="text-xs text-gray-400 mt-0.5">
-              {selecting === "start"
-                ? "Select pick-up date"
-                : "Select drop-off date"}
-            </p> */}
           </div>
           <button
             onClick={onClose}
@@ -327,7 +316,7 @@ export default function DatePickerModal({
               />
             </svg>
             <div className="min-w-0">
-              <p className="text-[10px] text-gray-400 font-medium  tracking-wide">
+              <p className="text-[10px] text-gray-400 font-medium tracking-wide">
                 Pick-up
               </p>
               <p className="text-sm font-bold text-gray-900 truncate">
@@ -372,7 +361,7 @@ export default function DatePickerModal({
               />
             </svg>
             <div className="min-w-0">
-              <p className="text-[10px] text-gray-400 font-medium  tracking-wide">
+              <p className="text-[10px] text-gray-400 font-medium tracking-wide">
                 Drop-off
               </p>
               <p className="text-sm font-bold text-gray-900 truncate">
@@ -424,7 +413,6 @@ export default function DatePickerModal({
 
         {/* Calendar(s) */}
         <div className="flex-1 overflow-y-auto px-5 pb-2 overscroll-contain">
-          {/* Mobile: single column stacked; Desktop: 2 months side by side */}
           <div className="flex flex-col sm:flex-row gap-6">
             <CalendarMonth
               viewDate={month1}

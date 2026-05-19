@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import CityPickerModal from "@/components/search/CityPickerModal";
 import DatePickerModal, { DateRange } from "@/components/search/DatePickerModal";
 import TimePickerModal from "@/components/search/TimePickerModal";
-import { City } from "@/types/city"; // ← shared type (see below)
+import { City } from "@/types/city";
 
 /* ── Default dates: today + 2hrs, tomorrow + 2hrs ── */
 function getDefaults() {
@@ -44,15 +44,18 @@ export interface SelectedCity {
   name: string;
 }
 
-export default function SearchWidget() {
+/* ── Props ── */
+interface SearchWidgetProps {
+  cities: City[];
+  citiesError: string | null;
+}
+
+export default function SearchWidget({ cities, citiesError }: SearchWidgetProps) {
   const defaults = getDefaults();
 
   const [openModal, setOpenModal] = useState<ModalType>(null);
 
   /* City state */
-  const [cities, setCities] = useState<City[]>([]);
-  const [citiesLoading, setCitiesLoading] = useState(true);
-  const [citiesError, setCitiesError] = useState<string | null>(null);
   const [selectedCity, setSelectedCity] = useState<SelectedCity | null>(null);
 
   /* Date / time state */
@@ -68,27 +71,6 @@ export default function SearchWidget() {
     hour: defaults.dropoff.getHours(),
     minute: 0,
   });
-
-  /* ── Fetch cities on mount ── */
-  useEffect(() => {
-    async function fetchCities() {
-      try {
-        setCitiesLoading(true);
-        setCitiesError(null);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/locations/cities/`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = await res.json();
-        // API shape: { success, data: { results: City[] } }
-        setCities(json.data.results as City[]);
-      } catch (err) {
-        console.error("Failed to load cities:", err);
-        setCitiesError("Could not load cities. Please try again.");
-      } finally {
-        setCitiesLoading(false);
-      }
-    }
-    fetchCities();
-  }, []);
 
   function handleDateSelect(range: DateRange) {
     setDateRange(
@@ -125,7 +107,7 @@ export default function SearchWidget() {
               </label>
               <TriggerButton
                 onClick={() => setOpenModal("city")}
-                disabled={citiesLoading}
+                disabled={!!citiesError}
               >
                 <svg
                   className="w-5 h-5 text-gray-400 mr-2 shrink-0"
@@ -147,9 +129,7 @@ export default function SearchWidget() {
                   />
                 </svg>
                 <span className="flex-1 text-sm font-medium text-gray-900 truncate">
-                  {citiesLoading
-                    ? "Loading cities…"
-                    : citiesError
+                  {citiesError
                     ? "Failed to load"
                     : selectedCity?.name ?? "Select a city"}
                 </span>
@@ -281,7 +261,7 @@ export default function SearchWidget() {
         onSelect={(city) => setSelectedCity({ id: city.id, name: city.name })}
         selectedCityId={selectedCity?.id ?? null}
         cities={cities}
-        loading={citiesLoading}
+        loading={false}
         error={citiesError}
       />
 
@@ -331,19 +311,6 @@ function TriggerButton({
       className="w-full flex items-center justify-between border border-gray-300 rounded-lg p-2 bg-white hover:border-[#ffc107] hover:cursor-pointer transition-colors text-left disabled:opacity-60 disabled:cursor-not-allowed"
     >
       <div className="flex items-center min-w-0 flex-1">{children}</div>
-      {/* <svg
-        className="w-3 h-3 text-gray-400 shrink-0 ml-1"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M19 9l-7 7-7-7"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-        />
-      </svg> */}
     </button>
   );
 }
