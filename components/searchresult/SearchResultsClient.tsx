@@ -93,8 +93,8 @@ export default function SearchResultsClient() {
 
           <div className="flex-1 min-w-0">
             <div className="hidden md:flex items-center justify-between mb-4 flex-wrap gap-3">
-              <h1 className="font-medium text-black text-lg">
-                <span className="text-lg">{BIKES.length}</span> Bikes Available
+              <h1 className="font-medium text-black text-lg ">
+                <span className="text-lg  ">{BIKES.length}</span> Bikes Available
               </h1>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-600 font-medium whitespace-nowrap">Sort by:</span>

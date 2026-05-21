@@ -177,7 +177,7 @@ export default function BikeCard({
 
   return (
     // Outer wrapper establishes the 3D perspective.
-    <div className="group relative w-full max-w-sm h-[400px] bg-transparent [perspective:1000px]">
+    <div className="group relative w-full max-w-sm h-[400px] bg-transparent [perspective:1000px] max-sm:mx-2 ">
       
       {/* Inner container that actually rotates */}
       <div
