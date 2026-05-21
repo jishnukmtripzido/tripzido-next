@@ -55,13 +55,13 @@ export default function BikeCard({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col transition-all duration-200 hover:shadow-md hover:border-gray-300">
+    <div className="bg-white shadow border border-gray-200 rounded-xl overflow-hidden flex flex-col transition-all duration-200 hover:shadow-md hover:border-gray-300">
       {/* Image */}
-      <div className="relative h-44 sm:h-40 flex items-center justify-center bg-gray-50">
+      <div className="relative h-44 sm:h-40 flex items-center justify-center ">
         <img
           src={imageUrl}
           alt={name}
-          className="h-full w-full object-contain p-4"
+          className="h-full w-full object-contain p-6"
           onError={(e) => {
             (e.target as HTMLImageElement).src = `https://placehold.co/300x160/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
           }}

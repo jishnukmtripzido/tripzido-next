@@ -7,6 +7,7 @@ import FAQSection from "@/components/search/FAQSection";
 import PopularRentals from "@/components/search/PopularRentals";
 import HowItWorks from "@/components/search/HowItWorks";
 import TrendingDestinations from "@/components/search/TrendingDestinations";
+import Header from "@/components/layout/Header";
 import { City } from "@/types/city";
 
 const getCities = unstable_cache(
@@ -30,6 +31,7 @@ export default async function HomePage() {
 
   return (
     <>
+     <Header />
       <HeroSection />
       <SearchWidget cities={cities} citiesError={error} />
       <OffersSection />

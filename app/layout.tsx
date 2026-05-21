@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body suppressHydrationWarning>
-        <Header />
+       
         <main className="bg-white text-[#1a1a1a] font-sans min-h-screen">
           {children}
         </main>
