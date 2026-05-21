@@ -14,7 +14,7 @@ function FilterSection({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-gray-100 last:border-0">
+    <div className="border-b border-gray-100 last:border-0 shadow">
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex items-center justify-between w-full px-5 py-4 hover:bg-gray-50 transition-colors text-left"
@@ -45,16 +45,38 @@ function CheckItem({
 }) {
   const [checked, setChecked] = useState(defaultChecked);
   return (
+    // <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+    //   <input
+    //     type="checkbox"
+    //     checked={checked}
+    //     onChange={() => setChecked((c) => !c)}
+    //     className="rounded border-gray-400 text-[#ffc107] focus:ring-[#ffc107] accent-[#ffc107]"
+
+    //   />
+     
+    //   <span>{label}</span>
+    //   <span className="ml-auto text-xs text-gray-400">{count}</span>
+    // </label>
     <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={() => setChecked((c) => !c)}
-        className="rounded border-gray-400 text-[#ffc107] focus:ring-[#ffc107] accent-[#ffc107]"
-      />
-      <span>{label}</span>
-      <span className="ml-auto text-xs text-gray-400">{count}</span>
-    </label>
+  <input
+    type="checkbox"
+    checked={checked}
+    onChange={() => setChecked((c) => !c)}
+    className="sr-only peer"
+  />
+  <div className="w-4 h-4 rounded border border-gray-400 flex-shrink-0
+    peer-checked:bg-brand-yellow peer-checked:border-brand-yellow
+    peer-focus-visible:ring-2 peer-focus-visible:ring-brand-yellow peer-focus-visible:ring-offset-1
+    flex items-center justify-center">
+    {checked && (
+      <svg className="w-2.5 h-2.5 text-white" viewBox="0 0 10 8" fill="none">
+        <path d="M1 4L3.5 6.5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )}
+  </div>
+  <span>{label}</span>
+  <span className="ml-auto text-xs text-gray-400">{count}</span>
+</label>
   );
 }
 
