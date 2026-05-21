@@ -66,7 +66,7 @@ export default function SearchResultsClient() {
         dropoffTime="10:00 AM"
       />
 
-      {/* Mobile compact search pill — unchanged */}
+      {/* Mobile compact search pill */}
       <MobileSearchBar
         city="Wayanad"
         pickupDate="Thu, May 7"
@@ -84,64 +84,66 @@ export default function SearchResultsClient() {
         scrolled={scrolled}
       />
 
-      {/* Main layout */}
-      <div className="mx-auto  px-4 pt-5 pb-6 xl:mx-[121.5px] xl:px-0 flex gap-6 items-start">
-        <aside className="hidden lg:block w-64 shrink-0 sticky top-[130px] self-start">
-          <FilterSidebar />
-        </aside>
+      {/* Main layout — outer div carries the full-width background */}
+      <div className="bg-[#FAFBFD] min-h-screen">
+        <div className="mx-auto px-4 pt-5 pb-6 xl:mx-[121.5px] xl:px-0 flex gap-6 items-start">
+          <aside className="hidden lg:block w-64 shrink-0 sticky top-[130px] self-start">
+            <FilterSidebar />
+          </aside>
 
-        <div className="flex-1 min-w-0">
-          <div className="hidden md:flex items-center justify-between mb-4 flex-wrap gap-3">
-            <h1 className="font-medium text-gray-900 text-lg">
-              <span className="text-lg">{BIKES.length}</span> Bikes Available
-            </h1>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 font-medium whitespace-nowrap">Sort by:</span>
-              <div className="relative">
-                <select
-                  value={sortValue}
-                  onChange={(e) => setSortValue(e.target.value)}
-                  className="appearance-none border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm font-normal bg-white focus:outline-none focus:ring-2 focus:ring-[#ffc107] cursor-pointer"
-                >
-                  {SORT_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                <svg className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                </svg>
+          <div className="flex-1 min-w-0">
+            <div className="hidden md:flex items-center justify-between mb-4 flex-wrap gap-3">
+              <h1 className="font-medium text-black text-lg">
+                <span className="text-lg">{BIKES.length}</span> Bikes Available
+              </h1>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 font-medium whitespace-nowrap">Sort by:</span>
+                <div className="relative">
+                  <select
+                    value={sortValue}
+                    onChange={(e) => setSortValue(e.target.value)}
+                    className="appearance-none border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm font-normal bg-white focus:outline-none focus:ring-2 focus:ring-[#ffc107] cursor-pointer"
+                  >
+                    {SORT_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                  <svg className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                  </svg>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="md:hidden flex items-center justify-between mb-3">
-            <p className="text-sm font-medium text-gray-700">
-              <span className="font-semibold text-gray-900">{BIKES.length}</span> bikes · {sortLabel}
-            </p>
-          </div>
+            <div className="md:hidden flex items-center justify-between mb-3">
+              <p className="text-sm font-medium text-black">
+                <span className="font-semibold text-black">{BIKES.length}</span> Bikes · {sortLabel}
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {sortedBikes.map((bike) => (
-              <BikeCard key={bike.id} {...bike} />
-            ))}
-          </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+              {sortedBikes.map((bike) => (
+                <BikeCard key={bike.id} {...bike} />
+              ))}
+            </div>
 
-          <div className="mt-8 flex items-center justify-center gap-1">
-            <button className="w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 flex items-center justify-center cursor-pointer">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-              </svg>
-            </button>
-            {[1, 2, 3, 4].map((p) => (
-              <button key={p} className={`w-9 h-9 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${p === 1 ? "bg-[#ffc107] border-[#ffc107] text-black" : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"}`}>
-                {p}
+            <div className="mt-8 flex items-center justify-center gap-1">
+              <button className="w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 flex items-center justify-center cursor-pointer">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                </svg>
               </button>
-            ))}
-            <button className="w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 flex items-center justify-center cursor-pointer">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-              </svg>
-            </button>
+              {[1, 2, 3, 4].map((p) => (
+                <button key={p} className={`w-9 h-9 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${p === 1 ? "bg-[#ffc107] border-[#ffc107] text-black" : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"}`}>
+                  {p}
+                </button>
+              ))}
+              <button className="w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 flex items-center justify-center cursor-pointer">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>

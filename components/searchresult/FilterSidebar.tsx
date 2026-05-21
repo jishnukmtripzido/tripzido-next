@@ -14,12 +14,12 @@ function FilterSection({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-gray-100 last:border-0 shadow">
+    <div className="border-b border-gray-50 last:border-0 shadow">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center justify-between w-full px-5 py-4 hover:bg-gray-50 transition-colors text-left"
+        className="flex items-center justify-between w-full px-5 py-4  text-left"
       >
-        <span className="font-medium text-sm text-gray-900">{title}</span>
+        <span className="font-medium text-sm text-black">{title}</span>
         <svg
           className={`w-4 h-4 text-gray-500 transition-transform duration-200 shrink-0 ${open ? "rotate-180" : ""}`}
           fill="none"
@@ -45,19 +45,8 @@ function CheckItem({
 }) {
   const [checked, setChecked] = useState(defaultChecked);
   return (
-    // <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-    //   <input
-    //     type="checkbox"
-    //     checked={checked}
-    //     onChange={() => setChecked((c) => !c)}
-    //     className="rounded border-gray-400 text-[#ffc107] focus:ring-[#ffc107] accent-[#ffc107]"
-
-    //   />
-     
-    //   <span>{label}</span>
-    //   <span className="ml-auto text-xs text-gray-400">{count}</span>
-    // </label>
-    <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+   
+    <label className="flex items-center gap-2 text-sm text-black cursor-pointer">
   <input
     type="checkbox"
     checked={checked}
@@ -74,8 +63,8 @@ function CheckItem({
       </svg>
     )}
   </div>
-  <span>{label}</span>
-  <span className="ml-auto text-xs text-gray-400">{count}</span>
+  <span className="text-[0.79rem] font-thin text-black">{label}</span>
+  <span className="ml-auto text-xs font-thin text-black">{count}</span>
 </label>
   );
 }
@@ -93,13 +82,13 @@ export default function FilterSidebar({ onClearAll }: FilterSidebarProps) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-300 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-        <span className="font-semibold text-base text-gray-700">Filter</span>
+        <span className="font-semibold text-base text-black">Filter</span>
         <button
           onClick={handleClearAll}
-          className="text-[#006CE4] text-sm font-normal hover:underline cursor-pointer"
+          className="text-[#006CE4] text-xs font-thin hover:underline cursor-pointer"
         >
           Clear all filters
         </button>
@@ -107,7 +96,7 @@ export default function FilterSidebar({ onClearAll }: FilterSidebarProps) {
 
       {/* Price */}
       <FilterSection title="Price per day">
-        <div className="flex justify-between text-xs text-gray-700 mb-3">
+        <div className="flex justify-between text-xs text-black mb-3">
           <span>₹0</span>
           <span>₹{priceMax.toLocaleString("en-IN")}</span>
         </div>

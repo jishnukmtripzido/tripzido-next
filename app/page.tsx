@@ -23,7 +23,7 @@ const getCities = unstable_cache(
     }
   },
   ["cities-list"],
-  { revalidate: 3600 } // cache for 1 hour
+  { revalidate: 36000 } // cache for 1 hour
 );
 
 export default async function HomePage() {
