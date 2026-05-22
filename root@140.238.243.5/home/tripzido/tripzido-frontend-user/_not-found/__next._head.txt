@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[78602,["/_next/static/chunks/0-rlkzfo79g1q.js","/_next/static/chunks/13o~ce8zttnqe.js"],"ViewportBoundary"]
+3:I[78602,["/_next/static/chunks/0-rlkzfo79g1q.js","/_next/static/chunks/13o~ce8zttnqe.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Tripzido - Bike Rentals for Every Kind of Trip"}],["$","meta","1",{"name":"description","content":"Great bikes at great prices from trusted rental partners across India."}]]}]}]}],null]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"y3bP07ORNeMpzudNjNEcW"}

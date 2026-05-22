@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+/root@140.238.243.5/tripzido/tripzido-frontend-user/tripzido-frontend-user/
