@@ -474,6 +474,9 @@ export default function SearchResultHeader({
             </div>
           </div>
         </section>
+
+
+
       </div>
 
       <CityPickerModal
@@ -488,6 +491,26 @@ export default function SearchResultHeader({
         loading={false}
         error={citiesError}
       />
+
+{/* <section className="banner mx-auto xl:mx-[121.5px] mt-2">
+  <div className="bg-[#ffc107] px-8 py-4 flex items-center justify-between gap-4 relative overflow-hidden ">
+   
+    <div className="flex-1">
+  
+      <p className="text-sm text-[#3a2c00]">
+        Get 50% off on all bookings above <strong className="text-black">₹1,000</strong>. Use code{" "}
+        <span className="bg-black text-[#ffc107] font-mono text-xs px-2 py-0.5 rounded">TRIP50</span> at checkout.
+      </p>
+    </div>
+
+    <div className="flex flex-col items-end gap-1 shrink-0">
+      <span className="bg-black text-[#ffc107] text-xs font-medium px-3 py-1 rounded-full">⏰ Ends soon</span>
+     
+    </div>
+  </div>
+</section> */}
+
+
       <DatePickerModal
         isOpen={openModal === "date"}
         onClose={() => setOpenModal(null)}

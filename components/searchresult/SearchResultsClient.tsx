@@ -555,23 +555,7 @@ export default function SearchResultsClient({
               </div>
             )}
 
-            <div className="mt-8 flex items-center justify-center gap-1">
-              <button className="w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 flex items-center justify-center cursor-pointer">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                </svg>
-              </button>
-              {[1, 2, 3, 4].map((p) => (
-                <button key={p} className={`w-9 h-9 rounded-lg border text-sm font-medium cursor-pointer transition-colors ${p === 1 ? "bg-[#ffc107] border-[#ffc107] text-black" : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"}`}>
-                  {p}
-                </button>
-              ))}
-              <button className="w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 flex items-center justify-center cursor-pointer">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                </svg>
-              </button>
-            </div>
+            {/*  */}
           </div>
         </div>
       </div>

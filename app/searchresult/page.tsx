@@ -230,7 +230,6 @@ export default async function SearchResultPage({ searchParams }: Props) {
       if (res.ok) {
         data = await res.json();
 
-        console.log("out put",data)
       }
     } catch (err) {
       console.error("Failed to fetch vehicles:", err);
