@@ -9,6 +9,7 @@ export default function Header() {
         {/* Left: Logo + Nav */}
         <div className="flex items-center space-x-12">
           {/* Logo */}
+          <Link href="/">
           <div className="flex items-center space-x-2">
             <div className="bg-[#ffc107] p-1.5 rounded-lg">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,6 +18,7 @@ export default function Header() {
             </div>
             <span className="text-2xl font-extrabold tracking-tight">tripzido</span>
           </div>
+          </Link>
 
           {/* Nav Links */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-700">

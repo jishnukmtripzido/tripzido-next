@@ -1,6 +1,6 @@
 export default function HeroSection() {
   return (
-    <section className="relative w-full overflow-hidden h-[55vw] min-h-[200px] max-h-[420px] md:h-[42vh] md:max-h-none">
+    <section className="relative w-full overflow-hidden h-[55vw] min-h-[200px] max-h-[420px] md:h-[42vh] md:min-h-[270px] md:max-h-none">
       {/* Background Image + Gradient */}
       <div className="absolute inset-0 z-0">
         <img
