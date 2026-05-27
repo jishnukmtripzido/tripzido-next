@@ -13,17 +13,19 @@ import { City } from "@/types/city";
 const getCities = unstable_cache(
   async (): Promise<{ cities: City[]; error: string | null }> => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/locations/cities/`);
+      const res = await fetch(`${process.env.API_URL}/api/locations/cities/`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       return { cities: json.data.results as City[], error: null };
     } catch (err) {
       console.error("Failed to load cities:", err);
       return { cities: [], error: "Could not load cities. Please try again." };
+      
     }
   },
   ["cities-list"],
-  { revalidate: 36000 } // cache for 1 hour
+  // { revalidate: 36000 } 
+  // signal: AbortSignal.timeout(10000), 
 );
 
 export default async function HomePage() {
