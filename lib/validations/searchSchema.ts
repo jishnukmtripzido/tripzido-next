@@ -2,18 +2,18 @@ import { z } from "zod";
 
 export const searchSchema = z.object({
   city_id: z
-    .number({ required_error: "Please select a city" })
+    .number({ error: "Please select a city" })
     .int()
     .positive("Please select a valid city"),
 
   city_name: z.string().min(1, "Please select a city"),
 
   pickup_datetime: z.coerce.date({
-    required_error: "Pick-up date and time are required",
+    error: "Pick-up date and time are required",
   }),
 
   dropoff_datetime: z.coerce.date({
-    required_error: "Drop-off date and time are required",
+    error: "Drop-off date and time are required",
   }),
 }).superRefine((data, ctx) => {
   const now = new Date();
