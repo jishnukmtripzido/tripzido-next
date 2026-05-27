@@ -35,7 +35,7 @@ export type VehicleLocation = {
       id: number;
       name: string;
     };
-    price_per_day: string;
+    price: string;
     min_days: number;
     max_days: number | null;
   }[];
