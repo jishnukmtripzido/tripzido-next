@@ -63,7 +63,7 @@ export default async function SearchResultPage({ searchParams }: Props) {
 
   return (
     <SearchResultsClient
-      bikes={data['data']}
+      bikes={(data as any).data}
       city={city_name ?? ""}
       cityId={city_id ? Number(city_id) : null}
       pickup={pickup ?? ""}
