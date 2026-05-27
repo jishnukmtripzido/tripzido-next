@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { He } from "zod/v4/locales";
 
 export const metadata: Metadata = {
   title: "Tripzido - Bike Rentals for Every Kind of Trip",

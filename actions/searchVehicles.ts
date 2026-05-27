@@ -54,6 +54,7 @@ export type VehicleSearchResult = {
   make_year: number;
   transmission_type: string;
   fuel_type: string;
+  "vehicle_type": string;
   seats: number;
   cc: number;
   mileage_kmpl: string;

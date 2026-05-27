@@ -11,6 +11,7 @@ export type FilterState = {
   fuelTypes: string[];
   ccRanges: string[];
   brands: string[];
+  vehicleTypes: string[];
   locationIds: string[];   // location_id as string keys
   sortValue: string;       // "none" | "price_asc" | "price_desc"
 };
@@ -19,6 +20,7 @@ export type FilterOptions = {
   priceAbsoluteMax: number;
   transmissionCounts: Record<string, number>;
   fuelTypeCounts: Record<string, number>;
+  vehicleTypeCounts: Record<string, number>;
   ccRangeCounts: Record<string, number>;
   priceRangeCounts: Record<string, number>;
   brandCounts: Record<string, number>;
@@ -44,8 +46,8 @@ export const PRICE_RANGE_META = PRICE_RANGES;
 export const CC_RANGE_META = CC_RANGES;
 
 export const TRANSMISSION_LABELS: Record<string, string> = {
-  AUTOMATIC:  "Automatic (Scooter)",
-  MANUAL:     "Manual (Gear)",
+  AUTOMATIC:  "Automatic",
+  MANUAL:     "Manual",
   SEMI_AUTO:  "Semi-Automatic",
 };
 
@@ -55,6 +57,15 @@ export const FUEL_LABELS: Record<string, string> = {
   CNG:      "CNG",
   HYBRID:   "Hybrid",
   DIESEL:   "Diesel",
+};
+
+export const VEHICLE_TYPE_LABELS: Record<string, string> = {
+  BIKE: "Bike",
+  SCOOTER: "Scooter",
+  CAR: "Car",
+  VAN: "Van",
+  AUTO_RICKSHAW: "Auto Rickshaw",
+  BUS: "Bus",
 };
 
 /** Minimum daily price across all locations */
@@ -73,6 +84,7 @@ function getMinDailyPrice(bike: VehicleSearchResult): number | null {
 export function deriveFilterOptions(bikes: VehicleSearchResult[]): FilterOptions {
   const transmissionCounts: Record<string, number> = {};
   const fuelTypeCounts: Record<string, number> = {};
+  const vehicleTypeCounts: Record<string, number> = {};
   const ccRangeCounts: Record<string, number> = {};
   const priceRangeCounts: Record<string, number> = {};
   const brandCounts: Record<string, number> = {};
@@ -87,6 +99,10 @@ export function deriveFilterOptions(bikes: VehicleSearchResult[]): FilterOptions
     // Fuel
     const f = bike.fuel_type;
     fuelTypeCounts[f] = (fuelTypeCounts[f] ?? 0) + 1;
+
+    // Vehicle type
+    const vt = bike.vehicle_type;
+    vehicleTypeCounts[vt] = (vehicleTypeCounts[vt] ?? 0) + 1;
 
     // CC range
     for (const r of CC_RANGES) {
@@ -130,6 +146,7 @@ export function deriveFilterOptions(bikes: VehicleSearchResult[]): FilterOptions
     priceRangeCounts,
     brandCounts,
     locationOptions,
+    vehicleTypeCounts,
   };
 }
 
@@ -143,6 +160,7 @@ function buildInitialFilters(options: FilterOptions): FilterState {
     ccRanges: Object.keys(options.ccRangeCounts),
     brands: Object.keys(options.brandCounts),
     locationIds: Object.keys(options.locationOptions),
+    vehicleTypes: Object.keys(options.vehicleTypeCounts),
     sortValue: "none",   // no sorting until user explicitly picks one
   };
 }
@@ -159,6 +177,10 @@ function applyFilters(
 
     // Fuel
     if (filters.fuelTypes.length > 0 && !filters.fuelTypes.includes(bike.fuel_type))
+      return false;
+
+    // Vehicle type
+    if (filters.vehicleTypes.length > 0 && !filters.vehicleTypes.includes(bike.vehicle_type))
       return false;
 
     // CC range

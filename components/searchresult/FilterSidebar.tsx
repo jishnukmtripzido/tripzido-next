@@ -179,6 +179,7 @@ import {
   CC_RANGE_META,
   TRANSMISSION_LABELS,
   FUEL_LABELS,
+  VEHICLE_TYPE_LABELS,
 } from "@/hooks/useVehicleFilters";
 
 // ── Collapsible section ──────────────────────────────────────────────
@@ -267,6 +268,7 @@ export default function FilterSidebar({
     priceAbsoluteMax,
     transmissionCounts,
     fuelTypeCounts,
+    vehicleTypeCounts,
     ccRangeCounts,
     priceRangeCounts,
     brandCounts,
@@ -385,6 +387,23 @@ export default function FilterSidebar({
                 count={count}
                 checked={filters.fuelTypes.includes(key)}
                 onChange={() => onToggle("fuelTypes", key)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+      )}
+
+      {/* Vehicle type */}
+      {Object.keys(vehicleTypeCounts).length > 0 && (
+        <FilterSection title="Vehicle type">
+          <div className="flex flex-col gap-1.5">
+            {Object.entries(vehicleTypeCounts).map(([key, count]) => (
+              <CheckItem
+                key={key}
+                label={VEHICLE_TYPE_LABELS[key] ?? key}
+                count={count}
+                checked={filters.vehicleTypes.includes(key)}
+                onChange={() => onToggle("vehicleTypes", key)}
               />
             ))}
           </div>
