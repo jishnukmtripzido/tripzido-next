@@ -305,12 +305,12 @@ export default function Header({
         {/* Drawer header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <div className="flex items-center space-x-2">
-            <div className="bg-[#ffc107] p-1 rounded-lg">
+            <div className="bg-brand-yellow p-1 rounded-lg">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
               </svg>
             </div>
-            <span className="text-xl font-extrabold tracking-tight">tripzido</span>
+            <span className="text-xl font-semibold tracking-tight">tripzido</span>
           </div>
           <button
             onClick={closeMenu}
@@ -325,7 +325,7 @@ export default function Header({
 
         {/* User info strip */}
         <div className="flex items-center gap-3 px-5 py-4 bg-amber-50 border-b border-amber-100">
-          <div className="w-10 h-10 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold text-base shrink-0">
+          <div className="w-10 h-10 rounded-full bg-brand-yellow flex items-center justify-center text-white font-bold text-base shrink-0">
             {userNameFirstLetter || "J"}
           </div>
           <div>
@@ -339,14 +339,14 @@ export default function Header({
           <Link
             href="#"
             onClick={closeMenu}
-            className="flex-1 text-center text-sm font-semibold bg-[#ffc107] text-white py-2.5 rounded-xl hover:bg-[#e6ab00] transition-colors"
+            className="flex-1 text-center text-sm font-semibold bg-brand-yellow text-white py-2.5 rounded-xl hover:bg-[#e6ab00] transition-colors"
           >
             Sign In
           </Link>
           <Link
             href="#"
             onClick={closeMenu}
-            className="flex-1 text-center text-sm font-semibold border border-[#ffc107] text-[#c89600] py-2.5 rounded-xl hover:bg-amber-50 transition-colors"
+            className="flex-1 text-center text-sm font-semibold border border-brand-yellow text-brand-yellow py-2.5 rounded-xl hover:bg-amber-50 transition-colors"
           >
             Register
           </Link>
@@ -365,7 +365,7 @@ export default function Header({
                   onClick={closeMenu}
                   className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-black transition-colors"
                 >
-                  <span className="text-[#ffc107]">{link.icon}</span>
+                  <span className="text-brand-yellow">{link.icon}</span>
                   {link.label}
                 </Link>
               </li>
