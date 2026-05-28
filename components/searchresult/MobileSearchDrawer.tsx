@@ -300,21 +300,19 @@ export default function MobileSearchDrawer({
         initialRange={dateRange}
       />
       <TimePickerModal
-        isOpen={openModal === "pickup-time"}
-        onClose={() => setOpenModal(null)}
-        onSelect={(h, m) => setPickupTime({ hour: h, minute: m })}
-        initialHour={pickupTime.hour}
-        initialMinute={pickupTime.minute}
-        label="Pick-up time"
-      />
-      <TimePickerModal
-        isOpen={openModal === "dropoff-time"}
-        onClose={() => setOpenModal(null)}
-        onSelect={(h, m) => setDropoffTime({ hour: h, minute: m })}
-        initialHour={dropoffTime.hour}
-        initialMinute={dropoffTime.minute}
-        label="Drop-off time"
-      />
+          isOpen={openModal === "pickup-time" || openModal === "dropoff-time"}
+          onClose={() => setOpenModal(null)}
+          onSelectBoth={(pickup, dropoff) => {
+            setPickupTime(pickup);
+            setDropoffTime(dropoff);
+          }}
+          initialPickupHour={pickupTime.hour}
+          initialPickupMinute={pickupTime.minute}
+          initialDropoffHour={dropoffTime.hour}
+          initialDropoffMinute={dropoffTime.minute}
+          pickupDate={dateRange.start}
+          dropoffDate={dateRange.end}
+        />
     </>,
     document.body
   );
