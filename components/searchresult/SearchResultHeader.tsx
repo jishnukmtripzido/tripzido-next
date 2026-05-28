@@ -1,5 +1,4 @@
 
-
 // "use client";
 
 // import Link from "next/link";
@@ -85,6 +84,12 @@
 //     setErrors(e => ({ ...e, pickup_datetime: "", dropoff_datetime: "" }));
 //   }
 
+//   /** Real-time update while user is picking dates in the dropdown */
+//   function handleDateChange(range: DateRange) {
+//     setDateRange(range.end < range.start ? { start: range.start, end: range.start } : range);
+//     setErrors(e => ({ ...e, pickup_datetime: "", dropoff_datetime: "" }));
+//   }
+
 //   async function handleSearch() {
 //     setOpenDropdown(null);
 //     const pickup_datetime = buildDatetime(dateRange.start, pickupTime.hour, pickupTime.minute);
@@ -137,7 +142,6 @@
 
 //         {/* Nav header */}
 //         <Header logoWidth={4} logoHeight={4} logoTextSize="xl" linkIconsSize={4} userNameFirstLetterSize={8} userNameFirstLetter="J" headerLgScreenMx="xl:mx-[80.5px] xl:px-0" headerValues="w-full bg-white py-2 border-b border-gray-100 text-gray-900" />
-        
 
 //         {/* Search widget */}
 //         <section className="px-4 xl:px-0 py-3 mx-auto xl:mx-[80.5px]">
@@ -192,6 +196,7 @@
 //                   isOpen
 //                   onClose={() => setOpenDropdown(null)}
 //                   onSelect={(range) => { handleDateSelect(range); setOpenDropdown(null); }}
+//                   onDateChange={handleDateChange}
 //                   initialRange={dateRange}
 //                 />
 //               )}
@@ -326,6 +331,7 @@
 //     </>
 //   );
 // }
+
 
 "use client";
 
@@ -476,28 +482,35 @@ export default function SearchResultHeader({
           <div className="flex w-full items-center bg-white border-2 border-[#cccce6] rounded-md h-[52px] shadow-md">
 
             {/* City — always modal */}
-            <div
-              onClick={() => setOpenModal("city")}
-              className={`flex-[2] min-w-[200px] flex items-center px-3 h-full border-r hover:bg-gray-50 cursor-pointer transition-colors
-                ${errors.city_id ? "border-red-400 bg-red-50" : "border-gray-300"}`}
-            >
-              <svg className="w-6 h-6 text-gray-500 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <div className="flex flex-col justify-center flex-1 overflow-hidden">
-                <span className="text-[11px] font-thin text-gray-500 leading-none mb-1">City</span>
-                <span className="text-sm font-thin text-gray-900 truncate leading-none">
-                  {selectedCity?.name ?? "Select a city"}
-                </span>
-              </div>
-              {selectedCity && (
-                <svg
-                  onClick={(e) => { e.stopPropagation(); setSelectedCity(null); setErrors(e2 => ({ ...e2, city_id: "" })); }}
-                  className="w-5 h-5 text-gray-500 hover:text-black shrink-0 ml-2"
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            <div className="relative flex-[2] min-w-[200px] h-full">
+              <div
+                onClick={() => setOpenModal("city")}
+                className={`flex items-center px-3 h-full border-r hover:bg-gray-50 cursor-pointer transition-colors
+                  ${errors.city_id ? "border-red-400 bg-red-50" : "border-gray-300"}`}
+              >
+                <svg className="w-6 h-6 text-gray-500 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
+                <div className="flex flex-col justify-center flex-1 overflow-hidden">
+                  <span className="text-[11px] font-thin text-gray-500 leading-none mb-1">City</span>
+                  <span className="text-sm font-thin text-gray-900 truncate leading-none">
+                    {selectedCity?.name ?? "Select a city"}
+                  </span>
+                </div>
+                {selectedCity && (
+                  <svg
+                    onClick={(e) => { e.stopPropagation(); setSelectedCity(null); setErrors(e2 => ({ ...e2, city_id: "" })); }}
+                    className="w-5 h-5 text-gray-500 hover:text-black shrink-0 ml-2"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+              </div>
+              {errors.city_id && (
+                <div className="absolute top-full left-0 mt-1 z-10">
+                  <FieldError message={errors.city_id} />
+                </div>
               )}
             </div>
 
@@ -527,6 +540,11 @@ export default function SearchResultHeader({
                   onDateChange={handleDateChange}
                   initialRange={dateRange}
                 />
+              )}
+              {errors.pickup_datetime && (
+                <div className="absolute top-full left-0 mt-1 z-10">
+                  <FieldError message={errors.pickup_datetime} />
+                </div>
               )}
             </div>
 
@@ -579,6 +597,11 @@ export default function SearchResultHeader({
                 </div>
               </div>
               {/* Dropdown anchors on pickup date cell; this is just the visual trigger */}
+              {errors.dropoff_datetime && (
+                <div className="absolute top-full left-0 mt-1 z-10">
+                  <FieldError message={errors.dropoff_datetime} />
+                </div>
+              )}
             </div>
 
             {/* Drop-off time — inline dropdown on desktop */}

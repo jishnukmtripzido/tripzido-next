@@ -17,7 +17,7 @@ export default function FilterSortBar({ onFilterClick, onSortClick, scrolled }: 
       <div className="flex">
         <button
           onClick={onFilterClick}
-          className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-gray-700 border-r border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold text-black border-r border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -31,7 +31,7 @@ export default function FilterSortBar({ onFilterClick, onSortClick, scrolled }: 
         </button>
         <button
           onClick={onSortClick}
-          className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold text-black hover:bg-gray-50 transition-colors cursor-pointer"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
