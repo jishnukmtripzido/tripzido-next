@@ -194,7 +194,7 @@ export default function Header({
               <div className="flex items-center space-x-2">
                 <div className="bg-[#ffc107] p-1.5 rounded-lg">
                   <svg
-                    className={`w-${logoWidth || 6} h-${logoHeight || 6} text-white`}
+                    className={`w-${logoWidth || 5} h-${logoHeight || 5} text-white`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -278,7 +278,7 @@ export default function Header({
               className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 transition-colors"
               aria-label="Open menu"
             >
-              <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
               </svg>
             </button>
