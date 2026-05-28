@@ -94,7 +94,7 @@ export default function BikeCard({
         >
           {/* FRONT FACE */}
           <div
-            className={`absolute inset-0 w-full h-full bg-white border border-gray-300/80 rounded-md hover:shadow-sm transition-shadow [backface-visibility:hidden] flex flex-col pt-4 ${
+            className={`absolute inset-0 w-full h-full bg-white border border-gray-300/80 rounded-md hover:shadow-sm transition-shadow [backface-visibility:hidden] flex flex-col pt-4 shadow-lg sm:shadow-none ${
               isFlipped ? "pointer-events-none" : "pointer-events-auto"
             }`}
           >
