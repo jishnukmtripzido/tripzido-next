@@ -273,7 +273,7 @@ export default function MobileSearchDrawer({
             <button
               onClick={handleSearch}
               disabled={isLoading}
-              className="w-full bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-4 rounded-xl text-sm transition-colors cursor-pointer mt-1 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-4 rounded-xl text-base transition-colors cursor-pointer mt-1 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isLoading ? "Searching..." : "Search"}
             </button>

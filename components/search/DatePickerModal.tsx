@@ -341,7 +341,7 @@ export default function DatePickerModal({
 
         {/* Footer — shows selected dates */}
         <div className="shrink-0 px-5 py-4 border-t border-gray-100 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-sm font-medium">
+          <div className="flex items-center gap-2 text-xs font-medium">
             {isSameRange ? (
               <span className="text-gray-400">Pick a start &amp; end date</span>
             ) : (
