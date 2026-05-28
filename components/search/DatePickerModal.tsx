@@ -130,15 +130,22 @@ function CalendarMonth({
           const isSingleDay = isSameDay(effStart, effEnd);
 
           return (
+            // <div
+            //   key={date.getDate()}
+            //   className={`
+            //     relative flex items-center justify-center h-10
+            //     ${inRange ? "bg-[#fff3cd]" : ""}
+            //     ${isStart && !isSingleDay ? "bg-[#fff3cd] rounded-l-md" : ""}
+            //     ${isEnd ? "bg-[#fff3cd] rounded-r-md" : ""}
+            //   `}
+            // >
             <div
-              key={date.getDate()}
-              className={`
-                relative flex items-center justify-center h-10
-                ${inRange ? "bg-[#fff3cd]" : ""}
-                ${isStart && !isSingleDay ? "bg-[#fff3cd] rounded-l-md" : ""}
-                ${isEnd ? "bg-[#fff3cd] rounded-r-md" : ""}
-              `}
-            >
+                key={date.getDate()}
+                className={`
+                  relative flex items-center justify-center h-10
+                  ${inRange ? "bg-[#fff3cd]" : ""}
+                `}
+              >
               <button
                 onClick={() => !isPast && onDayClick(date)}
                 onMouseEnter={() => onDayHover(date)}
