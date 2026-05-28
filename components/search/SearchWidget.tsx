@@ -649,12 +649,12 @@ function TriggerButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`w-full flex items-center justify-between border rounded-lg p-3 sm:p-2 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
+      className={`w-full flex items-center justify-between border  rounded-lg p-3 sm:p-2 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
         ${hasError
           ? "border-red-300 hover:border-red-400"
           : active
             ? "border-[#ffc107] ring-2 ring-[#ffc107]/30"
-            : "border-gray-300 hover:border-[#ffc107]"
+            : "border-gray-400 hover:border-[#ffc107]"
         }`}
     >
       <div className="flex items-center min-w-0 flex-1">{children}</div>
