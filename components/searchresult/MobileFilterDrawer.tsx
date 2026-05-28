@@ -213,6 +213,14 @@ export default function MobileFilterDrawer({
           <h2 className="font-bold text-gray-900 text-base">
             {mode === "filter" ? "Filter" : "Sort by"}
           </h2>
+
+          <div className="flex items-center gap-2">
+          <button
+          onClick={onClearAll}
+          className="text-[#006CE4] text-xs hover:underline cursor-pointer"
+        >
+          Clear all filters
+        </button>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors cursor-pointer"
@@ -231,6 +239,7 @@ export default function MobileFilterDrawer({
               />
             </svg>
           </button>
+          </div>
         </div>
 
         {/* Content */}

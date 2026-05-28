@@ -100,6 +100,7 @@ export default function SearchResultsClient({
     onClearAll: clearAll,
   };
 
+
   return (
     <>
       <SearchResultHeaderSmallScreen />

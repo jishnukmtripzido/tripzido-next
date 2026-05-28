@@ -285,7 +285,8 @@ export default function FilterSidebar({
   return (
     <div className="bg-white rounded-md border border-gray-300/80 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+      <div className="hidden lg:block">
+      <div className=" flex items-center justify-between px-5 py-4 border-b border-gray-100">
         <span className="font-semibold text-base text-black">Filter</span>
         <button
           onClick={onClearAll}
@@ -293,6 +294,7 @@ export default function FilterSidebar({
         >
           Clear all filters
         </button>
+      </div>
       </div>
 
       {/* Price per day */}
