@@ -151,7 +151,7 @@ export default function TimePickerModal({
               <p className="text-sm font-semibold text-black">
                 Pick-up: <span className="font-thin font-sm text-gray-500">{formatDate(pickupDate)}</span>
               </p>
-              <p className="text-base font-thin text-black">
+              <p className="text-sm font-thin text-black">
                 {formatTime(pickupTime.hour, pickupTime.minute)}
               </p>
             </div>
@@ -185,7 +185,7 @@ export default function TimePickerModal({
               <p className="text-sm font-semibold text-black">
                 Drop-off: <span className="font-sm font-thin text-gray-500">{formatDate(dropoffDate)}</span>
               </p>
-              <p className="text-base font-thin text-black">
+              <p className="text-sm font-thin text-black">
                 {formatTime(dropoffTime.hour, dropoffTime.minute)}
               </p>
             </div>
