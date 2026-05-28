@@ -24,11 +24,11 @@ export default function Header({ logoWidth, logoHeight, logoTextSize, linkIconsS
           <Link href="/">
           <div className="flex items-center space-x-2">
             <div className="bg-[#ffc107] p-1.5 rounded-lg">
-              <svg className={`w-${logoWidth || 6} h-${logoHeight || 6} text-white`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-4 sm:w-${logoWidth || 6} h-4 sm:h-${logoHeight || 6} text-white`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
               </svg>
             </div>
-            <span className={`text-${logoTextSize || '2xl'} font-extrabold tracking-tight`}>tripzido</span>
+            <span className={`text-xl sm:text-${logoTextSize || '2xl'} font-extrabold tracking-tight`}>tripzido</span>
           </div>
           </Link>
 
@@ -82,7 +82,7 @@ export default function Header({ logoWidth, logoHeight, logoTextSize, linkIconsS
 
           {/* User */}
           <div className="flex items-center space-x-3 cursor-pointer">
-            <div className={`w-${userNameFirstLetterSize || 10} h-${userNameFirstLetterSize || 10} rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold`}>
+            <div className={`w-8 sm:w-${userNameFirstLetterSize || 10} h-8 sm:h-${userNameFirstLetterSize || 10} rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold`}>
               {userNameFirstLetter || "J"}
             </div>
             <div className="hidden sm:block">
