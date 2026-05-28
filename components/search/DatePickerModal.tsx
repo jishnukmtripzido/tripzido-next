@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -54,7 +52,7 @@ const MONTHS = [
 ];
 
 function formatDisplay(date: Date) {
-  return `${DAYS[(date.getDay() + 6) % 7].slice(0, 3)}, ${MONTHS[date.getMonth()].slice(0, 3)} ${date.getDate()}`;
+  return `${MONTHS[date.getMonth()].slice(0, 3)} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
 /* ── Calendar Month ── */
@@ -100,11 +98,11 @@ function CalendarMonth({
 
   return (
     <div className="flex-1 min-w-0">
-      {/* Month title — matches dropdown's tracking-wide */}
+      {/* Month title */}
       <p className="text-center font-bold text-gray-900 mb-4 text-sm tracking-wide">
         {MONTHS[month]} {year}
       </p>
-      {/* Day headers — matches dropdown's text-[11px] and py-2 */}
+      {/* Day headers */}
       <div className="grid grid-cols-7 mb-1">
         {DAYS.map((d) => (
           <div
@@ -130,33 +128,30 @@ function CalendarMonth({
           const isSingleDay = isSameDay(effStart, effEnd);
 
           return (
-            // <div
-            //   key={date.getDate()}
-            //   className={`
-            //     relative flex items-center justify-center h-10
-            //     ${inRange ? "bg-[#fff3cd]" : ""}
-            //     ${isStart && !isSingleDay ? "bg-[#fff3cd] rounded-l-md" : ""}
-            //     ${isEnd ? "bg-[#fff3cd] rounded-r-md" : ""}
-            //   `}
-            // >
-            <div
-                key={date.getDate()}
-                className={`
-                  relative flex items-center justify-center h-10
-                  ${inRange ? "bg-[#fff3cd]" : ""}
-                `}
-              >
+            <div key={date.getDate()} className="relative flex items-center justify-center h-10">
+              {/* Full-width strip for in-between days */}
+              {inRange && (
+                <div className="absolute inset-y-0 left-0 right-0 bg-[#fff3cd]" />
+              )}
+              {/* Right-half strip for start date */}
+              {isStart && !isSingleDay && (
+                <div className="absolute inset-y-0 left-1/2 right-0 bg-[#fff3cd]" />
+              )}
+              {/* Left-half strip for end date */}
+              {isEnd && (
+                <div className="absolute inset-y-0 left-0 right-1/2 bg-[#fff3cd]" />
+              )}
               <button
                 onClick={() => !isPast && onDayClick(date)}
                 onMouseEnter={() => onDayHover(date)}
                 onMouseLeave={() => onDayHover(null)}
                 disabled={isPast}
                 className={`
-                  w-10 h-10 text-sm font-medium flex items-center justify-center
+                  relative z-10 w-10 h-10 text-sm font-medium flex items-center justify-center
                   transition-all duration-100 ease-in-out
                   ${isPast ? "text-gray-300 cursor-not-allowed" : "cursor-pointer"}
                   ${isSelected
-                    ? "bg-[#ffc107] text-black font-bold shadow-sm rounded-md z-10 relative"
+                    ? "bg-[#ffc107] text-black font-bold shadow-sm rounded-md"
                     : isSingleDay && isStart
                       ? "bg-[#ffc107] text-black font-bold shadow-sm rounded-md"
                       : isPast
@@ -244,9 +239,6 @@ export default function DatePickerModal({
   const month1 = viewMonth;
   const month2 = addMonths(viewMonth, 1);
   const isSameRange = isSameDay(range.start, range.end);
-  const nights = Math.round(
-    (range.end.getTime() - range.start.getTime()) / 86400000,
-  );
 
   if (!mounted || !isOpen) return null;
 
@@ -278,7 +270,7 @@ export default function DatePickerModal({
           </button>
         </div>
 
-        {/* Selection pills — matches dropdown's xs font + rounded-lg border style */}
+        {/* Selection pills */}
         <div className="flex gap-2 px-5 py-4 shrink-0">
           <button
             onClick={() => { setSelecting("start"); setPendingStart(null); }}
@@ -347,17 +339,25 @@ export default function DatePickerModal({
           </div>
         </div>
 
-        {/* Footer — matches dropdown's layout and text exactly */}
+        {/* Footer — shows selected dates */}
         <div className="shrink-0 px-5 py-4 border-t border-gray-100 flex items-center justify-between gap-4">
-          <p className="text-sm text-gray-500 font-medium">
-            {isSameRange
-              ? "Pick a start & end date"
-              : `${nights} night${nights !== 1 ? "s" : ""} selected`}
-          </p>
+          <div className="flex items-center gap-2 text-sm font-medium">
+            {isSameRange ? (
+              <span className="text-gray-400">Pick a start &amp; end date</span>
+            ) : (
+              <>
+                <span className="text-gray-800 font-semibold">{formatDisplay(range.start)}</span>
+                <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                </svg>
+                <span className="text-gray-800 font-semibold">{formatDisplay(range.end)}</span>
+              </>
+            )}
+          </div>
           <button
             onClick={handleConfirm}
             disabled={isSameRange}
-            className="bg-[#ffc107] hover:bg-yellow-500 disabled:opacity-40 disabled:cursor-not-allowed text-black font-semibold px-6 py-2 rounded-xl text-sm transition-colors"
+            className="bg-[#ffc107] hover:bg-yellow-500 disabled:opacity-40 disabled:cursor-not-allowed text-black font-semibold px-6 py-2 rounded-xl text-sm transition-colors shrink-0"
           >
             Select Dates
           </button>
