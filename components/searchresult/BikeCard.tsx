@@ -117,7 +117,7 @@ export default function BikeCard({
               <div className="flex-1 border-t-2 border-gray-200"></div>
               <button
                 onClick={() => setIsFlipped(true)}
-                className="px-4 py-1 bg-white border border-gray-200 rounded-full text-[13px] sm:text-[11px] font-light text-black mx-3 hover:border-[#ffc107] transition-colors cursor-pointer shadow-sm"
+                className="px-4 py-1 bg-white border border-gray-300 rounded-full text-[13px] sm:text-[11px] font-light text-black mx-3 hover:border-[#ffc107] transition-colors cursor-pointer shadow-sm"
               >
                 View Specs
               </button>
