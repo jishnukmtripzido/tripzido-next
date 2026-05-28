@@ -235,7 +235,7 @@ export default function SearchResultsClient({
             </div>
 
             {/* ── Mobile: result count ── */}
-            <div className="md:hidden flex items-center justify-between mb-3">
+            {/* <div className="md:hidden flex items-center justify-between mb-3">
               <p className="text-sm font-medium text-black">
                 <span className="font-semibold">{tabFilteredBikes.length}</span> Bikes
                 {activeTab === "electric" && (
@@ -243,7 +243,8 @@ export default function SearchResultsClient({
                 )}
                 {selectedSortLabel ? ` · ${selectedSortLabel}` : ""}
               </p>
-            </div>
+            </div> */}
+            
 
             {/* Disclaimer */}
 {tabFilteredBikes.length > 0 && (
