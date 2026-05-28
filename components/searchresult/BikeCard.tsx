@@ -98,7 +98,7 @@ export default function BikeCard({
               isFlipped ? "pointer-events-none" : "pointer-events-auto"
             }`}
           >
-            <h3 className="font-medium text-black text-[17px] leading-none text-center px-4 tracking-tight">
+            <h3 className="font-semibold sm:font-medium text-black text-[17px] leading-none text-center px-4 tracking-tight">
               {name}
             </h3>
 
@@ -117,7 +117,7 @@ export default function BikeCard({
               <div className="flex-1 border-t-2 border-gray-200"></div>
               <button
                 onClick={() => setIsFlipped(true)}
-                className="px-4 py-1 bg-white border border-gray-300 rounded-full text-[13px] sm:text-[11px] font-light text-black mx-3 hover:border-[#ffc107] transition-colors cursor-pointer shadow-sm"
+                className="px-4 py-1 bg-white border border-gray-300 rounded-full text-[11px] sm:text-[11px] font-light text-black mx-3 hover:border-[#ffc107] transition-colors cursor-pointer shadow-sm"
               >
                 View Specs
               </button>
@@ -126,7 +126,7 @@ export default function BikeCard({
 
             <div className="px-4 pb-4 flex flex-col flex-1 justify-between">
               {/* Quick specs */}
-              <div className="flex justify-between items-center text-black text-[12px] font-normal px-1">
+              <div className="flex justify-between items-center text-black text-[13px] font-semibold px-1">
                 <div className="flex items-center gap-1.5">
                   <svg className="w-3.5 h-3.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
