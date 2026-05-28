@@ -181,7 +181,7 @@ export default function Header({
 
   return (
     <>
-      <header className={headerValues || "w-full px-0 py-2 border-b border-gray-300 sm:border-gray-100 shadow-sm"}>
+      <header className={headerValues || "w-full px-0 py-2 border-b border-gray-100 sm:border-gray-100 shadow-sm"}>
         <div
           className={`mx-auto px-4 lg:px-8 py-2 flex items-center justify-between ${
             headerLgScreenMx || "xl:mx-[121.5px] xl:px-0"
