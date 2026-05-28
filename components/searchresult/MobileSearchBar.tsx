@@ -28,7 +28,7 @@ export default function MobileSearchBar({
     >
       <button
         onClick={onModify}
-        className="w-full bg-white flex items-center gap-3 border border-gray-300 rounded-xl px-3 py-3 bg-white hover:border-[#ffc107] transition-colors text-left cursor-pointer"
+        className="w-full bg-white flex items-center gap-3 border border-gray-300 rounded-xl px-3 py-2.5 bg-white hover:border-[#ffc107] transition-colors text-left cursor-pointer"
       >
         <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -40,7 +40,7 @@ export default function MobileSearchBar({
           <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
         </svg>
         <div className="flex-1 min-w-0">
-          <div className="text-base font-semibold text-gray-900 truncate">{city}</div>
+          <div className="text-sm font-semibold text-gray-900 truncate">{city}</div>
           <div className="text-sm text-gray-500 truncate">
             {pickupDate} {pickupTime} &nbsp;–&nbsp; {dropoffDate} {dropoffTime}
           </div>
