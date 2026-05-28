@@ -40,8 +40,8 @@ export default function MobileSearchBar({
           <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
         </svg>
         <div className="flex-1 min-w-0">
-          <div className="text-sm font-semibold text-gray-900 truncate">{city}</div>
-          <div className="text-xs text-gray-500 truncate">
+          <div className="text-base font-semibold text-gray-900 truncate">{city}</div>
+          <div className="text-sm text-gray-500 truncate">
             {pickupDate} {pickupTime} &nbsp;–&nbsp; {dropoffDate} {dropoffTime}
           </div>
         </div>
