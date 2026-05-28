@@ -41,8 +41,8 @@
 //   return d;
 // }
 
-// type ModalType = "city" | "date" | "pickup-time" | "dropoff-time" | null;
-// // Desktop inline dropdowns — separate from modals
+// // "time" replaces the two separate "pickup-time" | "dropoff-time" modal types
+// type ModalType = "city" | "date" | "time" | null;
 // type DropdownType = "date" | "pickup-time" | "dropoff-time" | null;
 
 // export interface SelectedCity { id: number; name: string; }
@@ -52,9 +52,7 @@
 //   const defaults = getDefaults();
 //   const router = useRouter();
 
-//   // Mobile modals
 //   const [openModal, setOpenModal] = useState<ModalType>(null);
-//   // Desktop dropdowns
 //   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
 
 //   const [selectedCity, setSelectedCity] = useState<SelectedCity | null>(null);
@@ -66,7 +64,6 @@
 //   const [isLoading, setIsLoading] = useState(false);
 //   const [serverError, setServerError] = useState<string | null>(null);
 
-//   // Refs for positioning dropdowns relative to their trigger
 //   const pickupDateRef = useRef<HTMLDivElement>(null);
 //   const dropoffDateRef = useRef<HTMLDivElement>(null);
 //   const pickupTimeRef = useRef<HTMLDivElement>(null);
@@ -119,7 +116,9 @@
 //         return;
 //       }
 
-//       router.push(`/searchresult?city=${selectedCity!.id}&pickup=${pickup_datetime.toISOString()}&dropoff=${dropoff_datetime.toISOString()}`);
+//       router.push(
+//         `/searchresult?city=${selectedCity!.id}&pickup=${pickup_datetime.toISOString()}&dropoff=${dropoff_datetime.toISOString()}`
+//       );
 //     } finally {
 //       setIsLoading(false);
 //     }
@@ -139,7 +138,6 @@
 //               {/* ── City ── */}
 //               <div className="relative w-full md:flex-1 min-w-0">
 //                 <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">Select City</label>
-//                 {/* Mobile & desktop: always modal for city */}
 //                 <TriggerButton
 //                   onClick={() => setOpenModal("city")}
 //                   disabled={!!citiesError}
@@ -161,14 +159,14 @@
 //                 {/* ── Pick-up date ── */}
 //                 <div ref={pickupDateRef} className="relative w-full md:w-[130px] md:shrink-0">
 //                   <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">Pick-up date</label>
-//                   {/* Mobile: open modal */}
+//                   {/* Mobile */}
 //                   <div className="md:hidden">
 //                     <TriggerButton onClick={() => setOpenModal("date")} hasError={!!errors.pickup_datetime}>
 //                       <CalendarIcon />
 //                       <span className="text-sm font-medium whitespace-nowrap">{formatDate(dateRange.start)}</span>
 //                     </TriggerButton>
 //                   </div>
-//                   {/* Desktop: open inline dropdown */}
+//                   {/* Desktop */}
 //                   <div className="hidden md:block">
 //                     <TriggerButton
 //                       onClick={() => toggleDropdown("date")}
@@ -193,9 +191,9 @@
 //                 {/* ── Pick-up time ── */}
 //                 <div ref={pickupTimeRef} className="relative w-full md:w-[120px] md:shrink-0">
 //                   <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">Time</label>
-//                   {/* Mobile */}
+//                   {/* Mobile — opens combined time modal */}
 //                   <div className="md:hidden">
-//                     <TriggerButton onClick={() => setOpenModal("pickup-time")}>
+//                     <TriggerButton onClick={() => setOpenModal("time")}>
 //                       <ClockIcon />
 //                       <span className="text-sm font-medium whitespace-nowrap">{formatTime(pickupTime.hour, pickupTime.minute)}</span>
 //                     </TriggerButton>
@@ -232,7 +230,7 @@
 //                       <span className="text-sm font-medium whitespace-nowrap">{formatDate(dateRange.end)}</span>
 //                     </TriggerButton>
 //                   </div>
-//                   {/* Desktop — reuses the same date dropdown */}
+//                   {/* Desktop */}
 //                   <div className="hidden md:block">
 //                     <TriggerButton
 //                       onClick={() => toggleDropdown("date")}
@@ -242,7 +240,6 @@
 //                       <CalendarIcon />
 //                       <span className="text-sm font-medium whitespace-nowrap">{formatDate(dateRange.end)}</span>
 //                     </TriggerButton>
-//                     {/* Dropdown anchor is on the pickup date cell; this just acts as a visual trigger */}
 //                   </div>
 //                   <FieldError message={errors.dropoff_datetime} />
 //                 </div>
@@ -250,9 +247,9 @@
 //                 {/* ── Drop-off time ── */}
 //                 <div ref={dropoffTimeRef} className="relative w-full md:w-[120px] md:shrink-0">
 //                   <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">Time</label>
-//                   {/* Mobile */}
+//                   {/* Mobile — opens same combined time modal */}
 //                   <div className="md:hidden">
-//                     <TriggerButton onClick={() => setOpenModal("dropoff-time")}>
+//                     <TriggerButton onClick={() => setOpenModal("time")}>
 //                       <ClockIcon />
 //                       <span className="text-sm font-medium whitespace-nowrap">{formatTime(dropoffTime.hour, dropoffTime.minute)}</span>
 //                     </TriggerButton>
@@ -312,27 +309,28 @@
 //         loading={false}
 //         error={citiesError}
 //       />
+
 //       <DatePickerModal
 //         isOpen={openModal === "date"}
 //         onClose={() => setOpenModal(null)}
 //         onSelect={handleDateSelect}
 //         initialRange={dateRange}
 //       />
+
+//       {/* Combined pick-up + drop-off time modal (mobile only) */}
 //       <TimePickerModal
-//         isOpen={openModal === "pickup-time"}
+//         isOpen={openModal === "time"}
 //         onClose={() => setOpenModal(null)}
-//         onSelect={(h, m) => setPickupTime({ hour: h, minute: m })}
-//         initialHour={pickupTime.hour}
-//         initialMinute={pickupTime.minute}
-//         label="Pick-up time"
-//       />
-//       <TimePickerModal
-//         isOpen={openModal === "dropoff-time"}
-//         onClose={() => setOpenModal(null)}
-//         onSelect={(h, m) => setDropoffTime({ hour: h, minute: m })}
-//         initialHour={dropoffTime.hour}
-//         initialMinute={dropoffTime.minute}
-//         label="Drop-off time"
+//         onSelectBoth={(pickup, dropoff) => {
+//           setPickupTime(pickup);
+//           setDropoffTime(dropoff);
+//         }}
+//         initialPickupHour={pickupTime.hour}
+//         initialPickupMinute={pickupTime.minute}
+//         initialDropoffHour={dropoffTime.hour}
+//         initialDropoffMinute={dropoffTime.minute}
+//         pickupDate={dateRange.start}
+//         dropoffDate={dateRange.end}
 //       />
 //     </>
 //   );
@@ -374,7 +372,7 @@
 //       type="button"
 //       onClick={onClick}
 //       disabled={disabled}
-//       className={`w-full flex items-center justify-between border  rounded-lg p-3 sm:p-2 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
+//       className={`w-full flex items-center justify-between border rounded-lg p-3 sm:p-2 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
 //         ${hasError
 //           ? "border-red-300 hover:border-red-400"
 //           : active
@@ -386,7 +384,6 @@
 //     </button>
 //   );
 // }
-
 
 
 "use client";
@@ -459,6 +456,12 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
   const dropoffTimeRef = useRef<HTMLDivElement>(null);
 
   function handleDateSelect(range: DateRange) {
+    setDateRange(range.end < range.start ? { start: range.start, end: range.start } : range);
+    setErrors(e => ({ ...e, dropoff_datetime: "", pickup_datetime: "" }));
+  }
+
+  /** Real-time update while user is picking dates in the dropdown */
+  function handleDateChange(range: DateRange) {
     setDateRange(range.end < range.start ? { start: range.start, end: range.start } : range);
     setErrors(e => ({ ...e, dropoff_datetime: "", pickup_datetime: "" }));
   }
@@ -570,6 +573,7 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
                         isOpen
                         onClose={() => setOpenDropdown(null)}
                         onSelect={(range) => { handleDateSelect(range); setOpenDropdown(null); }}
+                        onDateChange={handleDateChange}
                         initialRange={dateRange}
                       />
                     )}
@@ -629,6 +633,7 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
                       <CalendarIcon />
                       <span className="text-sm font-medium whitespace-nowrap">{formatDate(dateRange.end)}</span>
                     </TriggerButton>
+                    {/* Dropdown anchors on pickup date cell; this just acts as a visual trigger */}
                   </div>
                   <FieldError message={errors.dropoff_datetime} />
                 </div>
