@@ -108,7 +108,7 @@ export default function CityPickerModal({
 
         {/* ── Search bar ── */}
         <div className="px-5 py-3 shrink-0">
-          <div className="flex items-center gap-2.5 border border-gray-300 rounded-xl px-3.5 py-2.5 focus-within:border-[#ffc107] focus-within:ring-2 focus-within:ring-[#ffc107]/20 transition-all bg-gray-50">
+          <div className="flex items-center gap-2.5 border border-gray-300 rounded-md px-3.5 py-2.5 focus-within:border-[#ffc107] focus-within:ring-2 focus-within:ring-[#ffc107]/20 transition-all bg-gray-50">
             <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
             </svg>
@@ -185,7 +185,7 @@ export default function CityPickerModal({
                     onMouseEnter={() => setHighlighted(city.id)}
                     onMouseLeave={() => setHighlighted(null)}
                     className={`
-                      relative rounded-xl overflow-hidden aspect-[4/3] text-left
+                      relative rounded-md overflow-hidden aspect-[4/3] text-left
                       focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffc107]
                       transition-transform duration-150 cursor-pointer
                       ${isHighlighted ? "scale-[1.03]" : "scale-100"}

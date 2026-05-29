@@ -38,7 +38,7 @@ const FAQ_RIGHT: FAQItem[] = [
 
 function FAQColumn({ items }: { items: FAQItem[] }) {
   return (
-    <div className="flex flex-col divide-y divide-gray-200 border border-gray-200 rounded-lg overflow-hidden">
+    <div className="flex flex-col divide-y divide-gray-200 border border-gray-200 rounded-md overflow-hidden">
       {items.map((item) => (
         <details key={item.question} className="group">
           <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none select-none hover:bg-gray-50 transition-colors">

@@ -5,7 +5,7 @@ import { Bike } from "@/types";
 
 export default function BikeCard({ bike }: { bike: Bike }) {
   return (
-    <div className="border border-gray-300 rounded-xl overflow-hidden flex-shrink-0 min-w-[240px] md:min-w-0">
+    <div className="border border-gray-200 rounded-md overflow-hidden flex-shrink-0 min-w-[240px] md:min-w-0">
       <div className="relative h-48 bg-white overflow-hidden flex items-center justify-center p-3">
         <img
           src={bike.imageUrl}
@@ -77,7 +77,7 @@ export default function BikeCard({ bike }: { bike: Bike }) {
               <span className="text-xs text-gray-700 font-medium">/ day</span>
             </div>
           </div>
-          <button className="bg-[#ffc107] hover:bg-yellow-500 text-black text-sm font-medium px-5 py-2 rounded-lg transition-colors">
+          <button className="bg-[#ffc107] hover:bg-yellow-500 text-black text-sm font-medium px-5 py-2 rounded-md transition-colors">
             Book now
           </button>
         </div>
