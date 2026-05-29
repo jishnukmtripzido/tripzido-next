@@ -85,7 +85,7 @@ export default function BikeCard({
   }
 
   return (
-    <div className="px-4 sm:px-0 group relative w-full max-w-sm h-[410px] bg-transparent" >
+    <div className="px-3 sm:px-0 group relative w-full max-w-sm h-[410px] bg-transparent" >
       <div style={{ perspective: "1000px" }} className="relative w-full h-full">
         <div
           className={`relative w-full h-full transition-all duration-700 [transform-style:preserve-3d] ${
