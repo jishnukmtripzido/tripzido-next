@@ -541,7 +541,7 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
       <section className="relative z-20 px-4 lg:px-8 -mt-12 mx-auto xl:mx-[121.5px] xl:px-0">
         <form onSubmit={handleSearch} noValidate>
           {/* <div className="bg-white rounded-md shadow-2xl sm:shadow-xl p-4 border border-gray-400"> */}
-          <div className="rounded-md p-4 border border-gray-400" style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+          <div className="rounded-md p-4 border border-gray-400 sm:border-gray-300/90" style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
            
            {/* <div
   className="rounded-xl p-4 border border-white/35 overflow-hidden"
@@ -752,6 +752,8 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
         pickupDate={dateRange.start}
         dropoffDate={dateRange.end}
       />
+
+      
     </>
   );
 }
@@ -792,7 +794,7 @@ function TriggerButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`w-full flex items-center justify-between border rounded-md p-4 sm:p-3 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
+      className={`w-full flex items-center justify-between border rounded-md p-[14px] sm:p-3 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
         ${hasError
           ? "border-red-300 hover:border-red-400"
           : active
@@ -806,6 +808,8 @@ function TriggerButton({
   //  }`}
     >
       <div className="flex items-center min-w-0 flex-1">{children}</div>
+
+   
     </button>
   );
 }
