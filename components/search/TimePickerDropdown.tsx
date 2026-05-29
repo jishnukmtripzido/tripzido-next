@@ -78,9 +78,9 @@ export default function TimePickerDropdown({
                 onSelect(slot.h, slot.m);
                 onClose();
               }}
-              className={`w-full flex items-center justify-between px-3 py-2 text-sm transition-colors
+              className={`w-full flex items-center justify-between px-3 py-2 text-sm transition-colors hover:cursor-pointer
                 ${isSelected
-                  ? "bg-[#ffc107] text-black font-semibold"
+                  ? "bg-[#ffc107] text-black font-normal"
                   : "text-gray-700 hover:bg-gray-50"
                 }`}
             >

@@ -209,7 +209,7 @@ export default function CityPickerModal({
 
                     {/* Selected ring */}
                     {isSelected && (
-                      <div className="absolute inset-0 ring-3 ring-[#ffc107] ring-inset rounded-xl" />
+                      <div className="absolute inset-0 ring-3 ring-[#ffc107] ring-inset rounded-md" />
                     )}
 
                     {/* City name + check */}
@@ -242,7 +242,7 @@ export default function CityPickerModal({
           {selectedCity ? (
             <button
               onClick={onClose}
-              className="w-full cursor-pointer bg-[#ffc107] hover:bg-yellow-500 active:bg-yellow-600 text-black font-semibold py-3 rounded-xl transition-colors text-sm"
+              className="w-full cursor-pointer bg-[#ffc107] hover:bg-yellow-500 active:bg-yellow-600 text-black font-semibold py-3 rounded-md transition-colors text-sm"
             >
               Continue with {selectedCity.name}
             </button>

@@ -262,7 +262,7 @@ export default function BikeCard({
                   )}
                 </div>
                 <Link href={`/vehicledetails/${id}`}>
-                  <button className="bg-[#ffc107] hover:bg-yellow-500 text-black text-[13px] font-semibold px-5 py-2 rounded-xl transition-colors cursor-pointer">
+                  <button className="bg-[#ffc107] hover:bg-yellow-500 text-black text-[13px] font-semibold px-5 py-2 rounded-md transition-colors cursor-pointer">
                     Book now
                   </button>
                 </Link>
