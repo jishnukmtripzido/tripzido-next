@@ -1,106 +1,10 @@
-// "use client";
-
-// import Link from "next/link";
-
-
-// type HeaderProps = {
-//   logoWidth?: number;
-//   logoHeight?: number;
-//   logoTextSize?: string;
-//   linkIconsSize?: number;
-//   userNameFirstLetterSize?: number;
-//   userNameFirstLetter?: string;
-//   headerLgScreenMx?: string;
-//   headerValues? : string;
-// }
-
-// export default function Header({ logoWidth, logoHeight, logoTextSize, linkIconsSize, userNameFirstLetterSize, userNameFirstLetter, headerLgScreenMx,headerValues }: HeaderProps) {
-//   return (
-//     <header className={headerValues || 'w-full px-0 py-2 border-b border-gray-300 sm:border-gray-100 shadow-sm'}>
-//       <div className={`mx-auto px-4 lg:px-8 py-2 flex items-center justify-between ${headerLgScreenMx || 'xl:mx-[121.5px] xl:px-0'}`}>
-//         {/* Left: Logo + Nav */}
-//         <div className="flex items-center space-x-12">
-//           {/* Logo */}
-//           <Link href="/">
-//           <div className="flex items-center space-x-2">
-//             <div className="bg-[#ffc107] p-1.5 rounded-lg">
-//               <svg className={`w-${logoWidth || 6} h-${logoHeight || 6} text-white`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                 <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-//               </svg>
-//             </div>
-//             <span className={`text-${logoTextSize || '2xl'} font-extrabold tracking-tight`}>tripzido</span>
-//           </div>
-//           </Link>
-
-//           {/* Nav Links */}
-//           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-700">
-//             <Link href="#" className="flex items-center space-x-2 hover:text-black">
-//               <svg className={`w-${linkIconsSize || 5} h-${linkIconsSize || 5}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                 <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-//                 <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-//               </svg>
-//               <span>Bikes</span>
-//             </Link>
-//             <Link href="#" className="flex items-center space-x-2 hover:text-black">
-//               <svg className={`w-${linkIconsSize || 5} h-${linkIconsSize || 5}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                 <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-//               </svg>
-//               <span>Destinations</span>
-//             </Link>
-//             <Link href="#" className="flex items-center space-x-2 hover:text-black">
-//               <svg className={`w-${linkIconsSize || 5} h-${linkIconsSize || 5}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                 <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-//               </svg>
-//               <span>How it works</span>
-//             </Link>
-//             <Link href="#" className="flex items-center space-x-2 hover:text-black">
-//               <svg className={`w-${linkIconsSize || 5} h-${linkIconsSize || 5}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                 <path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-//               </svg>
-//               <span>Offers</span>
-//             </Link>
-//           </nav>
-//         </div>
-
-//         {/* Right: Flag, Help, Account */}
-//         <div className="flex items-center space-x-6 text-sm font-medium">
-//           {/* Indian Flag */}
-//           <div className="w-6 h-4 bg-gray-200 overflow-hidden rounded-sm cursor-pointer border border-gray-300">
-//             <div className="h-1/3 bg-[#FF9933]" />
-//             <div className="h-1/3 bg-white flex items-center justify-center">
-//               <div className="w-1 h-1 rounded-full bg-blue-800" />
-//             </div>
-//             <div className="h-1/3 bg-[#138808]" />
-//           </div>
-
-//           {/* Help */}
-//           <div className="text-gray-500 cursor-pointer">
-//             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//               <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-//             </svg>
-//           </div>
-
-//           {/* User */}
-//           <div className="flex items-center space-x-3 cursor-pointer">
-//             <div className={`w-${userNameFirstLetterSize || 8} h-${userNameFirstLetterSize || 8} rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold`}>
-//               {userNameFirstLetter || "J"}
-//             </div>
-//             <div className="hidden sm:block">
-//               <div className="text-sm font-bold">Your account</div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </header>
-//   );
-// }
-
 
 
 "use client";
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import MobileDrawer from "./MobileDrawer";
 
 type HeaderProps = {
   logoWidth?: number;
@@ -297,113 +201,12 @@ export default function Header({
       />
 
       {/* Drawer panel */}
-      <div
-        className={`fixed top-0 right-0 h-full w-[300px] z-50 bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out md:hidden ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        {/* Drawer header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <div className="flex items-center space-x-2">
-            <div className="bg-brand-yellow p-1 rounded-lg">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-              </svg>
-            </div>
-            <span className="text-xl font-semibold tracking-tight">tripzido</span>
-          </div>
-          <button
-            onClick={closeMenu}
-            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
-            aria-label="Close menu"
-          >
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-            </svg>
-          </button>
-        </div>
-
-        {/* User info strip */}
-        <div className="flex items-center gap-3 px-5 py-4 bg-amber-50 border-b border-amber-100">
-          <div className="w-10 h-10 rounded-full bg-brand-yellow flex items-center justify-center text-white font-bold text-base shrink-0">
-            {userNameFirstLetter || "J"}
-          </div>
-          <div>
-            <p className="text-sm font-bold text-gray-800">Your account</p>
-            <p className="text-xs text-gray-500">Manage your trips & profile</p>
-          </div>
-        </div>
-
-        {/* Auth buttons */}
-        <div className="flex gap-3 px-5 py-4 border-b border-gray-100">
-          <Link
-            href="#"
-            onClick={closeMenu}
-            className="flex-1 text-center text-sm font-semibold bg-brand-yellow text-white py-2.5 rounded-xl hover:bg-[#e6ab00] transition-colors"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="#"
-            onClick={closeMenu}
-            className="flex-1 text-center text-sm font-semibold border border-brand-yellow text-brand-yellow py-2.5 rounded-xl hover:bg-amber-50 transition-colors"
-          >
-            Register
-          </Link>
-        </div>
-
-        {/* Nav links */}
-        <nav className="flex-1 overflow-y-auto px-3 py-3">
-          <p className="px-2 mb-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400">
-            Explore
-          </p>
-          <ul className="space-y-0.5">
-            {navLinks.map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  onClick={closeMenu}
-                  className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-black transition-colors"
-                >
-                  <span className="text-brand-yellow">{link.icon}</span>
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-5 mb-2">
-            <p className="px-2 mb-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400">
-              Support
-            </p>
-            <Link
-              href="#"
-              onClick={closeMenu}
-              className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-black transition-colors"
-            >
-              <span className="text-[#ffc107]">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                </svg>
-              </span>
-              Help & Support
-            </Link>
-          </div>
-        </nav>
-
-        {/* Offer banner at bottom */}
-        <div className="mx-4 mb-4 rounded-2xl bg-gradient-to-r from-[#ffc107] to-[#ff9800] p-4 text-white">
-          <p className="text-xs font-semibold uppercase tracking-wide opacity-80 mb-0.5">Limited time</p>
-          <p className="text-sm font-bold leading-snug">🎉 Get 10% off your first booking!</p>
-          <Link
-            href="#"
-            onClick={closeMenu}
-            className="mt-2 inline-block text-xs font-semibold bg-white text-[#c89600] px-3 py-1.5 rounded-lg hover:bg-amber-50 transition-colors"
-          >
-            Claim offer →
-          </Link>
-        </div>
-      </div>
+     <MobileDrawer
+  isOpen={menuOpen}
+  onClose={closeMenu}
+  navLinks={navLinks}
+  userNameFirstLetter={userNameFirstLetter}
+/>
     </>
   );
 }
