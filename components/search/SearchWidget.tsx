@@ -1370,7 +1370,7 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
 
           {/* ── Desktop (md+): dark frosted glass ── */}
           <div
-            className="hidden md:block rounded-md p-4 border border-white/50"
+            className="hidden md:block rounded-md p-4 border border-white/30"
             style={{
               background: 'rgba(0,0,0,0.52)',
               backdropFilter: 'blur(16px)',
