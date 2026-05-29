@@ -74,6 +74,12 @@
 //     setErrors(e => ({ ...e, dropoff_datetime: "", pickup_datetime: "" }));
 //   }
 
+//   /** Real-time update while user is picking dates in the dropdown */
+//   function handleDateChange(range: DateRange) {
+//     setDateRange(range.end < range.start ? { start: range.start, end: range.start } : range);
+//     setErrors(e => ({ ...e, dropoff_datetime: "", pickup_datetime: "" }));
+//   }
+
 //   async function handleSearch(e: React.FormEvent) {
 //     e.preventDefault();
 //     setServerError(null);
@@ -132,7 +138,7 @@
 //     <>
 //       <section className="relative z-20 px-4 lg:px-8 -mt-12 mx-auto xl:mx-[121.5px] xl:px-0">
 //         <form onSubmit={handleSearch} noValidate>
-//           <div className="bg-white rounded-xl shadow-2xl sm:shadow-xl p-4 border border-gray-400">
+//           <div className="bg-white rounded-md shadow-2xl sm:shadow-xl p-4 border border-gray-400">
 //             <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
 
 //               {/* ── City ── */}
@@ -181,6 +187,7 @@
 //                         isOpen
 //                         onClose={() => setOpenDropdown(null)}
 //                         onSelect={(range) => { handleDateSelect(range); setOpenDropdown(null); }}
+//                         onDateChange={handleDateChange}
 //                         initialRange={dateRange}
 //                       />
 //                     )}
@@ -240,6 +247,7 @@
 //                       <CalendarIcon />
 //                       <span className="text-sm font-medium whitespace-nowrap">{formatDate(dateRange.end)}</span>
 //                     </TriggerButton>
+//                     {/* Dropdown anchors on pickup date cell; this just acts as a visual trigger */}
 //                   </div>
 //                   <FieldError message={errors.dropoff_datetime} />
 //                 </div>
@@ -282,7 +290,7 @@
 //                 <button
 //                   type="submit"
 //                   disabled={isLoading}
-//                   className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-3 sm:py-2 px-5 rounded-lg transition-colors whitespace-nowrap hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+//                   className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-3 sm:py-3 px-5 rounded-md transition-colors whitespace-nowrap hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
 //                 >
 //                   {isLoading ? "Searching..." : "Search"}
 //                 </button>
@@ -372,7 +380,7 @@
 //       type="button"
 //       onClick={onClick}
 //       disabled={disabled}
-//       className={`w-full flex items-center justify-between border rounded-lg p-3 sm:p-2 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
+//       className={`w-full flex items-center justify-between border rounded-md p-3 sm:p-3 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
 //         ${hasError
 //           ? "border-red-300 hover:border-red-400"
 //           : active
@@ -384,6 +392,14 @@
 //     </button>
 //   );
 // }
+
+
+
+
+
+
+
+
 
 
 "use client";
@@ -524,7 +540,17 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
     <>
       <section className="relative z-20 px-4 lg:px-8 -mt-12 mx-auto xl:mx-[121.5px] xl:px-0">
         <form onSubmit={handleSearch} noValidate>
-          <div className="bg-white rounded-md shadow-2xl sm:shadow-xl p-4 border border-gray-400">
+          {/* <div className="bg-white rounded-md shadow-2xl sm:shadow-xl p-4 border border-gray-400"> */}
+          <div className="rounded-md p-4 border border-gray-400" style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+           
+           {/* <div
+  className="rounded-xl p-4 border border-white/35 overflow-hidden"
+  style={{
+    background: 'rgba(255,255,255,0.18)',
+    backdropFilter: 'blur(16px)',
+    WebkitBackdropFilter: 'blur(16px)',
+  }}
+> */}
             <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
 
               {/* ── City ── */}
@@ -773,6 +799,11 @@ function TriggerButton({
             ? "border-[#ffc107] ring-2 ring-[#ffc107]/30"
             : "border-gray-300 hover:border-[#ffc107]"
         }`}
+  //     className={`w-full flex items-center justify-between rounded-md p-3 sm:p-3 bg-white/90 transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
+  //  ${hasError ? "border border-red-300 hover:border-red-400"
+  //   : active ? "border border-[#ffc107] ring-2 ring-[#ffc107]/30"
+  //    : "border border-white/60 hover:border-[#ffc107]"
+  //  }`}
     >
       <div className="flex items-center min-w-0 flex-1">{children}</div>
     </button>
