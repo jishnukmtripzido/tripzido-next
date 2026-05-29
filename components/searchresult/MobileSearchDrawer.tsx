@@ -485,7 +485,7 @@ export default function MobileSearchDrawer({
                 type="button"
                 onClick={() => setOpenModal("city")}
                 disabled={!!citiesError}
-                className={`w-full flex items-center border rounded-lg p-3 bg-white transition-colors cursor-pointer disabled:opacity-60
+                className={`w-full flex items-center border rounded-md p-4 bg-white transition-colors cursor-pointer disabled:opacity-60
                   ${errors.city_id ? "border-red-500" : "border-gray-300 hover:border-[#ffc107]"}`}
               >
                 <svg className="w-5 h-5 text-gray-400 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -511,7 +511,7 @@ export default function MobileSearchDrawer({
                 <button
                   type="button"
                   onClick={() => setOpenModal("date")}
-                  className={`w-full flex items-center border rounded-lg p-3 bg-white transition-colors cursor-pointer
+                  className={`w-full flex items-center border rounded-md p-4 bg-white transition-colors cursor-pointer
                     ${errors.pickup_datetime ? "border-red-500" : "border-gray-300 hover:border-[#ffc107]"}`}
                 >
                   <svg className="w-4 h-4 text-gray-400 mr-1.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -528,7 +528,7 @@ export default function MobileSearchDrawer({
                 <button
                   type="button"
                   onClick={() => setOpenModal("pickup-time")}
-                  className="w-full flex items-center border border-gray-300 rounded-lg p-3 bg-white hover:border-[#ffc107] transition-colors cursor-pointer"
+                  className="w-full flex items-center border border-gray-300  rounded-md p-4 bg-white hover:border-[#ffc107] transition-colors cursor-pointer"
                 >
                   <svg className="w-4 h-4 text-gray-400 mr-1.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -543,7 +543,7 @@ export default function MobileSearchDrawer({
                 <button
                   type="button"
                   onClick={() => setOpenModal("date")}
-                  className={`w-full flex items-center border rounded-lg p-3 bg-white transition-colors cursor-pointer
+                  className={`w-full flex items-center border  rounded-md p-4 bg-white transition-colors cursor-pointer
                     ${errors.dropoff_datetime ? "border-red-500" : "border-gray-300 hover:border-[#ffc107]"}`}
                 >
                   <svg className="w-4 h-4 text-gray-400 mr-1.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -560,7 +560,7 @@ export default function MobileSearchDrawer({
                 <button
                   type="button"
                   onClick={() => setOpenModal("dropoff-time")}
-                  className="w-full flex items-center border border-gray-300 rounded-lg p-3 bg-white hover:border-[#ffc107] transition-colors cursor-pointer"
+                  className="w-full flex items-center border border-gray-300  rounded-md p-4 bg-white hover:border-[#ffc107] transition-colors cursor-pointer"
                 >
                   <svg className="w-4 h-4 text-gray-400 mr-1.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
