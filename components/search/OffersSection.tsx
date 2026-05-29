@@ -68,7 +68,7 @@ export default function OffersSection() {
             {OFFERS.map((offer) => (
               <div
                 key={offer.id}
-                className={`rounded-xl p-4 h-28 flex flex-col justify-between flex-shrink-0
+                className={`rounded-md p-4 h-28 flex flex-col justify-between flex-shrink-0
                   min-w-[260px] md:min-w-0
                   ${offer.featured
                     ? "bg-[#ffc107]"

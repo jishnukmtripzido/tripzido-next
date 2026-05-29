@@ -524,7 +524,7 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
     <>
       <section className="relative z-20 px-4 lg:px-8 -mt-12 mx-auto xl:mx-[121.5px] xl:px-0">
         <form onSubmit={handleSearch} noValidate>
-          <div className="bg-white rounded-xl shadow-2xl sm:shadow-xl p-4 border border-gray-400">
+          <div className="bg-white rounded-md shadow-2xl sm:shadow-xl p-4 border border-gray-400">
             <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
 
               {/* ── City ── */}
@@ -676,7 +676,7 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-3 sm:py-2 px-5 rounded-lg transition-colors whitespace-nowrap hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-3 sm:py-3 px-5 rounded-md transition-colors whitespace-nowrap hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isLoading ? "Searching..." : "Search"}
                 </button>
@@ -766,7 +766,7 @@ function TriggerButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`w-full flex items-center justify-between border rounded-lg p-3 sm:p-2 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
+      className={`w-full flex items-center justify-between border rounded-md p-3 sm:p-3 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
         ${hasError
           ? "border-red-300 hover:border-red-400"
           : active
