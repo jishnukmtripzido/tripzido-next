@@ -80,9 +80,9 @@ export default function HeroSection() {
           src="hero.png"
         />
         {/* Left-to-right dark gradient — darkens left where text sits, fades out toward bike */}
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.25)_45%,rgba(0,0,0,0)_70%)]" />
+        {/* <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.25)_45%,rgba(0,0,0,0)_70%)]" /> */}
         {/* Bottom fade so search widget area blends naturally */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0)_40%)]" />
+        {/* <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0)_40%)]" /> */}
       </div>
 
       {/* Hero Content */}

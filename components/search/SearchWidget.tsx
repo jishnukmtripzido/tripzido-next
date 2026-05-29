@@ -949,9 +949,9 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
       <section className="relative z-20 px-4 lg:px-8 -mt-12 mx-auto xl:mx-[121.5px] xl:px-0">
         <form onSubmit={handleSearch} noValidate>
           <div
-            className="rounded-md p-4 border border-white/10"
+            className="rounded-md p-4 border border-white/40"
             style={{
-              background: 'rgba(0,0,0,0.52)',
+              background: 'rgba(0,0,0,0.21)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
             }}
