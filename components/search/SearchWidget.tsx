@@ -794,7 +794,7 @@ function TriggerButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`w-full flex items-center justify-between border rounded-md p-[13px] sm:p-3 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
+      className={`w-full flex items-center justify-between border rounded-md p-3 sm:p-3 bg-white transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed
         ${hasError
           ? "border-red-300 hover:border-red-400"
           : active
