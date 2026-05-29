@@ -1370,7 +1370,7 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
 
           {/* ── Desktop (md+): dark frosted glass ── */}
           <div
-            className="hidden md:block rounded-md p-4 border border-white/10"
+            className="hidden md:block rounded-md p-4 border border-white/50"
             style={{
               background: 'rgba(0,0,0,0.52)',
               backdropFilter: 'blur(16px)',
@@ -1667,9 +1667,9 @@ function TriggerButton({
   const base = "w-full flex items-center justify-between rounded-md p-3 border transition-colors text-left hover:cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed";
 
   const darkStyles = hasError
-    ? "bg-white/10 border-red-400 hover:border-red-300"
+    ? "bg-white border-red-400 hover:border-red-300"
     : active
-      ? "bg-white/15 border-[#ffc107] ring-2 ring-[#ffc107]/30"
+      ? "bg-white border-[#ffc107] ring-2 ring-[#ffc107]/30"
       : "bg-white border-white/20 hover:border-[#ffc107]";
 
   const lightStyles = hasError
