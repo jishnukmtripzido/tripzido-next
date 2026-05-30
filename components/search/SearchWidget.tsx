@@ -138,7 +138,9 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
     <>
       <section className="relative z-20 px-4 lg:px-8 -mt-12 mx-auto xl:mx-[121.5px] xl:px-0">
         <form onSubmit={handleSearch} noValidate>
-          <div className="bg-white rounded-md shadow-2xl sm:shadow-xl p-4 border border-gray-400">
+          {/* <div className="bg-white rounded-md shadow-2xl sm:shadow-xl p-4 border border-gray-400"> */}
+ <div className="bg-white rounded-md shadow-2xl  p-4 border border-gray-400" style={{ borderColor: "rgba(0,0,0,0.1)" }}>
+            
             <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
 
               {/* ── City ── */}
