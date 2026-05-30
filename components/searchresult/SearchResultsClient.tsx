@@ -128,7 +128,7 @@ export default function SearchResultsClient({
         visible={!scrolled}
       />
 
-      <div className=" md:hidden bg-[#fed250] px-1 py-4">
+      <div className=" md:hidden bg-[#fed250] px-1 py-3">
    
   <div className="center">
     <p className="text-[13px]   font-thin text-center text-[#3a2c00]">
