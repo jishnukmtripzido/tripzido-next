@@ -140,8 +140,8 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
         <form onSubmit={handleSearch} noValidate>
           {/* <div className="bg-white rounded-md shadow-2xl sm:shadow-xl p-4 border border-gray-400"> */}
  <div className="bg-white rounded-md shadow-2xl  p-4 border-3 border-brand-yellow" style={{ boxShadow: "rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px" }}>
-              <h2 className="text-lg font-semibold mb-4">
-               Search your next ride
+              <h2 className="text-xl font-semibold mb-4">
+               Find Your Next Adventure
               </h2>
             <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
 
