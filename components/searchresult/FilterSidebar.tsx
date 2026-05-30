@@ -290,7 +290,7 @@ export default function FilterSidebar({
         <span className="font-semibold text-base text-black">Filter</span>
         <button
           onClick={onClearAll}
-          className="text-[#006CE4] text-xs hover:underline cursor-pointer"
+          className="text-[#006CE4] text-xs font-thin hover:underline cursor-pointer"
         >
           Clear all filters
         </button>
