@@ -139,9 +139,14 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
       <section className="relative z-20 px-4 lg:px-8 -mt-12 mx-auto xl:mx-[121.5px] xl:px-0">
         <form onSubmit={handleSearch} noValidate>
           {/* <div className="bg-white rounded-md shadow-2xl sm:shadow-xl p-4 border border-gray-400"> */}
- <div className="bg-white rounded-md shadow-2xl  p-4 border-2 border-brand-yellow" style={{ boxShadow: "rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px" }}>
-            
+ <div className="bg-white rounded-md shadow-2xl  p-4 border-3 border-brand-yellow" style={{ boxShadow: "rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px" }}>
+              <h2 className="text-lg font-semibold mb-4">
+               Search your next ride
+              </h2>
             <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
+
+
+            
 
               {/* ── City ── */}
               <div className="relative w-full md:flex-1 min-w-0">
