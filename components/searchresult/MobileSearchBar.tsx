@@ -22,7 +22,7 @@ export default function MobileSearchBar({
 }: MobileSearchBarProps) {
   return (
     <div
-      className={`md:hidden sticky bg-[#fed250] top-0 z-30  border-b border-t border-[#fed250] shadow-sm px-4 py-4 transition-transform duration-300 ${
+      className={`md:hidden sticky bg-black/90 top-0 z-30  border-b border-t border-[#fed250] shadow-sm px-4 py-4 transition-transform duration-300 ${
         visible ? "translate-y-0" : "-translate-y-full"
       } `} 
     >
