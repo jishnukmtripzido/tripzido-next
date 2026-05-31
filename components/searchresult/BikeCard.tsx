@@ -424,7 +424,7 @@ export default function BikeCard({
   }
 
   return (
-    <div className="px-2 sm:px-0 group relative w-full max-w-sm bg-transparent">
+    <div className="px-0 sm:px-0 group relative w-full max-w-sm bg-transparent">
 
       {/* ═══════════════════════════════════════
           MOBILE CARD  (< sm)
@@ -433,7 +433,7 @@ export default function BikeCard({
         {!isFlipped ? (
 
           /* ── MOBILE FRONT ── */
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-visible">
+          <div className="bg-white border border-gray-200 rounded-md shadow-sm overflow-visible">
             <div className="p-4 pb-0">
 
               {/* Tags */}
