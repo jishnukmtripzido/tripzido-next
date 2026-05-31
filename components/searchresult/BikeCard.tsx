@@ -85,7 +85,7 @@ export default function BikeCard({
   }
 
   return (
-    <div className="px-3 sm:px-0 group relative w-full max-w-sm h-[410px] bg-transparent" >
+    <div className="px-0 sm:px-0 group relative w-full max-w-sm h-[410px] bg-transparent" >
       <div style={{ perspective: "1000px" }} className="relative w-full h-full">
         <div
           className={`relative w-full h-full transition-all duration-700 [transform-style:preserve-3d] ${
@@ -102,7 +102,7 @@ export default function BikeCard({
               {name}
             </h3>
 
-            <div className="relative h-36 flex items-center justify-center mt-2 p-2 sm:p-3">
+            <div className="relative h-36 flex items-center justify-center mt-2 p-0 sm:p-3">
               <img
                 src={imageUrl}
                 alt={name}
