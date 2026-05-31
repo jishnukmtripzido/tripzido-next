@@ -260,9 +260,9 @@ export default function SearchResultsClient({
             
 
             {/* Disclaimer */}
-{tabFilteredBikes.length > 0 && (
+{/* {tabFilteredBikes.length > 0 && (
   <VehicleDisclaimer/>
-)}
+)} */}
 
             {/* ── Results grid or empty state ── */}
             {tabFilteredBikes.length === 0 ? (
