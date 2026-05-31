@@ -33,20 +33,19 @@ export default function CityPickerModal({
     c.name.toLowerCase().includes(query.toLowerCase())
   );
 
-  /* Auto-focus search on open */
+  /* Reset state on open — no auto-focus */
   useEffect(() => {
     if (isOpen) {
-      setTimeout(() => searchRef.current?.focus(), 80);
       setQuery("");
       setHighlighted(null);
     }
   }, [isOpen]);
 
   /* Lock body scroll on mobile when open */
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [isOpen]);
+  // useEffect(() => {
+  //   document.body.style.overflow = isOpen ? "hidden" : "";
+  //   return () => { document.body.style.overflow = ""; };
+  // }, [isOpen]);
 
   /* Keyboard: Escape to close */
   const handleKey = useCallback(
