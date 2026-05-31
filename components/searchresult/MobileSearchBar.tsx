@@ -28,7 +28,7 @@ export default function MobileSearchBar({
     >
       <button
         onClick={onModify}
-        className="w-full bg-white flex items-center gap-3 border-2 border-brand-yellow rounded-xl px-3 py-2.5 bg-white hover:border-[#ffc107] transition-colors text-left cursor-pointer"
+        className="w-full bg-white flex items-center gap-3 border-1 border-brand-yellow rounded-xl px-3 py-2.5 bg-white hover:border-[#ffc107] transition-colors text-left cursor-pointer"
       >
         <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
