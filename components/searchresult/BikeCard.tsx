@@ -452,7 +452,7 @@ export default function BikeCard({
 
               {/* ✅ NEW: Pay at pickup badge */}
 {selectedLocation.pay_at_pickup_enabled && (
-  <span className="inline-flex mr-1 mb-4 items-center gap-1.5 bg-green-700 text-white text-[11px] font-medium px-1 py-[2px] rounded mb-2">
+  <span className="inline-flex mr-2 mb-4 items-center gap-1.5 bg-green-700 text-white text-[11px] font-medium px-1 py-[2px] rounded mb-2">
     {/* <span className="w-1.5 h-1.5 rounded-full bg-green-700 inline-block" /> */}
     Pay at pickup
   </span>
