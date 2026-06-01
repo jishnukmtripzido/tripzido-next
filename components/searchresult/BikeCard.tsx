@@ -510,7 +510,7 @@ export default function BikeCard({
                   <img
                     src={imageUrl}
                     alt={name}
-                    className="w-[130px] h-[100px] object-contain"
+                    className="w-[130px] h-[100px] object-contain mt-[-30px]"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = `https://placehold.co/130x100/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
                     }}
@@ -538,8 +538,8 @@ export default function BikeCard({
                   onClick={handleTriggerClick}
                   className={`w-full flex items-center gap-2 border px-3 py-2 cursor-pointer bg-white transition-colors ${
                     dropdownOpen
-                      ? `border-[#ffc107] rounded-[10px] ${dropUp ? "" : "rounded-b-none"}`
-                      : "border-gray-200 rounded-[10px] hover:border-[#ffc107]"
+                      ? `border-[#ffc107] rounded-md ${dropUp ? "" : "rounded-b-none"}`
+                      : "border-gray-200 rounded-md hover:border-[#ffc107]"
                   }`}
                 >
                   <svg className="text-[#ffc107] shrink-0" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -564,8 +564,8 @@ export default function BikeCard({
                   <div
                     className={`absolute left-0 right-0 bg-white border border-[#ffc107] overflow-hidden shadow-lg ${
                       dropUp
-                        ? "bottom-full border-b-0 rounded-t-[10px]"
-                        : "top-full border-t-0 rounded-b-[10px]"
+                        ? "bottom-full border-b-0 rounded-t-[5px]"
+                        : "top-full border-t-0 rounded-b-[5px]"
                     }`}
                   >
                     {locations.map((loc) => {
