@@ -433,7 +433,7 @@ export default function BikeCard({
         {!isFlipped ? (
 
           /* ── MOBILE FRONT ── */
-          <div className="bg-white border border-gray-200 rounded-md shadow-sm overflow-visible">
+          <div className="bg-white border border-gray-200 rounded-md shadow-lg overflow-visible">
             <div className="p-4 pb-0">
 
               {/* Tags */}
