@@ -22,13 +22,13 @@ export default function MobileSearchBar({
 }: MobileSearchBarProps) {
   return (
     <div
-      className={`md:hidden sticky bg-black/60 top-0 z-30  border-b border-t border-gray-500  px-4 py-4 transition-transform duration-300 ${
+      className={`md:hidden sticky bg-[#fed250] top-0 z-30  border border-[#fed250]  px-4 py-4 transition-transform duration-300 ${
         visible ? "translate-y-0" : "-translate-y-full"
       } `} 
     >
       <button
         onClick={onModify}
-        className="w-full bg-white flex items-center gap-3 border-1 border-brand-yellow rounded-xl px-3 py-2.5 bg-white hover:border-[#ffc107] transition-colors text-left cursor-pointer"
+        className="w-full bg-white flex items-center gap-3 border-1 border-[#6b3d00] rounded-xl px-3 py-2.5 bg-white hover:border-[#ffc107] transition-colors text-left cursor-pointer"
       >
         <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
