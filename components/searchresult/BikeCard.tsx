@@ -467,8 +467,8 @@ export default function BikeCard({
 
               {/* Name — full width above the grid */}
               <h3 className="text-[18px] font-semibold text-black leading-snug mb-2.5">
-                {/* {name}  */}
-                Royal Enfield Classic 350 or similar
+                {name} 
+                
                 {/* <span className="text-xs font-thing text-gray-500">or similar</span>  */}
               </h3>
 
