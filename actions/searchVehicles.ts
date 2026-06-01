@@ -60,6 +60,7 @@ export type VehicleSearchResult = {
   mileage_kmpl: string;
   primary_image: string;
   locations: VehicleLocation[];
+  pay_at_pickup_enabled: boolean;
 };
 
 function toISO(date: Date): string {

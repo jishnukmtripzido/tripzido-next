@@ -450,6 +450,14 @@ export default function BikeCard({
                 </div>
               )}
 
+              {/* ✅ NEW: Pay at pickup badge */}
+{selectedLocation.pay_at_pickup_enabled && (
+  <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-[11px] font-medium px-2.5 py-1 rounded mb-2">
+    <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
+    Pay at pickup
+  </span>
+)}
+
               {/* Name — full width above the grid */}
               <h3 className="text-[18px] font-semibold text-black leading-snug mb-2.5">
                 {name} <span className="text-xs font-thing text-gray-500">or similar</span> 
