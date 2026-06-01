@@ -621,12 +621,12 @@ export default function DatePickerModal({
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-[2px] hidden sm:block"
+        className="absolute inset-0 bg-black/50 backdrop-blur-[2px] hidden sm:block animate-fade-in"
         onClick={onClose}
       />
 
       {/* Panel */}
-      <div className="relative z-10 w-full h-[100dvh] sm:h-auto bg-white sm:rounded-2xl sm:max-w-3xl sm:mx-6 flex flex-col sm:shadow-2xl sm:max-h-[90vh]">
+      <div className="relative z-10 w-full h-[100dvh] sm:h-auto bg-white sm:rounded-2xl sm:max-w-3xl sm:mx-6 flex flex-col sm:shadow-2xl sm:max-h-[90vh] animate-slide-up sm:animate-scale-in">
 
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100 shrink-0">

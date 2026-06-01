@@ -115,11 +115,11 @@ export default function TimePickerModal({
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       <div
-        className={`absolute inset-0 bg-black/50 backdrop-blur-[2px] modal-backdrop ${backdropClass}`}
+        className={`animate-fade-in absolute inset-0 bg-black/50 backdrop-blur-[2px] modal-backdrop ${backdropClass}`}
         onClick={onClose}
       />
 
-      <div className={`relative z-10 w-full bg-white rounded-t-2xl sm:rounded-2xl sm:max-w-sm sm:mx-6 shadow-2xl flex flex-col modal-panel ${panelClass}`}>
+      <div className={`animate-slide-up sm:animate-scale-in relative z-10 w-full bg-white rounded-t-2xl sm:rounded-2xl sm:max-w-sm sm:mx-6 shadow-2xl flex flex-col modal-panel ${panelClass}`}>
 
         {/* Drag handle (mobile) */}
         <div className="flex justify-center pt-3 pb-1 sm:hidden">

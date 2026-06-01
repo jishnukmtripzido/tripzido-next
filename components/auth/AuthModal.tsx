@@ -57,7 +57,7 @@ export default function PhoneAuth() {
   const formatPhone = (val: string) => val.replace(/\D/g, "").slice(0, 12);
 
   return (
-    <div className="min-h-screen  flex items-center justify-center px-4 py-0 font-sans relative overflow-hidden">
+    <div className="  flex items-center justify-center px-4 py-5 font-sans relative overflow-hidden">
       {/* Decorative blobs */}
       {/* <div className="pointer-events-none absolute -top-36 -right-24 w-96 h-96 rounded-full bg-[#ffc107] opacity-[0.15] blur-3xl" /> */}
       {/* <div className="pointer-events-none absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-[#ffc107] opacity-[0.10] blur-3xl" /> */}

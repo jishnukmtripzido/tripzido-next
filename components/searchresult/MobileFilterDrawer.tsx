@@ -199,10 +199,10 @@ export default function MobileFilterDrawer({
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center">
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-[2px]"
+        className="animate-fade-in absolute inset-0 bg-black/50 backdrop-blur-[2px]"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full bg-white h-dvh sm:h-auto sm:max-h-[85dvh] sm:rounded-t-2xl flex flex-col shadow-2xl">
+      <div className="animate-slide-up sm:animate-scale-in relative z-10 w-full bg-white h-dvh sm:h-auto sm:max-h-[85dvh] sm:rounded-t-2xl flex flex-col shadow-2xl">
         {/* Handle — hidden on mobile since it's full screen */}
         <div className="hidden sm:flex justify-center pt-3 pb-1 shrink-0">
           <div className="w-10 h-1 rounded-full bg-gray-300" />

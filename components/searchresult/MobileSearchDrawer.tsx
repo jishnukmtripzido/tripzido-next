@@ -454,8 +454,8 @@ export default function MobileSearchDrawer({
   return createPortal(
     <>
       <div className="fixed inset-0 z-50 flex items-end justify-center">
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onClick={onClose} />
-        <div className="relative z-10 w-full bg-white rounded-t-2xl shadow-2xl">
+        <div className="animate-fade-in absolute inset-0 bg-black/50 backdrop-blur-[2px]" onClick={onClose} />
+        <div className="animate-slide-up sm:animate-scale-in relative z-10 w-full bg-white rounded-t-2xl shadow-2xl">
 
           {/* Handle */}
           <div className="flex justify-center pt-3 pb-1">
