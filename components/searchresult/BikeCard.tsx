@@ -467,7 +467,8 @@ export default function BikeCard({
 
               {/* Name — full width above the grid */}
               <h3 className="text-[18px] font-semibold text-black leading-snug mb-2.5">
-                {name} 
+                {/* {name}  */}
+                Royal Enfield Classic 350 or similar
                 {/* <span className="text-xs font-thing text-gray-500">or similar</span>  */}
               </h3>
 
@@ -510,7 +511,7 @@ export default function BikeCard({
                   <img
                     src={imageUrl}
                     alt={name}
-                    className="w-[130px] h-[100px] object-contain mt-[-30px]"
+                    className="w-[130px] h-[100px] object-contain mt-[-12px]"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = `https://placehold.co/130x100/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
                     }}
