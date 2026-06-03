@@ -48,7 +48,7 @@ export default function OffersSection() {
         <h2 className="text-xl pb-2 md:pb-0 md:text-2xl font-extrabold whitespace-nowrap">
           Travel more, spend less
         </h2>
-        <Link href="#" className="hidden md:block text-[#006CE4] font-semibold text-sm hover:underline shrink-0 ml-4">
+        <Link href="#" className="hidden md:block text-blue-900 font-semibold text-sm hover:underline shrink-0 ml-4">
           Learn more about your offers
         </Link>
       </div>
@@ -121,7 +121,7 @@ export default function OffersSection() {
         </button>
       </div>
 
-      <Link href="#" className="md:hidden block text-[#006CE4] font-semibold text-sm hover:underline mt-4">
+      <Link href="#" className="md:hidden block text-blue-900 font-semibold text-sm hover:underline mt-4">
         Learn more about your offers
       </Link>
     </section>

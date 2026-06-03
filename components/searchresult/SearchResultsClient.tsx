@@ -12,11 +12,12 @@ import MobileSearchBar from "./MobileSearchBar";
 import MobileSearchDrawer from "./MobileSearchDrawer";
 import SearchResultHeader from "./SearchResultHeader";
 import SearchResultHeaderSmallScreen from "./SearchResultHeaderSmallScreen";
-import { VehicleSearchResult } from "@/actions/searchVehicles";
+import { VehicleSearchResult } from "@/app/actions/searchVehicles";
 import { City } from "@/types/city";
 import { useVehicleFilters } from "@/hooks/useVehicleFilters";
 import OfferBanner from "../ui/OfferBanner";
-import VehicleDisclaimer from "./VehicleDisclaimer";
+
+
 
 const SORT_OPTIONS = [
   { value: "price_asc",  label: "Price: Low to High" },
@@ -103,8 +104,8 @@ export default function SearchResultsClient({
 
   return (
     <>
-      <SearchResultHeaderSmallScreen />
-
+      {/* <SearchResultHeaderSmallScreen /> */}
+      
       <SearchResultHeader
         cities={cities}
         citiesError={citiesError}
@@ -149,7 +150,7 @@ export default function SearchResultsClient({
       {/* Offer Banner */}
       <OfferBanner />
 
-      <div className="bg-[#FAFBFD] min-h-screen">
+      <div className=" min-h-screen">
         <div className="mx-auto px-4 pt-5 pb-6 xl:mx-[80.5px] xl:px-0 flex gap-6 items-start">
 
           {/* Desktop filter sidebar */}

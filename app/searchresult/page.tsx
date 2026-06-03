@@ -1,9 +1,10 @@
 
 
 import SearchResultsClient from "@/components/searchresult/SearchResultsClient";
-import { VehicleSearchResult } from "@/actions/searchVehicles";
+import { VehicleSearchResult } from "@/app/actions/searchVehicles";
 import { unstable_cache } from "next/cache";
 import { City } from "@/types/city";
+import Header from "@/components/layout/Header";
 
 const getCities = unstable_cache(
   async (): Promise<{ cities: City[]; error: string | null }> => {
@@ -62,6 +63,10 @@ export default async function SearchResultPage({ searchParams }: Props) {
   }
 
   return (
+
+    <>
+    
+   
     <SearchResultsClient
       bikes={(data as any).data}
       city={city_name ?? ""}
@@ -71,5 +76,6 @@ export default async function SearchResultPage({ searchParams }: Props) {
       cities={cities}
       citiesError={citiesError}
     />
+    </>
   );
 }

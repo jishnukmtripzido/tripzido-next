@@ -13,8 +13,8 @@ import TimePickerDropdown from "@/components/search/TimePickerDropdown";
 import { FieldError } from "@/components/ui/FieldError";
 import { City } from "@/types/city";
 import { searchSchema } from "@/lib/validations/searchSchema";
-import { searchVehiclesAction } from "@/actions/searchVehicles";
-import Header from "../layout/Header";
+import { searchVehiclesAction } from "@/app/actions/searchVehicles";
+// import Header from "../layout/HeaderClient";
 
 interface SearchResultHeaderProps {
   cities: City[];
@@ -142,7 +142,7 @@ export default function SearchResultHeader({
       <div className="hidden md:block top-0 z-50 bg-black/60 border-b border-gray-300/80">
 
         {/* Nav header */}
-        <Header logoWidth={4} logoHeight={4} logoTextSize="xl" linkIconsSize={4} userNameFirstLetterSize={8} userNameFirstLetter="J" headerLgScreenMx="xl:mx-[80.5px] xl:px-0" headerValues="w-full bg-white py-2 border-b border-gray-100 text-gray-900" />
+        {/* <Header logoWidth={4} logoHeight={4} logoTextSize="xl" linkIconsSize={4} userNameFirstLetterSize={8} userNameFirstLetter="J" headerLgScreenMx="xl:mx-[80.5px] xl:px-0" headerValues="w-full bg-white py-2 border-b border-gray-100 text-gray-900" /> */}
 
         {/* Search widget */}
         <section className="px-4 xl:px-0 py-3 mx-auto xl:mx-[80.5px]">

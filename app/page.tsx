@@ -33,7 +33,7 @@ export default async function HomePage() {
 
   return (
     <>
-     <Header />
+    <Header />
       <HeroSection />
       <SearchWidget cities={cities} citiesError={error} />
       <OffersSection />

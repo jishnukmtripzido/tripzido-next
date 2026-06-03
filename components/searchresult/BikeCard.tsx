@@ -333,7 +333,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { VehicleSearchResult, VehicleLocation } from "@/actions/searchVehicles";
+import { VehicleSearchResult, VehicleLocation } from "@/app/actions/searchVehicles";
 
 interface BikeCardProps extends VehicleSearchResult {
   onDropdownOpenChange?: (open: boolean) => void;
@@ -687,7 +687,7 @@ export default function BikeCard({
       {/* ═══════════════════════════════════════
           DESKTOP CARD  (sm+) — unchanged
       ═══════════════════════════════════════ */}
-      <div className="hidden sm:block h-[410px] bg-transparent">
+      <div className="hidden sm:block h-[410px] bg-transparent shadow-md shadow-inner">
         <div style={{ perspective: "1000px" }} className="relative w-full h-full">
           <div
             className={`relative w-full h-full transition-all duration-700 [transform-style:preserve-3d] ${
@@ -700,10 +700,12 @@ export default function BikeCard({
                 isFlipped ? "pointer-events-none" : "pointer-events-auto"
               }`}
             >
+              <div className="">
+
               <h3 className="font-medium text-black text-[17px] leading-none text-center px-4 tracking-tight">
                 {name}
               </h3>
-              <div className="relative h-36 flex items-center justify-center mt-2 p-3">
+              <div className="relative  h-36 flex items-center justify-center mt-2 p-3">
                 <img
                   src={imageUrl}
                   alt={name}
@@ -712,6 +714,8 @@ export default function BikeCard({
                     (e.target as HTMLImageElement).src = `https://placehold.co/300x160/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
                   }}
                 />
+              </div>
+
               </div>
               <div className="relative flex items-center justify-center px-4 mt-1 mb-3 z-10">
                 <div className="flex-1 border-t-2 border-gray-200" />

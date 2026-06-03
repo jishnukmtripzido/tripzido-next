@@ -11,7 +11,7 @@ import DatePickerDropdown from "@/components/search/DatePickerDropdown";
 import TimePickerDropdown from "@/components/search/TimePickerDropdown";
 import { City } from "@/types/city";
 import { searchSchema } from "@/lib/validations/searchSchema";
-import { searchVehiclesAction } from "@/actions/searchVehicles";
+import { searchVehiclesAction } from "@/app/actions/searchVehicles";
 import { FieldError } from "../ui/FieldError";
 
 function getDefaults() {
@@ -156,10 +156,7 @@ export default function SearchWidget({ cities, citiesError }: SearchWidgetProps)
                   disabled={!!citiesError}
                   hasError={!!errors.city_id}
                 >
-                  <svg className="w-5 h-5 text-gray-400 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  </svg>
+                  <LocationIcon />
                   <span className="flex-1 text-sm font-medium text-gray-900 truncate">
                     {citiesError ? "Failed to load" : selectedCity?.name ?? "Select a city"}
                   </span>
@@ -365,6 +362,16 @@ function ClockIcon() {
   return (
     <svg className="w-4 h-4 text-gray-400 mr-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+    </svg>
+  );
+}
+
+
+function LocationIcon() {
+  return (
+    <svg className="w-5 h-5 text-gray-400 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
     </svg>
   );
 }

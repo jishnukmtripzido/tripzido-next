@@ -283,7 +283,7 @@ export default function FilterSidebar({
   const brandEntries = Object.entries(brandCounts).sort((a, b) => a[0].localeCompare(b[0]));
 
   return (
-    <div className="bg-white rounded-md border border-gray-300/80 overflow-hidden">
+    <div className="bg-white rounded-md border border-gray-300/80 overflow-hidden md:shadow-md">
       {/* Header */}
       <div className="hidden lg:block">
       <div className=" flex items-center justify-between px-5 py-4 border-b border-gray-100">

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Header from "../layout/Header";
+import Header from "../layout/HeaderClient";
 
 export default function SearchResultHeaderSmallScreen() {
   return (

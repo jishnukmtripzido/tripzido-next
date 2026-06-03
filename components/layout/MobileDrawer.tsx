@@ -1,3 +1,4 @@
+
 // "use client";
 
 // import Link from "next/link";
@@ -13,6 +14,8 @@
 //   onClose: () => void;
 //   navLinks: NavLink[];
 //   userNameFirstLetter?: string;
+//   isLoggedIn?: boolean;
+//   onLoginClick?: () => void;
 // };
 
 // export default function MobileDrawer({
@@ -20,6 +23,8 @@
 //   onClose,
 //   navLinks,
 //   userNameFirstLetter,
+//   isLoggedIn = false,
+//   onLoginClick,
 // }: MobileDrawerProps) {
 //   return (
 //     <>
@@ -58,34 +63,37 @@
 //           </button>
 //         </div>
 
-//         {/* User info strip */}
-//         <div className="flex items-center gap-3 px-5 py-4 bg-amber-50 border-b border-amber-100">
-//           <div className="w-10 h-10 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold text-base shrink-0">
-//             {userNameFirstLetter || "J"}
+//         {/* ── AUTH SECTION ── */}
+//         {isLoggedIn ? (
+//           /* Logged-in: account info strip */
+//           <div className="flex items-center gap-3 px-5 py-4 bg-amber-50 border-b border-amber-100">
+//             <div className="w-10 h-10 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold text-base shrink-0">
+//               {userNameFirstLetter || "J"}
+//             </div>
+//             <div>
+//               <p className="text-sm font-bold text-gray-800">Your account</p>
+//               <p className="text-xs text-gray-500">Manage your trips &amp; profile</p>
+//             </div>
 //           </div>
-//           <div>
-//             <p className="text-sm font-bold text-gray-800">Your account</p>
-//             <p className="text-xs text-gray-500">Manage your trips & profile</p>
+//         ) : (
+//           /* Logged-out: Sign In + Register buttons */
+//           <div className="flex gap-3 px-5 py-4 border-b border-gray-100">
+            
+//             <Link
+//               href="/register"
+//               onClick={onClose}
+//               className="flex-1 cursor-pointer text-center text-sm font-semibold border border-[#ffc107] text-[#ffc107] py-2.5 rounded-xl hover:bg-amber-50 transition-colors"
+//             >
+//               Register
+//             </Link>
+//             <button
+//               onClick={() => { onClose(); onLoginClick?.(); }}
+//               className="flex-1 cursor-pointer text-center text-sm font-semibold bg-[#ffc107] text-white py-2.5 rounded-xl hover:bg-[#e6ab00] transition-colors"
+//             >
+//               Sign In
+//             </button>
 //           </div>
-//         </div>
-
-//         {/* Auth buttons */}
-//         <div className="flex gap-3 px-5 py-4 border-b border-gray-100">
-//           <Link
-//             href="#"
-//             onClick={onClose}
-//             className="flex-1 text-center text-sm font-semibold bg-[#ffc107] text-white py-2.5 rounded-xl hover:bg-[#e6ab00] transition-colors"
-//           >
-//             Sign In
-//           </Link>
-//           <Link
-//             href="#"
-//             onClick={onClose}
-//             className="flex-1 text-center text-sm font-semibold border border-[#ffc107] text-[#ffc107] py-2.5 rounded-xl hover:bg-amber-50 transition-colors"
-//           >
-//             Register
-//           </Link>
-//         </div>
+//         )}
 
 //         {/* Nav links */}
 //         <nav className="flex-1 overflow-y-auto px-3 py-3">
@@ -121,17 +129,14 @@
 //                   <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
 //                 </svg>
 //               </span>
-//               Help & Support
+//               Help &amp; Support
 //             </Link>
 //           </div>
 //         </nav>
-
-      
 //       </div>
 //     </>
 //   );
 // }
-
 
 "use client";
 
@@ -150,6 +155,8 @@ type MobileDrawerProps = {
   userNameFirstLetter?: string;
   isLoggedIn?: boolean;
   onLoginClick?: () => void;
+  onLogout?: () => void;
+  isLoggingOut?: boolean;
 };
 
 export default function MobileDrawer({
@@ -159,17 +166,11 @@ export default function MobileDrawer({
   userNameFirstLetter,
   isLoggedIn = false,
   onLoginClick,
+  onLogout,
+  isLoggingOut = false,
 }: MobileDrawerProps) {
   return (
     <>
-      {/* Backdrop */}
-      <div
-        onClick={onClose}
-        className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      />
-
       {/* Drawer panel */}
       <div
         className={`fixed top-0 right-0 h-full w-[300px] z-50 bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out md:hidden ${
@@ -204,7 +205,7 @@ export default function MobileDrawer({
             <div className="w-10 h-10 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold text-base shrink-0">
               {userNameFirstLetter || "J"}
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-gray-800">Your account</p>
               <p className="text-xs text-gray-500">Manage your trips &amp; profile</p>
             </div>
@@ -212,7 +213,6 @@ export default function MobileDrawer({
         ) : (
           /* Logged-out: Sign In + Register buttons */
           <div className="flex gap-3 px-5 py-4 border-b border-gray-100">
-            
             <Link
               href="/register"
               onClick={onClose}
@@ -267,6 +267,34 @@ export default function MobileDrawer({
             </Link>
           </div>
         </nav>
+
+        {/* ── LOGOUT (only when logged in) ── */}
+        {isLoggedIn && (
+          <div className="px-3 py-4 border-t border-gray-100">
+            <button
+              onClick={() => { onClose(); onLogout?.(); }}
+              disabled={isLoggingOut}
+              className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoggingOut ? (
+                <>
+                  <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  </svg>
+                  Signing out…
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                  </svg>
+                  Sign out
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
