@@ -16,6 +16,7 @@ import { VehicleSearchResult } from "@/app/actions/searchVehicles";
 import { City } from "@/types/city";
 import { useVehicleFilters } from "@/hooks/useVehicleFilters";
 import OfferBanner from "../ui/OfferBanner";
+import VehicleDisclaimer from "./VehicleDisclaimer";
 
 
 
@@ -260,10 +261,12 @@ export default function SearchResultsClient({
             </div> */}
             
 
-            {/* Disclaimer */}
-{/* {tabFilteredBikes.length > 0 && (
+            {/* Disclaimer  */}
+{tabFilteredBikes.length > 0 && (
+  <div className="hidden md:block">
   <VehicleDisclaimer/>
-)} */}
+  </div>
+)}
 
             {/* ── Results grid or empty state ── */}
             {tabFilteredBikes.length === 0 ? (
