@@ -262,7 +262,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { VehicleSearchResult } from "@/actions/vehicles.actions";
+import type { VehicleSearchResult } from "@/types/vehicles.types";
 
 export type FilterState = {
   priceMax: number;
@@ -288,34 +288,34 @@ export type FilterOptions = {
 };
 
 const PRICE_RANGES = [
-  { key: "0-500",     label: "₹0 – ₹500",        min: 0,    max: 500       },
-  { key: "500-1000",  label: "₹500 – ₹1,000",    min: 500,  max: 1000      },
-  { key: "1000-1500", label: "₹1,000 – ₹1,500",  min: 1000, max: 1500      },
-  { key: "1500+",     label: "₹1,500+",            min: 1500, max: Infinity  },
+  { key: "0-500", label: "₹0 – ₹500", min: 0, max: 500 },
+  { key: "500-1000", label: "₹500 – ₹1,000", min: 500, max: 1000 },
+  { key: "1000-1500", label: "₹1,000 – ₹1,500", min: 1000, max: 1500 },
+  { key: "1500+", label: "₹1,500+", min: 1500, max: Infinity },
 ];
 
 const CC_RANGES = [
-  { key: "0-110",   label: "Up to 110cc",   min: 0,   max: 110       },
-  { key: "111-200", label: "111cc – 200cc", min: 111, max: 200       },
-  { key: "201-350", label: "201cc – 350cc", min: 201, max: 350       },
-  { key: "350+",    label: "350cc+",         min: 351, max: Infinity  },
+  { key: "0-110", label: "Up to 110cc", min: 0, max: 110 },
+  { key: "111-200", label: "111cc – 200cc", min: 111, max: 200 },
+  { key: "201-350", label: "201cc – 350cc", min: 201, max: 350 },
+  { key: "350+", label: "350cc+", min: 351, max: Infinity },
 ];
 
 export const PRICE_RANGE_META = PRICE_RANGES;
 export const CC_RANGE_META = CC_RANGES;
 
 export const TRANSMISSION_LABELS: Record<string, string> = {
-  AUTOMATIC:  "Automatic",
-  MANUAL:     "Manual",
-  SEMI_AUTO:  "Semi-Automatic",
+  AUTOMATIC: "Automatic",
+  MANUAL: "Manual",
+  SEMI_AUTO: "Semi-Automatic",
 };
 
 export const FUEL_LABELS: Record<string, string> = {
-  PETROL:   "Petrol",
+  PETROL: "Petrol",
   ELECTRIC: "Electric",
-  CNG:      "CNG",
-  HYBRID:   "Hybrid",
-  DIESEL:   "Diesel",
+  CNG: "CNG",
+  HYBRID: "Hybrid",
+  DIESEL: "Diesel",
 };
 
 export const VEHICLE_TYPE_LABELS: Record<string, string> = {
@@ -338,7 +338,9 @@ function getMinDailyPrice(bike: VehicleSearchResult): number | null {
   return min;
 }
 
-export function deriveFilterOptions(bikes: VehicleSearchResult[]): FilterOptions {
+export function deriveFilterOptions(
+  bikes: VehicleSearchResult[],
+): FilterOptions {
   const transmissionCounts: Record<string, number> = {};
   const fuelTypeCounts: Record<string, number> = {};
   const vehicleTypeCounts: Record<string, number> = {};
@@ -378,7 +380,8 @@ export function deriveFilterOptions(bikes: VehicleSearchResult[]): FilterOptions
 
     const price = getMinDailyPrice(bike);
     if (price !== null) {
-      if (price > priceAbsoluteMax) priceAbsoluteMax = Math.ceil(price / 100) * 100;
+      if (price > priceAbsoluteMax)
+        priceAbsoluteMax = Math.ceil(price / 100) * 100;
       for (const r of PRICE_RANGES) {
         if (price >= r.min && price <= r.max) {
           priceRangeCounts[r.key] = (priceRangeCounts[r.key] ?? 0) + 1;
@@ -420,18 +423,30 @@ function applyFilters(
   filters: FilterState,
 ): VehicleSearchResult[] {
   let result = bikes.filter((bike) => {
-    if (filters.transmissions.length > 0 && !filters.transmissions.includes(bike.transmission_type))
+    if (
+      filters.transmissions.length > 0 &&
+      !filters.transmissions.includes(bike.transmission_type)
+    )
       return false;
 
-    if (filters.fuelTypes.length > 0 && !filters.fuelTypes.includes(bike.fuel_type))
+    if (
+      filters.fuelTypes.length > 0 &&
+      !filters.fuelTypes.includes(bike.fuel_type)
+    )
       return false;
 
-    if (filters.vehicleTypes.length > 0 && !filters.vehicleTypes.includes(bike.vehicle_type))
+    if (
+      filters.vehicleTypes.length > 0 &&
+      !filters.vehicleTypes.includes(bike.vehicle_type)
+    )
       return false;
 
     if (filters.ccRanges.length > 0) {
       const ok = CC_RANGES.some(
-        (r) => filters.ccRanges.includes(r.key) && bike.cc >= r.min && bike.cc <= r.max
+        (r) =>
+          filters.ccRanges.includes(r.key) &&
+          bike.cc >= r.min &&
+          bike.cc <= r.max,
       );
       if (!ok) return false;
     }
@@ -441,7 +456,7 @@ function applyFilters(
 
     if (filters.locationIds.length > 0) {
       const ok = bike.locations.some((loc) =>
-        filters.locationIds.includes(String(loc.location_id))
+        filters.locationIds.includes(String(loc.location_id)),
       );
       if (!ok) return false;
     }
@@ -453,7 +468,10 @@ function applyFilters(
       if (price > filters.priceMax) return false;
       if (filters.priceRanges.length > 0) {
         const ok = PRICE_RANGES.some(
-          (r) => filters.priceRanges.includes(r.key) && price >= r.min && price <= r.max
+          (r) =>
+            filters.priceRanges.includes(r.key) &&
+            price >= r.min &&
+            price <= r.max,
         );
         if (!ok) return false;
       }
@@ -463,9 +481,13 @@ function applyFilters(
   });
 
   if (filters.sortValue === "price_asc") {
-    result = [...result].sort((a, b) => (getMinDailyPrice(a) ?? 0) - (getMinDailyPrice(b) ?? 0));
+    result = [...result].sort(
+      (a, b) => (getMinDailyPrice(a) ?? 0) - (getMinDailyPrice(b) ?? 0),
+    );
   } else if (filters.sortValue === "price_desc") {
-    result = [...result].sort((a, b) => (getMinDailyPrice(b) ?? 0) - (getMinDailyPrice(a) ?? 0));
+    result = [...result].sort(
+      (a, b) => (getMinDailyPrice(b) ?? 0) - (getMinDailyPrice(a) ?? 0),
+    );
   }
 
   return result;
@@ -473,14 +495,24 @@ function applyFilters(
 
 export function useVehicleFilters(bikes: VehicleSearchResult[]) {
   const options = useMemo(() => deriveFilterOptions(bikes), [bikes]);
-  const [filters, setFilters] = useState<FilterState>(() => buildInitialFilters(options));
+  const [filters, setFilters] = useState<FilterState>(() =>
+    buildInitialFilters(options),
+  );
 
-  const filteredBikes = useMemo(() => applyFilters(bikes, filters), [bikes, filters]);
+  const filteredBikes = useMemo(
+    () => applyFilters(bikes, filters),
+    [bikes, filters],
+  );
 
-  function toggleArrayFilter<K extends keyof FilterState>(key: K, value: string) {
+  function toggleArrayFilter<K extends keyof FilterState>(
+    key: K,
+    value: string,
+  ) {
     setFilters((prev) => {
       const arr = prev[key] as string[];
-      const next = arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
+      const next = arr.includes(value)
+        ? arr.filter((v) => v !== value)
+        : [...arr, value];
       return { ...prev, [key]: next };
     });
   }
@@ -498,5 +530,13 @@ export function useVehicleFilters(bikes: VehicleSearchResult[]) {
     setFilters(buildInitialFilters(options));
   }
 
-  return { filters, options, filteredBikes, toggleArrayFilter, setPriceMax, setSortValue, clearAll };
+  return {
+    filters,
+    options,
+    filteredBikes,
+    toggleArrayFilter,
+    setPriceMax,
+    setSortValue,
+    clearAll,
+  };
 }
