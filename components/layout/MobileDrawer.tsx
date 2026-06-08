@@ -1,4 +1,3 @@
-
 // "use client";
 
 // import Link from "next/link";
@@ -78,7 +77,7 @@
 //         ) : (
 //           /* Logged-out: Sign In + Register buttons */
 //           <div className="flex gap-3 px-5 py-4 border-b border-gray-100">
-            
+
 //             <Link
 //               href="/register"
 //               onClick={onClose}
@@ -181,19 +180,41 @@ export default function MobileDrawer({
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <div className="flex items-center space-x-2">
             <div className="bg-[#ffc107] p-1 rounded-lg">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                />
               </svg>
             </div>
-            <span className="text-xl font-semibold tracking-tight">tripzido</span>
+            <span className="text-xl font-semibold tracking-tight">
+              tripzido
+            </span>
           </div>
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
             aria-label="Close menu"
           >
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+            <svg
+              className="w-5 h-5 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 18L18 6M6 6l12 12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+              />
             </svg>
           </button>
         </div>
@@ -207,7 +228,9 @@ export default function MobileDrawer({
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-gray-800">Your account</p>
-              <p className="text-xs text-gray-500">Manage your trips &amp; profile</p>
+              <p className="text-xs text-gray-500">
+                Manage your trips &amp; profile
+              </p>
             </div>
           </div>
         ) : (
@@ -216,13 +239,16 @@ export default function MobileDrawer({
             <Link
               href="/register"
               onClick={onClose}
-              className="flex-1 cursor-pointer text-center text-sm font-semibold border border-[#ffc107] text-[#ffc107] py-2.5 rounded-xl hover:bg-amber-50 transition-colors"
+              className="flex-1 cursor-pointer text-center text-sm font-semibold border  py-2.5 rounded-md hover:bg-amber-50 transition-colors"
             >
               Register
             </Link>
             <button
-              onClick={() => { onClose(); onLoginClick?.(); }}
-              className="flex-1 cursor-pointer text-center text-sm font-semibold bg-[#ffc107] text-white py-2.5 rounded-xl hover:bg-[#e6ab00] transition-colors"
+              onClick={() => {
+                onClose();
+                onLoginClick?.();
+              }}
+              className="flex-1 cursor-pointer text-center text-sm font-semibold bg-[#ffc107]  py-2.5 rounded-md hover:bg-[#e6ab00] transition-colors"
             >
               Sign In
             </button>
@@ -240,7 +266,7 @@ export default function MobileDrawer({
                 <Link
                   href={link.href}
                   onClick={onClose}
-                  className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-black transition-colors"
+                  className="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-black transition-colors"
                 >
                   <span className="text-[#ffc107]">{link.icon}</span>
                   {link.label}
@@ -259,8 +285,18 @@ export default function MobileDrawer({
               className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-black transition-colors"
             >
               <span className="text-[#ffc107]">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                  />
                 </svg>
               </span>
               Help &amp; Support
@@ -272,22 +308,50 @@ export default function MobileDrawer({
         {isLoggedIn && (
           <div className="px-3 py-4 border-t border-gray-100">
             <button
-              onClick={() => { onClose(); onLogout?.(); }}
+              onClick={() => {
+                onClose();
+                onLogout?.();
+              }}
               disabled={isLoggingOut}
               className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoggingOut ? (
                 <>
-                  <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  <svg
+                    className="w-5 h-5 animate-spin"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
                   </svg>
                   Signing out…
                 </>
               ) : (
                 <>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                    />
                   </svg>
                   Sign out
                 </>
