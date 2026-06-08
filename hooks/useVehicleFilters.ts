@@ -262,7 +262,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { VehicleSearchResult } from "@/app/actions/searchVehicles";
+import { VehicleSearchResult } from "@/actions/vehicles.actions";
 
 export type FilterState = {
   priceMax: number;

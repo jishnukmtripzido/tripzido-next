@@ -1,5 +1,0 @@
-1:I[79456,["/_next/static/chunks/0-rlkzfo79g1q.js","/_next/static/chunks/13o~ce8zttnqe.js"],"LoadingBoundaryProvider"]
-2:"$Sreact.fragment"
-3:I[79456,["/_next/static/chunks/0-rlkzfo79g1q.js","/_next/static/chunks/13o~ce8zttnqe.js"],"default"]
-4:I[11532,["/_next/static/chunks/0-rlkzfo79g1q.js","/_next/static/chunks/13o~ce8zttnqe.js"],"default"]
-0:{"rsc":["$","$L1",null,{"loading":[["$","div","l",{"className":"min-h-screen bg-white flex items-center justify-center","children":["$","div",null,{"className":"flex flex-col items-center gap-3","children":[["$","div",null,{"className":"w-8 h-8 rounded-full border-2 border-[#ffc107] border-t-transparent animate-spin"}],["$","span",null,{"className":"text-sm text-gray-400 font-medium","children":"Loading…"}]]}]}],[],[]],"children":["$","$2","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]]}]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"y3bP07ORNeMpzudNjNEcW"}

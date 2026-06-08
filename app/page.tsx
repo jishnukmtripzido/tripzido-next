@@ -1,39 +1,21 @@
-import { unstable_cache } from "next/cache";
-import HeroSection from "@/components/search/HeroSection";
-import SearchWidget from "@/components/search/SearchWidget";
-import OffersSection from "@/components/search/OffersSection";
-import WhyTripzido from "@/components/search/WhyTripzido";
-import FAQSection from "@/components/search/FAQSection";
-import PopularRentals from "@/components/search/PopularRentals";
-import HowItWorks from "@/components/search/HowItWorks";
-import TrendingDestinations from "@/components/search/TrendingDestinations";
+// app/page.tsx
+import { getCitiesCached } from "@/lib/cache";
 import Header from "@/components/layout/Header";
-import { City } from "@/types/city";
-
-const getCities = unstable_cache(
-  async (): Promise<{ cities: City[]; error: string | null }> => {
-    try {
-      const res = await fetch(`${process.env.API_URL}/api/locations/cities/`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-      return { cities: json.data.results as City[], error: null };
-    } catch (err) {
-      console.error("Failed to load cities:", err);
-      return { cities: [], error: "Could not load cities. Please try again." };
-      
-    }
-  },
-  ["cities-list"],
-  // { revalidate: 36000 } 
-  // signal: AbortSignal.timeout(10000), 
-);
+import HeroSection from "@/components/features/search/HeroSection";
+import SearchWidget from "@/components/features/search/SearchWidget";
+import OffersSection from "@/components/features/search/OffersSection";
+import WhyTripzido from "@/components/features/search/WhyTripzido";
+import FAQSection from "@/components/features/search/FAQSection";
+import PopularRentals from "@/components/features/search/PopularRentals";
+import HowItWorks from "@/components/features/search/HowItWorks";
+import TrendingDestinations from "@/components/features/search/TrendingDestinations";
 
 export default async function HomePage() {
-  const { cities, error } = await getCities();
+  const { cities, error } = await getCitiesCached();
 
   return (
     <>
-    <Header />
+      <Header />
       <HeroSection />
       <SearchWidget cities={cities} citiesError={error} />
       <OffersSection />

@@ -209,8 +209,8 @@ import Link from "next/link";
 import { useState, useEffect, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import MobileDrawer from "./MobileDrawer";
-import LoginModal from "@/components/auth/LoginModal";
-import { logoutAction } from "@/app/actions/logout";
+import LoginModal from "@/components/features/auth/LoginModal";
+import { logoutAction } from "@/actions/auth.actions";
 
 type HeaderClientProps = {
   logoWidth?: number;
@@ -235,25 +235,30 @@ export default function HeaderClient({
   headerValues,
   isLoggedIn = false,
 }: HeaderClientProps) {
-  const [menuOpen, setMenuOpen]         = useState(false);
-  const [loginOpen, setLoginOpen]       = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [logoutError, setLogoutError]   = useState<string | null>(null);
-  const [isPending, startTransition]    = useTransition();
-  const dropdownRef                     = useRef<HTMLDivElement>(null);
-  const router                          = useRouter();
+  const [logoutError, setLogoutError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   /* close body scroll when mobile menu is open */
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
 
   /* close dropdown on outside click */
   useEffect(() => {
     if (!dropdownOpen) return;
     const handleClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setDropdownOpen(false);
       }
     };
@@ -289,9 +294,24 @@ export default function HeaderClient({
       href: "#",
       label: "Bikes",
       icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-          <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
+          <path
+            d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
         </svg>
       ),
     },
@@ -299,8 +319,18 @@ export default function HeaderClient({
       href: "#",
       label: "Destinations",
       icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
         </svg>
       ),
     },
@@ -308,8 +338,18 @@ export default function HeaderClient({
       href: "#",
       label: "How it works",
       icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
         </svg>
       ),
     },
@@ -317,8 +357,18 @@ export default function HeaderClient({
       href: "#",
       label: "Offers",
       icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12z"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
         </svg>
       ),
     },
@@ -329,14 +379,28 @@ export default function HeaderClient({
       {/* ── Error toast ── */}
       {logoutError && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[200] flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-xl shadow-lg animate-toast-fade-in">
-          <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+          <svg
+            className="w-4 h-4 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+            />
           </svg>
           {logoutError}
         </div>
       )}
 
-      <header className={headerValues || "w-full px-0 py-2 border-b border-gray-100 shadow-sm"}>
+      <header
+        className={
+          headerValues || "w-full px-0 py-2 border-b border-gray-100 shadow-sm"
+        }
+      >
         <div
           className={`mx-auto px-4 lg:px-8 py-2 flex items-center justify-between ${
             headerLgScreenMx || "xl:mx-[121.5px] xl:px-0"
@@ -353,10 +417,17 @@ export default function HeaderClient({
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                    <path
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                    />
                   </svg>
                 </div>
-                <span className={`text-${logoTextSize || "2xl"} font-extrabold tracking-tight`}>
+                <span
+                  className={`text-${logoTextSize || "2xl"} font-extrabold tracking-tight`}
+                >
                   tripzido
                 </span>
               </div>
@@ -391,8 +462,18 @@ export default function HeaderClient({
 
             {/* Help */}
             <div className="text-gray-500 cursor-pointer hidden md:block">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                />
               </svg>
             </div>
 
@@ -421,7 +502,12 @@ export default function HeaderClient({
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                    <path
+                      d="M19 9l-7 7-7-7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                    />
                   </svg>
                 </button>
 
@@ -429,16 +515,19 @@ export default function HeaderClient({
                 <div
                   className={`absolute right-0 mt-2.5 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50
                     transition-all duration-200 origin-top-right
-                    ${dropdownOpen
-                      ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+                    ${
+                      dropdownOpen
+                        ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                        : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
                     }`}
                 >
                   {/* User info */}
                   <div className="px-4 py-3 bg-amber-50 border-b border-amber-100">
                     <p className="text-xs text-gray-500">Signed in as</p>
                     <p className="text-sm font-bold text-gray-800 truncate">
-                      {userNameFirstLetter ? `${userNameFirstLetter}...` : "Your Account"}
+                      {userNameFirstLetter
+                        ? `${userNameFirstLetter}...`
+                        : "Your Account"}
                     </p>
                   </div>
 
@@ -449,8 +538,18 @@ export default function HeaderClient({
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors"
                     >
-                      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                      <svg
+                        className="w-4 h-4 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
                       </svg>
                       Profile
                     </Link>
@@ -459,8 +558,18 @@ export default function HeaderClient({
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors"
                     >
-                      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                      <svg
+                        className="w-4 h-4 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
                       </svg>
                       My Trips
                     </Link>
@@ -475,16 +584,41 @@ export default function HeaderClient({
                     >
                       {isPending ? (
                         <>
-                          <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                          <svg
+                            className="w-4 h-4 animate-spin"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8H4z"
+                            />
                           </svg>
                           Signing out…
                         </>
                       ) : (
                         <>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                            />
                           </svg>
                           Sign out
                         </>
@@ -497,13 +631,13 @@ export default function HeaderClient({
               <div className="hidden md:flex items-center space-x-2">
                 <Link
                   href="/register"
-                  className="px-4 py-2 text-sm font-semibold text-black-900 border-1 border-black-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-4 py-2 text-sm font-semibold text-black-900 border-none rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Register
                 </Link>
                 <button
                   onClick={() => setLoginOpen(true)}
-                  className="px-4 py-2 cursor-pointer text-sm font-semibold text-white bg-[#ffc107] rounded-lg hover:bg-[#e6ac00] transition-colors"
+                  className="px-4 py-2 cursor-pointer text-sm font-semibold  bg-[#ffc107] rounded-lg hover:bg-[#e6ac00] transition-colors"
                 >
                   Sign in
                 </button>
@@ -516,8 +650,18 @@ export default function HeaderClient({
               className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 transition-colors"
               aria-label="Open menu"
             >
-              <svg className="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+              <svg
+                className="w-8 h-8 text-gray-700"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M4 6h16M4 12h16M4 18h16"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                />
               </svg>
             </button>
           </div>
@@ -538,7 +682,10 @@ export default function HeaderClient({
         navLinks={navLinks}
         userNameFirstLetter={userNameFirstLetter}
         isLoggedIn={isLoggedIn}
-        onLoginClick={() => { closeMenu(); setLoginOpen(true); }}
+        onLoginClick={() => {
+          closeMenu();
+          setLoginOpen(true);
+        }}
         onLogout={handleLogout}
         isLoggingOut={isPending}
       />
@@ -549,17 +696,31 @@ export default function HeaderClient({
       <style jsx global>{`
         /* Toast fade-in — keeps translateX(-50%) because the toast uses left-1/2 -translate-x-1/2 */
         @keyframes toast-fade-in {
-          from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
-          to   { opacity: 1; transform: translateX(-50%) translateY(0);    }
+          from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+          }
         }
-        .animate-toast-fade-in { animation: toast-fade-in 0.2s ease-out both; }
+        .animate-toast-fade-in {
+          animation: toast-fade-in 0.2s ease-out both;
+        }
 
         /* Generic backdrop fade-in — NO transform so fixed inset-0 stays full-screen */
         @keyframes fade-in {
-          from { opacity: 0; }
-          to   { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
-        .animate-fade-in { animation: fade-in 0.15s ease-out both; }
+        .animate-fade-in {
+          animation: fade-in 0.15s ease-out both;
+        }
       `}</style>
     </>
   );

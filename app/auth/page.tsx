@@ -1,7 +1,7 @@
 
 
 
-import AuhModal from "@/components/auth/AuthModal";
+import AuhModal from "@/components/features/auth/AuthModal";
 
 export const metadata = {
   title: "Login or Sign Up - Tripzido",
