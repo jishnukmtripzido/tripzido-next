@@ -14,7 +14,7 @@ export default function PopularRentals() {
 
   return (
     <section className="pt-12 px-4 lg:px-8 mx-auto xl:mx-[121.5px] xl:px-0">
-      <div className="mb-2">
+      <div className="mb-7">
         <h2 className="text-[1.37rem] md:text-2xl font-bold text-gray-900">
           Popular rentals in Wayanad
         </h2>
@@ -24,7 +24,7 @@ export default function PopularRentals() {
       </div>
 
       {/* Filter tabs */}
-      <div className="mt-5 mb-7 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* <div className="mt-5 mb-7 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex gap-3 flex-nowrap">
           {POPULAR_BIKE_FILTER_TABS.map((tab) => (
             <button
@@ -40,7 +40,7 @@ export default function PopularRentals() {
             </button>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Carousel */}
       <div className="relative group">

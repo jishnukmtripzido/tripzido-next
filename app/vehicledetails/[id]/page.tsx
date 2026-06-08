@@ -27,7 +27,7 @@ export default function VehicleDetailsPage({
               <BookingWidget />
             </div>
 
-            <VehicleFeatures />
+            {/* <VehicleFeatures /> */}
             <ThingsToRemember />
             <TermsAndConditions />
             <PickupLocation location="Wayanad" />
