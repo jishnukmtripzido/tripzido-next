@@ -1,10 +1,15 @@
 "use client";
 import { useState } from "react";
 
-// Added a default empty array to prevent undefined errors during build/SSR
-export default function ImageGallery({ images = [] }) {
-  // Safely fallback to an empty string if the array is empty
-  const [activeImage, setActiveImage] = useState(images[0] || "");
+// 1. Define the TypeScript interface for your props
+interface ImageGalleryProps {
+  images?: string[];
+}
+
+// 2. Apply the interface to the component signature
+export default function ImageGallery({ images = [] }: ImageGalleryProps) {
+  // Explicitly tell useState that activeImage will be a string
+  const [activeImage, setActiveImage] = useState<string>(images[0] || "");
 
   // Early return if no images are provided
   if (images.length === 0) {
