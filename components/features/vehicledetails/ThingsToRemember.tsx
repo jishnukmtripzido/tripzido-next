@@ -41,11 +41,11 @@ export default function ThingsToRemember() {
   ];
 
   return (
-    <div className="mb-10">
+    <div className="mb-8">
       <h2 className="text-lg font-bold text-gray-900 mb-5">
         Things to remember
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
         {rules.map((rule, idx) => (
           <div key={idx} className="flex items-center gap-3">
             <div className={`flex-shrink-0 ${rule.color}`}>{rule.icon}</div>

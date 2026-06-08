@@ -7,11 +7,11 @@ export default function TermsAndConditions() {
   ];
 
   return (
-    <div className="mb-10">
+    <div className="mb-8">
       <h2 className="text-lg font-bold text-gray-900 mb-4">
         Terms & Conditions
       </h2>
-      <div className="bg-white border border-gray-200 rounded-xl p-6">
+      <div className="bg-white border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
         <ul className="space-y-3 text-sm text-gray-600">
           {terms.map((term, idx) => (
             <li key={idx} className="flex items-start gap-3">

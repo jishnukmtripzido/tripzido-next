@@ -16,7 +16,7 @@ export default function VehicleDetailsPage({
     <>
       <SearchModifyBar />
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <main className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 py-8 xl:py-7 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <main className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 py-4 xl:py-7 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column: Content */}
           <div className="lg:col-span-8 space-y-5 order-1 lg:order-none">
             <Breadcrumbs />
@@ -29,7 +29,9 @@ export default function VehicleDetailsPage({
 
             {/* <VehicleFeatures /> */}
             <ThingsToRemember />
+            <div className="lg:border-t lg:border-gray-200" />
             <TermsAndConditions />
+            <div className="lg:border-t lg:border-gray-200" />
             <PickupLocation location="Wayanad" />
           </div>
 
