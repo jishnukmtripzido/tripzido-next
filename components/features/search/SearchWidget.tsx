@@ -73,7 +73,7 @@ export default function SearchWidget({
                 "rgba(50,50,93,0.25) 0px 13px 27px -5px, rgba(0,0,0,0.3) 0px 8px 16px -8px",
             }}
           >
-            <h2 className="text-xl font-semibold mb-4">Grab Your Next Ride!</h2>
+            <h2 className="text-xl font-bold mb-4">Grab Your Next Ride!</h2>
             <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
               {/* City */}
               <div className="relative w-full md:flex-1 min-w-0">
