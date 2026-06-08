@@ -51,7 +51,8 @@ export default function VehicleHeader() {
               Wayanad Pickup
             </h3>
             <p className="text-sm text-gray-500 mt-1">
-              Exact location provided after booking • 9:00 AM - 10:00 PM
+              Exact location provided after booking •{" "}
+              <span className="text-black">9:00 AM - 10:00 PM</span>
             </p>
           </div>
 
