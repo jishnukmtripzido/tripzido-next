@@ -13,26 +13,47 @@
   --animate-scale-in: scale-in 0.2s ease-out forwards;
 
   @keyframes dropdown-in {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes slide-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes scale-in {
-    from { opacity: 0; transform: scale(0.97) translateY(-4px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
+    from {
+      opacity: 0;
+      transform: scale(0.97) translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
   }
 }
-
 
 /* ── Carousel: hide scrollbar cross-browser ── */
 .hide-scrollbar {
@@ -43,26 +64,50 @@
   display: none;
 }
 
-
-
 /* Backdrop */
 .modal-backdrop {
   transition: opacity 200ms ease;
 }
-.modal-backdrop-enter { opacity: 0; }
-.modal-backdrop-entered { opacity: 1; }
-.modal-backdrop-exit { opacity: 0; }
+.modal-backdrop-enter {
+  opacity: 0;
+}
+.modal-backdrop-entered {
+  opacity: 1;
+}
+.modal-backdrop-exit {
+  opacity: 0;
+}
 
 /* Panel — slides up on mobile, scales on desktop */
 .modal-panel {
-  transition: opacity 200ms ease, transform 200ms ease;
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
 }
-.modal-panel-enter  { opacity: 0; transform: translateY(16px); }
-.modal-panel-entered { opacity: 1; transform: translateY(0); }
-.modal-panel-exit  { opacity: 0; transform: translateY(16px); }
+.modal-panel-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.modal-panel-entered {
+  opacity: 1;
+  transform: translateY(0);
+}
+.modal-panel-exit {
+  opacity: 0;
+  transform: translateY(16px);
+}
 
 @media (min-width: 640px) {
-  .modal-panel-enter  { opacity: 0; transform: scale(0.96) translateY(0); }
-  .modal-panel-entered { opacity: 1; transform: scale(1) translateY(0); }
-  .modal-panel-exit  { opacity: 0; transform: scale(0.96) translateY(0); }
+  .modal-panel-enter {
+    opacity: 0;
+    transform: scale(0.96) translateY(0);
+  }
+  .modal-panel-entered {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  .modal-panel-exit {
+    opacity: 0;
+    transform: scale(0.96) translateY(0);
+  }
 }

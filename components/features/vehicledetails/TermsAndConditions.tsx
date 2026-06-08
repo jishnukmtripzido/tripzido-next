@@ -7,7 +7,7 @@ export default function TermsAndConditions() {
   ];
 
   return (
-    <div>
+    <div className="mb-10">
       <h2 className="text-xl font-bold text-gray-900 mb-4">
         Terms & Conditions
       </h2>

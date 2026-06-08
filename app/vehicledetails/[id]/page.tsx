@@ -16,9 +16,9 @@ export default function VehicleDetailsPage({
     <>
       <SearchModifyBar />
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <main className="max-w-6xl mx-auto px-4 xl:px-0 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <main className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column: Content */}
-          <div className="lg:col-span-8 space-y-10">
+          <div className="lg:col-span-8 space-y-5">
             <Breadcrumbs />
             <VehicleHeader />
             <VehicleFeatures />

@@ -2,36 +2,25 @@ import React from "react";
 
 export default function SearchModifyBar() {
   return (
-    <div className="w-full bg-white py-4 border-b border-gray-200">
-      <div className="max-w-5xl mx-auto px-4 flex items-center gap-4 justify-center">
-        {/* Input & Date Picker Group */}
-        <div className="flex flex-1 max-w-4xl border border-gray-300 rounded-md shadow-sm divide-x divide-gray-300">
-          {/* Location Field */}
-          <div className="flex items-center gap-2 px-4 py-2.5 bg-white flex-1 rounded-l-md">
-            <svg
-              className="w-5 h-5 text-gray-400 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              type="text"
-              defaultValue="Calangute Beach"
-              className="w-full outline-none text-gray-700 bg-transparent text-sm font-medium"
-            />
-          </div>
+    <div className="w-full bg-white py-4 border-b border-gray-100">
+      <div className="xl:mx-[80.5px] mx-auto px-0 ">
+        {/* Main Container - Mimicking the yellow border from the reference */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-2 border-brand-yellow rounded-lg p-3 md:px-4 md:py-3 bg-white gap-4 md:gap-0">
+          {/* Left Side: Location and Dates */}
+          <div className="flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-6">
+            {/* Pickup Details */}
+            <div className="flex flex-col">
+              <span className="text-black font-semibold text-base md:text-base">
+                Calangute Beach
+              </span>
+              <span className="text-gray-600 text-sm mt-0.5">
+                Mon, Jun 8, 2026, 11:00 AM
+              </span>
+            </div>
 
-          {/* Start Date & Time */}
-          <div className="flex items-center gap-2 px-4 py-2.5 bg-white flex-1">
+            {/* Separator Arrow */}
             <svg
-              className="w-5 h-5 text-gray-400 shrink-0"
+              className="w-5 h-5 text-gray-400 shrink-0 hidden md:block"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -40,41 +29,45 @@ export default function SearchModifyBar() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                d="M9 5l7 7-7 7"
               />
             </svg>
-            <div className="text-sm font-medium text-gray-700 flex whitespace-nowrap">
-              Mon, Jun 8{" "}
-              <span className="text-gray-400 font-normal ml-1.5">11:00 AM</span>
+
+            {/* Drop-off Details */}
+            <div className="flex flex-col">
+              <span className="text-black font-semibold text-base md:text-base">
+                Calangute Beach
+              </span>
+              <span className="text-gray-600 text-sm mt-0.5">
+                Tue, Jun 9, 2026, 11:00 AM
+              </span>
             </div>
           </div>
 
-          {/* End Date & Time */}
-          <div className="flex items-center gap-2 px-4 py-2.5 bg-white flex-1 rounded-r-md">
-            <svg
-              className="w-5 h-5 text-gray-400 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <div className="text-sm font-medium text-gray-700 flex whitespace-nowrap">
-              Tue, Jun 9{" "}
-              <span className="text-gray-400 font-normal ml-1.5">11:00 AM</span>
+          {/* Right Side: Info Text and Edit Button */}
+          <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-gray-100 pt-3 md:pt-0">
+            {/* Info Message */}
+            <div className="flex items-center gap-1.5 text-blue-500 text-sm">
+              <svg
+                className="w-4 h-4 shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>You'll need to pick up your bike at 11:00</span>
             </div>
+
+            {/* Edit Button - Maintained on the far right */}
+            <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2.5 rounded-md transition-colors shadow-sm shrink-0">
+              Edit
+            </button>
           </div>
         </div>
-
-        {/* Search Button (Maintained in exact position) */}
-        <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-8 py-2.5 rounded-md transition-colors shrink-0 shadow-sm">
-          Search
-        </button>
       </div>
     </div>
   );

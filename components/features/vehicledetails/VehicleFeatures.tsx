@@ -9,7 +9,7 @@ export default function VehicleFeatures() {
   ];
 
   return (
-    <div>
+    <div className="mb-10">
       <h2 className="text-xl font-bold text-gray-900 mb-4">Features</h2>
       <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
         {features.map((feat, idx) => (

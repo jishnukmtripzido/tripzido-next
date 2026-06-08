@@ -46,7 +46,7 @@ export default function ThingsToRemember() {
   ];
 
   return (
-    <div>
+    <div className=" mb-10">
       <h2 className="text-xl font-bold text-gray-900 mb-4">
         Things To Remember
       </h2>

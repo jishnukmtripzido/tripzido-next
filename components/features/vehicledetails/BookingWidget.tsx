@@ -1,8 +1,10 @@
 "use client"; // This component needs interactivity for selections
 
+import Link from "next/link";
+
 export default function BookingWidget() {
   return (
-    <div className="sticky top-24 bg-white border border-gray-200 rounded-md  p-6">
+    <div className="sticky top-8 bg-white border border-gray-200 rounded-md  p-6">
       <h3 className="text-xl font-bold text-gray-900 mb-4">Select Package</h3>
 
       <div className="relative mb-6">
@@ -63,9 +65,12 @@ export default function BookingWidget() {
         Refundable Deposit - ₹0 (To be paid at pickup)
       </div>
 
-      <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-xl transition duration-200">
+      <Link
+        href="/checkout"
+        className="w-full inline-block text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-xl transition duration-200"
+      >
         Book Now
-      </button>
+      </Link>
 
       <div className="mt-4 text-center">
         <a href="#" className="text-sm text-blue-600 hover:underline">
