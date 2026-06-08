@@ -48,7 +48,7 @@ export default function HowItWorks() {
   return (
     <section className="pt-12 px-4 lg:px-8 mx-auto xl:mx-[121.5px] xl:px-0">
       <div className="mb-10">
-        <h2 className="text-[1.37rem] md:text-2xl font-extrabold text-gray-900">
+        <h2 className="text-[1.37rem] md:text-2xl font-bold text-gray-900">
           How it works
         </h2>
         <p className="text-sm text-gray-700 mt-1">
@@ -91,7 +91,7 @@ export default function HowItWorks() {
                 {s.step}
               </span>
             </div>
-            <h3 className="font-extrabold text-gray-900 text-[15px] mb-2">
+            <h3 className="font-bold text-gray-900 text-[15px] mb-2">
               {s.title}
             </h3>
             <p className="text-sm text-gray-700 leading-relaxed">

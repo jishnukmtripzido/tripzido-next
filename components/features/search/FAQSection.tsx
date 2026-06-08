@@ -36,7 +36,7 @@ function FAQColumn({ items }: { items: FAQItem[] }) {
 export default function FAQSection() {
   return (
     <section className="pt-12 px-4 lg:px-8 mx-auto xl:mx-[121.5px] xl:px-0">
-      <h2 className="text-[1.37rem] md:text-2xl font-extrabold text-gray-900 mb-6">
+      <h2 className="text-[1.37rem] md:text-2xl font-bold text-gray-900 mb-6">
         Frequently asked questions
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">

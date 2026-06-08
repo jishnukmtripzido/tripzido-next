@@ -15,7 +15,7 @@ export default function PopularRentals() {
   return (
     <section className="pt-12 px-4 lg:px-8 mx-auto xl:mx-[121.5px] xl:px-0">
       <div className="mb-2">
-        <h2 className="text-[1.37rem] md:text-2xl font-extrabold text-gray-900">
+        <h2 className="text-[1.37rem] md:text-2xl font-bold text-gray-900">
           Popular rentals in Wayanad
         </h2>
         <p className="text-sm text-gray-700 mt-1">
