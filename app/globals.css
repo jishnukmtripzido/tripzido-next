@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
 
 /* ── Brand theme (Tailwind v4 config lives here, not in tailwind.config.ts) ── */
 @theme {
   --color-brand-yellow: #ffc107;
-  --font-sans: "Inter", sans-serif;
+  --font-sans: "Nunito Sans", sans-serif;
   --font-heading: "Nunito", "Inter", sans-serif;
 
   --animate-dropdown-in: dropdown-in 0.15s ease-out forwards;
