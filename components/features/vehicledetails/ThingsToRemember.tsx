@@ -4,65 +4,55 @@ import {
   MapIcon,
   ExclamationCircleIcon,
   DocumentTextIcon,
-} from "@heroicons/react/24/outline"; // Assuming Heroicons, adjust to Lucide if using Shadcn
+} from "@heroicons/react/24/outline";
 
 export default function ThingsToRemember() {
   const rules = [
     {
       label: "Security Deposit",
       value: "₹0",
-      icon: "₹",
+      icon: <BanknotesIcon className="w-5 h-5" />,
       color: "text-green-600",
-      bg: "bg-green-50",
     },
     {
       label: "Location timings",
       value: "9:00 AM - 10:00 PM",
       icon: <ClockIcon className="w-5 h-5" />,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
+      color: "text-gray-700",
     },
     {
       label: "Distance limit",
       value: "No Limit",
       icon: <MapIcon className="w-5 h-5" />,
-      color: "text-purple-600",
-      bg: "bg-purple-50",
+      color: "text-gray-700",
     },
     {
       label: "Excess Charge",
       value: "N/A",
       icon: <ExclamationCircleIcon className="w-5 h-5" />,
-      color: "text-red-600",
-      bg: "bg-red-50",
+      color: "text-gray-700",
     },
     {
       label: "Late Penalty",
       value: "₹100 / hour",
       icon: <DocumentTextIcon className="w-5 h-5" />,
-      color: "text-orange-600",
-      bg: "bg-orange-50",
+      color: "text-gray-700",
     },
   ];
 
   return (
-    <div className=" mb-10">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">
-        Things To Remember
+    <div className="mb-10">
+      <h2 className="text-lg font-bold text-gray-900 mb-5">
+        Things to remember
       </h2>
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
         {rules.map((rule, idx) => (
-          <div
-            key={idx}
-            className="border border-gray-200 rounded-xl p-4 text-center hover:shadow-md transition bg-white"
-          >
-            <div
-              className={`w-10 h-10 ${rule.bg} ${rule.color} rounded-full flex items-center justify-center mx-auto mb-3`}
-            >
-              {rule.icon}
+          <div key={idx} className="flex items-center gap-3">
+            <div className={`flex-shrink-0 ${rule.color}`}>{rule.icon}</div>
+            <div className="text-sm">
+              <span className="text-gray-600">{rule.label}: </span>
+              <span className="font-semibold text-gray-900">{rule.value}</span>
             </div>
-            <p className="text-xs text-gray-500 mb-1">{rule.label}</p>
-            <p className="font-bold text-sm text-gray-900">{rule.value}</p>
           </div>
         ))}
       </div>

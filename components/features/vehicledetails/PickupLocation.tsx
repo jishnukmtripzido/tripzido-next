@@ -7,10 +7,10 @@ export default function PickupLocation({
 }: PickupLocationProps) {
   return (
     <div>
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Pickup Location</h2>
+      <h2 className="text-lg font-bold text-gray-900 mb-4">Pickup Location</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
         <div className="md:col-span-1">
-          <p className="font-semibold text-gray-900">{location}</p>
+          <p className="font-semibold text-gray-900 text-base">{location}</p>
           <p className="text-sm text-gray-500 mt-2">
             Exact location will be provided after the booking is confirmed.
           </p>
