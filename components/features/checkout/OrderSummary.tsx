@@ -2,42 +2,44 @@ export default function OrderSummary() {
   return (
     <div className="bg-white border border-gray-200 rounded-md p-6 shadow-sm">
       {/* Vehicle Info */}
-      <div className="flex flex-col md:flex-row items-center md:items-start gap-6 pb-6 border-b border-gray-100">
-        <div className="w-full md:w-48 shrink-0 bg-gray-50 rounded-xl p-4 flex items-center justify-center">
-          <img
-            src="https://gowheelo.com/_next/image?url=https%3A%2F%2Fstatic.gowheelo.com%2Fuploads%2Fold%2Fbike%2FYamaha-Fascino.png&w=640&q=75"
-            alt="Yamaha Fascino"
-            className="w-full h-auto object-contain mix-blend-multiply"
-          />
-        </div>
-        <div className="flex-grow w-full">
-          <h2 className="text-xl font-bold text-gray-900">Yamaha Fascino</h2>
-          <div className="mt-2 space-y-1 text-sm text-gray-600">
-            <p>
-              Rent Amount :{" "}
-              <span className="font-semibold text-gray-900">₹ 998</span>
-            </p>
-            <p>
-              Refundable Deposit :{" "}
-              <span className="font-semibold text-gray-900">₹ 0</span>
-            </p>
+      <div>
+        <h1 className="text-lg font-bold text-gray-900 mb-4">Summary</h1>
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 pb-6 border-b border-gray-100">
+          <div className="w-full md:w-48 shrink-0 bg-gray-50 rounded-xl p-4 flex items-center justify-center">
+            <img
+              src="https://gowheelo.com/_next/image?url=https%3A%2F%2Fstatic.gowheelo.com%2Fuploads%2Fold%2Fbike%2FYamaha-Fascino.png&w=640&q=75"
+              alt="Yamaha Fascino"
+              className="w-full h-auto object-contain mix-blend-multiply"
+            />
           </div>
-
-          {/* Quantity Stepper */}
-          <div className="mt-4 flex items-center border border-gray-300 rounded-lg w-max overflow-hidden">
-            <button className="px-3 py-1.5 hover:bg-gray-100 text-gray-600 transition">
-              -
-            </button>
-            <div className="px-4 py-1.5 font-medium border-x border-gray-300">
-              1
+          <div className="flex-grow w-full">
+            <h2 className="text-xl font-bold text-gray-900">Yamaha Fascino</h2>
+            <div className="mt-2 space-y-1 text-sm text-gray-600">
+              <p>
+                Rent Amount :{" "}
+                <span className="font-semibold text-gray-900">₹ 998</span>
+              </p>
+              <p>
+                Refundable Deposit :{" "}
+                <span className="font-semibold text-gray-900">₹ 0</span>
+              </p>
             </div>
-            <button className="px-3 py-1.5 hover:bg-gray-100 text-gray-600 transition">
-              +
-            </button>
+
+            {/* Quantity Stepper */}
+            <div className="mt-4 flex items-center border border-gray-300 rounded-lg w-max overflow-hidden">
+              <button className="px-3 py-1.5 hover:bg-gray-100 text-gray-600 transition">
+                -
+              </button>
+              <div className="px-4 py-1.5 font-medium border-x border-gray-300">
+                1
+              </div>
+              <button className="px-3 py-1.5 hover:bg-gray-100 text-gray-600 transition">
+                +
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
       {/* Date Timeline */}
       <div className="py-6 border-b border-gray-100">
         <h3 className="text-sm font-semibold text-green-600 mb-4">

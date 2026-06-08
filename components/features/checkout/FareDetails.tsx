@@ -6,7 +6,8 @@ export default function FareDetails() {
 
   return (
     <div className="bg-gray-50 md:bg-white border md:border-gray-200 rounded-md p-6 shadow-sm">
-      <h3 className="text-lg font-bold text-gray-900 mb-6 ">Fare Details</h3>
+      {/* FIX: Changed mb-6 to mb-4 to match OrderSummary heading */}
+      <h3 className="text-lg font-bold text-gray-900 mb-4">Fare Details</h3>
 
       {/* Price Breakdown */}
       <div className="space-y-4 text-sm mb-6">
