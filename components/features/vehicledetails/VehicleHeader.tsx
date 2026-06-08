@@ -12,7 +12,7 @@ export default function VehicleHeader() {
   ];
 
   return (
-    <div className="bg-white rounded-lg p-6 border border-gray-200 mb-8 shadow-sm">
+    <div className="bg-white rounded-md p-6 border border-gray-200 mb-8 ">
       <div className="flex flex-col md:flex-row gap-8">
         {/* Left Side: Images */}
         <div className="w-full md:w-5/12">
@@ -23,9 +23,9 @@ export default function VehicleHeader() {
         <div className="w-full md:w-7/12 flex flex-col justify-start">
           {/* Tags */}
           <div className="flex items-center gap-2 mb-3">
-            <span className="bg-blue-900 text-white text-xs font-semibold px-2.5 py-1 rounded">
+            {/* <span className="bg-blue-900 text-white text-xs font-semibold px-2.5 py-1 rounded">
               Top Pick
-            </span>
+            </span> */}
             <span className="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded">
               7 Bikes Available
             </span>
@@ -36,9 +36,9 @@ export default function VehicleHeader() {
             <h1 className="text-2xl font-bold text-gray-900 inline-block mr-2">
               Yamaha Fascino
             </h1>
-            <span className="text-sm text-blue-600 cursor-pointer hover:underline">
+            {/* <span className="text-sm text-blue-600 cursor-pointer hover:underline">
               or similar scooter ⓘ
-            </span>
+            </span> */}
             <p className="text-gray-500 text-sm mt-1">Make Year: 2023</p>
           </div>
 

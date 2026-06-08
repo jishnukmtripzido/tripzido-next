@@ -23,7 +23,7 @@ export default function ImageGallery({ images }) {
             onClick={() => setActiveImage(img)}
             className={`flex-shrink-0 w-20 h-16 rounded-md border-2 overflow-hidden bg-gray-50 transition-all ${
               activeImage === img
-                ? "border-blue-600"
+                ? "border-gray-200"
                 : "border-transparent hover:border-gray-300"
             }`}
           >
