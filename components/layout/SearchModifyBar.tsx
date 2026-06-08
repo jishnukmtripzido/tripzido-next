@@ -3,7 +3,7 @@ import React from "react";
 export default function SearchModifyBar() {
   return (
     <div className="w-full bg-white py-4 border-b border-gray-100">
-      <div className="xl:mx-[80.5px] mx-auto px-0 ">
+      <div className="xl:mx-[80.5px] mx-auto px-4 xl:px-0">
         {/* Main Container - Mimicking the yellow border from the reference */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-2 border-brand-yellow rounded-lg p-3 md:px-4 md:py-3 bg-white gap-4 md:gap-0">
           {/* Left Side: Location and Dates */}
