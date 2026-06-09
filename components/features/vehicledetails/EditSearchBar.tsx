@@ -7,15 +7,32 @@ import { FieldError } from "@/components/ui/FieldError";
 import DatePickerDropdown from "@/components/features/search/DatePickerDropdown";
 import TimePickerDropdown from "@/components/features/search/TimePickerDropdown";
 import { useSearchForm } from "@/hooks/useSearchForm";
-import { getDefaultDatetimes, formatDate, formatTime } from "@/lib/dateUtils";
+import {
+  parseDate,
+  parseHour,
+  parseMinute,
+  formatDate,
+  formatTime,
+} from "@/lib/dateUtils";
+import type { PickupLocationOption } from "@/services/vehicleDetails.service";
 
 interface EditSearchBarProps {
   onClose: () => void;
+  initialLocationName: string;
+  initialPickup: string;
+  initialDropoff: string;
+  cityLocations: PickupLocationOption[];
+  cityLocationsLoading: boolean;
 }
 
-export default function EditSearchBar({ onClose }: EditSearchBarProps) {
-  const defaults = getDefaultDatetimes();
-
+export default function EditSearchBar({
+  onClose,
+  initialLocationName,
+  initialPickup,
+  initialDropoff,
+  cityLocations,
+  cityLocationsLoading,
+}: EditSearchBarProps) {
   const {
     dateRange,
     pickupTime,
@@ -31,20 +48,27 @@ export default function EditSearchBar({ onClose }: EditSearchBarProps) {
     handleDateChange,
     handleSearch,
   } = useSearchForm({
-    initialPickupDate: defaults.pickup,
-    initialDropoffDate: defaults.dropoff,
-    initialPickupHour: defaults.pickup.getHours(),
-    initialDropoffHour: defaults.dropoff.getHours(),
+    initialPickupDate: parseDate(initialPickup),
+    initialDropoffDate: parseDate(initialDropoff),
+    initialPickupHour: parseHour(initialPickup),
+    initialPickupMinute: parseMinute(initialPickup),
+    initialDropoffHour: parseHour(initialDropoff),
+    initialDropoffMinute: parseMinute(initialDropoff),
   });
 
-  // Local pickup location state (plain text input, not city picker)
-  const [pickupLocation, setPickupLocation] = useState("");
+  // Pre-select the current location if it exists in the list, else keep name as fallback
+  const [selectedLocationId, setSelectedLocationId] = useState<string>(
+    String(
+      cityLocations.find((l) => l.location_name === initialLocationName)?.id ??
+        "",
+    ),
+  );
   const [locationError, setLocationError] = useState<string | null>(null);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!pickupLocation.trim()) {
-      setLocationError("Please enter a pick-up location.");
+    if (!selectedLocationId) {
+      setLocationError("Please select a pick-up location.");
       return;
     }
     setLocationError(null);
@@ -54,12 +78,11 @@ export default function EditSearchBar({ onClose }: EditSearchBarProps) {
   return (
     <div className="w-full bg-white border-b border-gray-100">
       <div className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 py-3">
-        {/* Form */}
         <form onSubmit={handleSubmit} noValidate>
           <div className="border-2 border-brand-yellow rounded-lg p-3 bg-white">
-            {/* Header row */}
+            {/* Header */}
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-gray-900 tracking-wide ">
+              <h2 className="text-sm font-bold text-gray-900 tracking-wide">
                 Edit search
               </h2>
               <button
@@ -68,7 +91,6 @@ export default function EditSearchBar({ onClose }: EditSearchBarProps) {
                 aria-label="Close edit search"
                 className="text-gray-400 hover:text-gray-600 transition-colors p-1 -mr-1"
               >
-                {/* × icon */}
                 <svg
                   className="w-5 h-5"
                   fill="none"
@@ -85,11 +107,8 @@ export default function EditSearchBar({ onClose }: EditSearchBarProps) {
               </button>
             </div>
 
-            {/* Form */}
-            {/* <form onSubmit={handleSubmit} noValidate>
-          <div className="border-2 border-brand-yellow rounded-lg p-3 bg-white"> */}
             <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
-              {/* Pick-up location — text input */}
+              {/* Pick-up location — dropdown from city locations */}
               <div className="relative w-full md:flex-1 min-w-0">
                 <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
                   Pick-up location
@@ -102,37 +121,33 @@ export default function EditSearchBar({ onClose }: EditSearchBarProps) {
                   }`}
                 >
                   <LocationIcon />
-                  <input
-                    type="text"
-                    value={pickupLocation}
-                    onChange={(e) => {
-                      setPickupLocation(e.target.value);
-                      if (e.target.value.trim()) setLocationError(null);
-                    }}
-                    placeholder="Milan Malpensa Airport"
-                    className="flex-1 text-sm font-medium text-gray-900 bg-transparent outline-none placeholder:text-gray-400"
-                  />
-                  {pickupLocation && (
-                    <button
-                      type="button"
-                      onClick={() => setPickupLocation("")}
-                      aria-label="Clear location"
-                      className="text-gray-400 hover:text-gray-600 transition-colors"
+                  {cityLocationsLoading ? (
+                    <span className="flex-1 text-sm text-gray-400">
+                      Loading locations...
+                    </span>
+                  ) : cityLocations.length > 0 ? (
+                    <select
+                      value={selectedLocationId}
+                      onChange={(e) => {
+                        setSelectedLocationId(e.target.value);
+                        if (e.target.value) setLocationError(null);
+                      }}
+                      className="flex-1 text-sm font-medium text-gray-900 bg-transparent outline-none"
                     >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
+                      <option value="" disabled>
+                        Select location
+                      </option>
+                      {cityLocations.map((loc) => (
+                        <option key={loc.id} value={String(loc.id)}>
+                          {loc.location_name}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    // Fallback: plain text if locations failed to load
+                    <span className="flex-1 text-sm font-medium text-gray-900">
+                      {initialLocationName}
+                    </span>
                   )}
                 </div>
                 <FieldError message={locationError ?? undefined} />
@@ -239,7 +254,7 @@ export default function EditSearchBar({ onClose }: EditSearchBarProps) {
                 </div>
               </div>
 
-              {/* Search button */}
+              {/* Search */}
               <div className="shrink-0 w-full md:w-auto">
                 <button
                   type="submit"

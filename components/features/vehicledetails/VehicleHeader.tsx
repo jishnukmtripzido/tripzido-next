@@ -1,58 +1,69 @@
-//
-
 import ImageGallery from "./ImageGallery";
 import VehicleFeatures from "./VehicleFeatures";
 
-export default function VehicleHeader() {
-  // Mock array of images uploaded by the vendor
-  const vendorImages = [
-    "https://gowheelo.com/_next/image?url=https%3A%2F%2Fstatic.gowheelo.com%2Fuploads%2Fold%2Fbike%2FYamaha-Fascino.png&w=640&q=75",
-    "https://media.publit.io/file/cool-motorcycle-studio-1.jpg", // Placeholder for side view
-    "https://media.publit.io/file/cool-motorcycle-indoors-1.jpg", // Placeholder for back view
-  ];
+interface Props {
+  name: string;
+  makeYear: number;
+  images: string[];
+  primaryImage: string;
+  seats: number;
+  fuelCapacityLitres: number;
+  cc: number;
+  kmLimitPerDay: number | null;
+  topSpeedKmph: number;
+  mileageKmpl: number;
+  kerbWeightKg: number;
+  availableCount: number;
+  pickupLocationName: string;
+}
+
+export default function VehicleHeader({
+  name,
+  makeYear,
+  images,
+  primaryImage,
+  availableCount,
+  pickupLocationName,
+}: Props) {
+  const allImages = images?.length ? images : [primaryImage];
 
   return (
-    <div className="bg-white rounded-md p-6 border border-gray-200 mb-8 ">
+    <div className="bg-white rounded-md p-6 border border-gray-200 mb-8">
       <div className="flex flex-col md:flex-row gap-8">
         {/* Left Side: Images */}
         <div className="w-full md:w-5/12">
-          <ImageGallery images={vendorImages} />
+          <ImageGallery images={allImages} />
         </div>
 
         {/* Right Side: Details & Features */}
         <div className="w-full md:w-7/12 flex flex-col justify-start">
-          {/* Tags */}
+          {/* Availability tag */}
           <div className="flex items-center gap-2 mb-3">
-            {/* <span className="bg-blue-900 text-white text-xs font-semibold px-2.5 py-1 rounded">
-              Top Pick
-            </span> */}
-            <span className="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded">
-              7 Bikes Available
-            </span>
+            {availableCount > 0 && (
+              <span className="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded">
+                {availableCount} Bike{availableCount !== 1 ? "s" : ""} Available
+              </span>
+            )}
           </div>
 
           {/* Title and Make Year */}
           <div className="mb-2">
             <h1 className="text-2xl font-bold text-gray-900 inline-block mr-2">
-              Yamaha Fascino
+              {name}
             </h1>
-            {/* <span className="text-sm text-blue-600 cursor-pointer hover:underline">
-              or similar scooter ⓘ
-            </span> */}
-            <p className="text-gray-500 text-sm mt-1">Make Year: 2023</p>
+            <p className="text-gray-500 text-sm mt-1">Make Year: {makeYear}</p>
           </div>
 
-          {/* Imported Features Component */}
+          {/* Specs */}
           <VehicleFeatures />
 
-          {/* Location Info (Matches Booking.com bottom section style) */}
+          {/* Pickup location */}
           <div className="mt-8 pt-4 border-t border-gray-100">
             <h3 className="text-base font-medium text-gray-900">
-              Wayanad Pickup
+              {pickupLocationName} Pickup
             </h3>
             <p className="text-sm text-gray-500 mt-1">
-              Exact location provided after booking •{" "}
-              <span className="text-black">9:00 AM - 10:00 PM</span>
+              Exact location provided after booking
             </p>
           </div>
 

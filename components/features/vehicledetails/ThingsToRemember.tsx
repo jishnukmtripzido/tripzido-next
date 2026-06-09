@@ -5,36 +5,44 @@ import {
   ExclamationCircleIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
+import type { VehicleDetailsResponse } from "@/types/vehicleDetails.types";
 
-export default function ThingsToRemember() {
+interface Props {
+  policies: VehicleDetailsResponse["policies"];
+}
+
+export default function ThingsToRemember({ policies }: Props) {
   const rules = [
     {
       label: "Security Deposit",
-      value: "₹0",
+      value:
+        policies.security_deposit === 0
+          ? "₹0"
+          : `₹${policies.security_deposit.toLocaleString("en-IN")}`,
       icon: <BanknotesIcon className="w-5 h-5" />,
       color: "text-green-600",
     },
     {
       label: "Location timings",
-      value: "9:00 AM - 10:00 PM",
+      value: policies.location_timings,
       icon: <ClockIcon className="w-5 h-5" />,
       color: "text-gray-700",
     },
     {
       label: "Distance limit",
-      value: "No Limit",
+      value: policies.distance_limit,
       icon: <MapIcon className="w-5 h-5" />,
       color: "text-gray-700",
     },
     {
       label: "Excess Charge",
-      value: "N/A",
+      value: policies.excess_charge,
       icon: <ExclamationCircleIcon className="w-5 h-5" />,
       color: "text-gray-700",
     },
     {
       label: "Late Penalty",
-      value: "₹100 / hour",
+      value: `₹${policies.late_penalty_per_hour} / hour`,
       icon: <DocumentTextIcon className="w-5 h-5" />,
       color: "text-gray-700",
     },

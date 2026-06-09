@@ -1,15 +1,12 @@
-export default function TermsAndConditions() {
-  const terms = [
-    "One Day will be considered from 9 am to 9 am.",
-    "Documents Required: Aadhar Card and Driving License.",
-    "One Original Govt Address Proof has to be submitted during pickup and will be returned during drop.",
-    "Fuel Charges are not included in the security deposit or rent.",
-  ];
+interface Props {
+  terms: string[];
+}
 
+export default function TermsAndConditions({ terms }: Props) {
   return (
     <div className="mb-8">
       <h2 className="text-lg font-bold text-gray-900 mb-4">
-        Terms & Conditions
+        Terms &amp; Conditions
       </h2>
       <div className="bg-white border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
         <ul className="space-y-3 text-sm text-gray-600">

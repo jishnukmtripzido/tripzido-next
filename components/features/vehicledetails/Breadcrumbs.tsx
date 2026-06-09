@@ -1,6 +1,11 @@
 import Link from "next/link";
 
-export default function Breadcrumbs() {
+interface Props {
+  locationName: string;
+  vehicleName: string;
+}
+
+export default function Breadcrumbs({ locationName, vehicleName }: Props) {
   return (
     <div className="text-sm text-gray-500 flex items-center gap-2">
       <Link href="/" className="hover:text-gray-900 transition-colors">
@@ -8,13 +13,13 @@ export default function Breadcrumbs() {
       </Link>
       <span>›</span>
       <Link
-        href="/rentals/goa"
+        href="/searchresult"
         className="hover:text-gray-900 transition-colors"
       >
-        Rentals in Goa
+        Rentals in {locationName}
       </Link>
       <span>›</span>
-      <span className="text-gray-900 font-medium">Yamaha Fascino</span>
+      <span className="text-gray-900 font-medium">{vehicleName}</span>
     </div>
   );
 }

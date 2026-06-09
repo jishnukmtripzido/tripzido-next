@@ -1,16 +1,48 @@
-"use client"; // This component needs interactivity for selections
+"use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import type { VehiclePackage, FareDetails } from "@/types/vehicleDetails.types";
 
-export default function BookingWidget() {
+interface Props {
+  packages: VehiclePackage[];
+  fareDetails: FareDetails;
+  payAtPickupEnabled: boolean;
+  pickup: string;
+  dropoff: string;
+  vehicleId: number;
+  locationId: number;
+}
+
+export default function BookingWidget({
+  packages,
+  fareDetails,
+  payAtPickupEnabled,
+  vehicleId,
+  locationId,
+  pickup,
+  dropoff,
+}: Props) {
+  const [selectedPackageId, setSelectedPackageId] = useState<number>(
+    packages[0]?.id ?? 0,
+  );
+
   return (
-    <div className="sticky top-8 bg-white border border-gray-200 rounded-md  p-6">
+    <div className="bg-white border border-gray-200 rounded-md p-6">
       <h3 className="text-xl font-bold text-gray-900 mb-4">Select Package</h3>
 
       <div className="relative mb-6">
-        <select className="w-full appearance-none bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 text-sm font-medium">
-          <option>Daily Package (₹ 499 per Day)</option>
-          <option>Weekly Package (₹ 3000 per Week)</option>
+        <select
+          value={selectedPackageId}
+          onChange={(e) => setSelectedPackageId(Number(e.target.value))}
+          className="w-full appearance-none bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 text-sm font-medium"
+        >
+          {packages.map((pkg) => (
+            <option key={pkg.id} value={pkg.id}>
+              {pkg.label ??
+                `${pkg.name} (₹ ${pkg.price_per_day.toLocaleString("en-IN")} per Day)`}
+            </option>
+          ))}
         </select>
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
           <svg
@@ -28,30 +60,36 @@ export default function BookingWidget() {
       <div className="space-y-3 text-sm text-gray-600 mb-4">
         <div className="flex justify-between">
           <span>Rent Amount</span>
-          <span className="font-medium text-gray-900">₹ 998.00</span>
+          <span className="font-medium text-gray-900">
+            ₹ {fareDetails.rent_amount.toFixed(2)}
+          </span>
         </div>
         <div className="flex justify-between">
           <span>Total</span>
-          <span className="font-medium text-gray-900">₹ 998.00</span>
+          <span className="font-medium text-gray-900">
+            ₹ {fareDetails.total.toFixed(2)}
+          </span>
         </div>
         <div className="flex justify-between text-gray-500">
           <span>
             Remaining Rent{" "}
             <span className="text-xs">(To be paid at pickup)</span>
           </span>
-          <span>₹ 798.40</span>
+          <span>₹ {fareDetails.remaining_rent.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-gray-500">
           <span>Advance Payment</span>
-          <span>₹ 199.60</span>
+          <span>₹ {fareDetails.advance_payment.toFixed(2)}</span>
         </div>
       </div>
 
-      <div className="border-t border-gray-200 my-4"></div>
+      <div className="border-t border-gray-200 my-4" />
 
       <div className="flex justify-between items-center mb-6">
         <span className="font-bold text-gray-900">Amount Payable Today</span>
-        <span className="text-xl font-bold text-gray-900">₹ 199.60</span>
+        <span className="text-xl font-bold text-gray-900">
+          ₹ {fareDetails.advance_payment.toFixed(2)}
+        </span>
       </div>
 
       <div className="bg-green-50 text-green-700 text-xs font-medium px-4 py-3 rounded-lg mb-6 flex items-center gap-2">
@@ -62,7 +100,8 @@ export default function BookingWidget() {
             clipRule="evenodd"
           />
         </svg>
-        Refundable Deposit - ₹0 (To be paid at pickup)
+        Refundable Deposit - ₹{fareDetails.refundable_deposit.toFixed(0)} (To be
+        paid at pickup)
       </div>
 
       <Link
