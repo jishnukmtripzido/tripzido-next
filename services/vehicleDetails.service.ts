@@ -3,13 +3,10 @@ import { api } from "@/lib/api";
 import type { VehicleDetailsResponse } from "@/types/vehicleDetails.types";
 
 export interface VehicleDetailsParams {
-  /** Vehicle listing ID (the [id] path segment) */
   vehicle_id: string | number;
   location_id: string | number;
   location_name: string;
-  /** ISO datetime string */
   pickup_datetime: string;
-  /** ISO datetime string */
   dropoff_datetime: string;
 }
 
@@ -48,7 +45,7 @@ export async function getVehicleReviewsApi(
 ): Promise<ReviewsResponse> {
   const data = await api.get<{ data: ReviewsResponse }>(
     `/api/vehicles/${vehicleId}/reviews/`,
-    { next: { revalidate: 300 } }, // revalidate every 5 min
+    { revalidate: 300 }, // revalidate every 5 min
   );
   return data.data;
 }
@@ -58,7 +55,7 @@ export async function getCityPickupLocationsApi(
 ): Promise<PickupLocationOption[]> {
   const data = await api.get<{ data: PickupLocationOption[] }>(
     `/api/locations/?city_id=${cityId}`,
-    { next: { revalidate: 3600 } }, // locations change rarely
+    { revalidate: 3600 }, // revalidate every hour
   );
   return data.data;
 }
