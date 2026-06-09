@@ -1,6 +1,15 @@
-import React from "react";
+"use client";
+
+import { useState } from "react";
+import EditSearchBar from "./EditSearchBar";
 
 export default function SearchModifyBar() {
+  const [isEditing, setIsEditing] = useState(false);
+
+  if (isEditing) {
+    return <EditSearchBar onClose={() => setIsEditing(false)} />;
+  }
+
   return (
     <div className="w-full bg-white py-4 border-b border-gray-100">
       <div className="xl:mx-[80.5px] mx-auto px-4 xl:px-0">
@@ -17,7 +26,10 @@ export default function SearchModifyBar() {
                   Mon, Jun 8 – Tue, Jun 9, 2026
                 </span>
               </div>
-              <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-5 py-2 rounded-md transition-colors shadow-sm shrink-0 ml-4">
+              <button
+                onClick={() => setIsEditing(true)}
+                className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-5 py-2 rounded-md transition-colors shadow-sm shrink-0 ml-4"
+              >
                 Edit
               </button>
             </div>
@@ -89,7 +101,10 @@ export default function SearchModifyBar() {
               </svg>
               <span>You'll need to pick up your bike at 11:00</span>
             </div>
-            <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2.5 rounded-md transition-colors shadow-sm shrink-0">
+            <button
+              onClick={() => setIsEditing(true)}
+              className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2.5 rounded-md transition-colors shadow-sm shrink-0"
+            >
               Edit
             </button>
           </div>
