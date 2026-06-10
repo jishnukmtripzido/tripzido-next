@@ -296,7 +296,7 @@ export default function BikeCard({
       {/* ── MOBILE ── */}
       <div className="sm:hidden">
         {!isFlipped ? (
-          <div className="bg-white  rounded-md  overflow-visible">
+          <div className="bg-white  rounded-md shadow-sm  overflow-visible">
             <div className="p-4 pb-0">
               <Badges />
               <h3 className="text-[18px] font-bold text-black leading-snug mb-2.5">
