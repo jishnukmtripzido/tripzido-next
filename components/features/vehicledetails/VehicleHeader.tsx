@@ -67,7 +67,7 @@ export default function VehicleHeader({
             </p>
           </div>
 
-          <p className="text-xs text-gray-400 mt-4">
+          <p className="text-xs text-gray-400 mt-4  hidden md:block">
             *Images are for representation purposes only.
           </p>
         </div>
