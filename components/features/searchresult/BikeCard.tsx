@@ -1032,7 +1032,7 @@ function SpecsBack({
       {!desktop && (
         <div className="p-4 pb-0">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[15px] font-semibold text-black">{name}</h3>
+            <h3 className="text-[20px] font-semibold text-black">{name}</h3>
             <button
               onClick={onBack}
               className="text-[11px] text-gray-500 border border-gray-200 rounded-full px-3 py-0.5 hover:border-[#ffc107] hover:text-black transition-colors"
