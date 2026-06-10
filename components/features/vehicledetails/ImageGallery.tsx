@@ -23,7 +23,7 @@ export default function ImageGallery({ images = [] }: ImageGalleryProps) {
   return (
     <div className="flex flex-col w-full">
       {/* Main Image Container */}
-      <div className="bg-gray-50 rounded-md flex items-center justify-center p-6 border border-gray-100 h-64 md:h-72">
+      <div className="md:bg-gray-50 md:rounded-md flex items-center justify-center p-6 border-t md:border border-gray-100 h-64 md:h-72">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={activeImage}
