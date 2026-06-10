@@ -303,7 +303,7 @@ export default function BikeCard({
                 {name}
                 {/* <span className="text-sm text-gray-700 ps-1">or similar</span> */}
               </h3>
-              <div className="grid grid-cols-[1fr_130px] gap-2.5 items-start mb-6">
+              <div className="grid grid-cols-[1fr_160px] gap-2.5 items-start mb-6">
                 <div className="min-w-0">
                   <SpecsList />
                 </div>
@@ -311,10 +311,10 @@ export default function BikeCard({
                   <img
                     src={primary_image}
                     alt={name}
-                    className="w-[130px] h-[100px] object-contain mt-[-40px]"
+                    className="w-[160px] h-[130px] object-contain mt-[-50px]"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src =
-                        `https://placehold.co/130x100/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
+                        `https://placehold.co/160x130/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
                     }}
                   />
                 </div>

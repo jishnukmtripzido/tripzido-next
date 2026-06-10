@@ -16,7 +16,7 @@ export default function VehicleDetailsLayout({
         userNameFirstLetterSize={8}
         userNameFirstLetter="J"
         headerLgScreenMx="xl:mx-[80.5px] xl:px-0"
-        headerValues=" w-full py-2 border-b border-gray-100 text-gray-900"
+        headerValues=" w-full  py-2 border-b border-gray-100 text-gray-900"
       />
       {children}
     </>

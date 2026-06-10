@@ -16,7 +16,7 @@ export default function SearchResultLayout({
         userNameFirstLetterSize={8}
         userNameFirstLetter="J"
         headerLgScreenMx=" xl:px-5"
-        headerValues=" w-full bg-white py-2 border-b border-gray-100 text-gray-900"
+        headerValues=" w-full  py-2 border-b border-gray-100 text-gray-900"
       />
       {children}
     </>

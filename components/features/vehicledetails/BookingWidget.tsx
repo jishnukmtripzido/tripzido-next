@@ -28,7 +28,7 @@ export default function BookingWidget({
   );
 
   return (
-    <div className="bg-white border-b border-gray-200  pb-6">
+    <div className="bg-white border-b border-gray-200 md:border-none  pb-6">
       <h3 className="text-xl font-bold text-gray-900 mb-4">Select Package</h3>
 
       <div className="relative mb-6">
