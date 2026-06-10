@@ -306,7 +306,7 @@ function CellLabel({ top, bottom }: { top: string; bottom: string }) {
       <span className="text-[11px] font-thin text-gray-500 leading-none mb-1">
         {top}
       </span>
-      <span className="text-sm font-thin text-gray-900 truncate leading-none">
+      <span className="text-sm font-normal text-gray-900 truncate leading-none">
         {bottom}
       </span>
     </div>

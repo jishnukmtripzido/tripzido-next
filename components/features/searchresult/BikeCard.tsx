@@ -573,7 +573,6 @@
 //     </svg>
 //   );
 // }
-
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -786,14 +785,14 @@ export default function BikeCard({
             Price for {rentalDays} day{rentalDays > 1 ? "s" : ""}:
           </p>
           <div className="flex items-baseline gap-0.5">
-            <span className="text-[20px] font-bold text-black leading-none">
+            <span className="text-[20px] font-extrabold text-black leading-none">
               ₹{totalPrice!.toLocaleString("en-IN")}
             </span>
           </div>
         </>
       ) : price !== null ? (
         <div className="flex items-baseline gap-0.5">
-          <span className="text-[20px] font-bold text-black leading-none">
+          <span className="text-[20px] font-extrabold text-black leading-none">
             ₹{price.toLocaleString("en-IN")}
           </span>
           <span className="text-[12px] text-black">/day</span>
@@ -807,7 +806,7 @@ export default function BikeCard({
   const BookButton = ({ size = "sm" }: { size?: "sm" | "md" }) => (
     <Link href={buildDetailsUrl()}>
       <button
-        className={`bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold rounded-lg transition-colors cursor-pointer ${
+        className={`bg-[#ffc107] hover:bg-yellow-500 text-black font-bold rounded-lg transition-colors cursor-pointer ${
           size === "md"
             ? "text-[13px] px-5 py-2 rounded-md"
             : "text-[14px] px-6 py-2.5"
@@ -868,15 +867,16 @@ export default function BikeCard({
   );
 
   return (
-    <div className="group relative w-full max-w-sm bg-transparent">
+    <div className="group relative w-full max-w-sm bg-transparent border-2 border-brand-yellow rounded-md">
       {/* ── MOBILE ── */}
       <div className="sm:hidden">
         {!isFlipped ? (
           <div className="bg-white border border-gray-200 rounded-md shadow-lg overflow-visible">
             <div className="p-4 pb-0">
               <Badges />
-              <h3 className="text-[18px] font-semibold text-black leading-snug mb-2.5">
+              <h3 className="text-[18px] font-bold text-black leading-snug mb-2.5">
                 {name}
+                {/* <span className="text-sm text-gray-700 ps-1">or similar</span> */}
               </h3>
               <div className="grid grid-cols-[1fr_130px] gap-2.5 items-start">
                 <div className="min-w-0">
@@ -886,7 +886,7 @@ export default function BikeCard({
                   <img
                     src={primary_image}
                     alt={name}
-                    className="w-[130px] h-[100px] object-contain mt-[-12px]"
+                    className="w-[130px] h-[100px] object-contain mt-[-35px]"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src =
                         `https://placehold.co/130x100/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
@@ -927,7 +927,7 @@ export default function BikeCard({
             <div
               className={`absolute inset-0 w-full h-full bg-white border border-gray-300/80 rounded-md [backface-visibility:hidden] flex flex-col pt-4 ${isFlipped ? "pointer-events-none" : "pointer-events-auto"}`}
             >
-              <h3 className="font-medium text-black text-[17px] leading-none text-center px-4 tracking-tight">
+              <h3 className="font-medium text-black text-[20px] leading-none text-center px-4 tracking-tight">
                 {name}
               </h3>
               <div className="relative h-36 flex items-center justify-center mt-2 p-3">
@@ -945,29 +945,22 @@ export default function BikeCard({
                 <div className="flex-1 border-t-2 border-gray-200" />
                 <button
                   onClick={() => setIsFlipped(true)}
-                  className="px-4 py-1 bg-white border border-gray-300 rounded-full text-[11px] font-light text-black mx-3 hover:border-[#ffc107] transition-colors cursor-pointer shadow-sm"
+                  className="px-4 py-1 bg-white border border-gray-300 rounded-full text-[11px] font-normal text-black mx-3 hover:border-[#ffc107] transition-colors cursor-pointer"
                 >
                   View Specs
                 </button>
                 <div className="flex-1 border-t-2 border-gray-200" />
               </div>
               <div className="px-4 pb-4 flex flex-col flex-1 justify-between">
-                <div className="flex justify-between items-center text-black text-[13px] font-thin px-1">
-                  {[transmission, seatsLabel, fuelTypeLabel].map((label) => (
+                {/* Desktop spec row — each item gets its own icon */}
+                <div className="flex justify-between items-center text-black text-sm font-normal px-1">
+                  {[
+                    { label: transmission, icon: "transmission" },
+                    { label: seatsLabel, icon: "seat" },
+                    { label: fuelTypeLabel, icon: "fuel" },
+                  ].map(({ label, icon }) => (
                     <div key={label} className="flex items-center gap-1.5">
-                      <svg
-                        className="w-3.5 h-3.5 text-gray-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M13 10V3L4 14h7v7l9-11h-7z"
-                        />
-                      </svg>
+                      <SpecIcon type={icon} />
                       {label}
                     </div>
                   ))}
@@ -1142,12 +1135,60 @@ function PinIcon() {
 }
 
 function SpecIcon({ type }: { type: string }) {
+  // ── Seat (desktop row) ──────────────────────────────────────────────
+  if (type === "seat") {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="w-3.5 h-3.5 text-gray-600 shrink-0"
+      >
+        <path d="M16.5 6a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0M18 6A6 6 0 1 0 6 6a6 6 0 0 0 12 0M3 23.25a9 9 0 1 1 18 0 .75.75 0 0 0 1.5 0c0-5.799-4.701-10.5-10.5-10.5S1.5 17.451 1.5 23.25a.75.75 0 0 0 1.5 0" />
+      </svg>
+    );
+  }
+
+  // ── Transmission (desktop row) ──────────────────────────────────────
+  if (type === "transmission") {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="w-3.5 h-3.5 text-gray-600 shrink-0"
+      >
+        <path d="M19.25 14.25v-4.5l-1.374.416 3 4.5c.412.617 1.374.326 1.374-.416v-4.5a.75.75 0 0 0-1.5 0v4.5l1.374-.416-3-4.5c-.412-.617-1.374-.326-1.374.416v4.5a.75.75 0 0 0 1.5 0m3 6a3.75 3.75 0 0 0-3.75-3.75.75.75 0 0 0-.75.75v6c0 .414.336.75.75.75a3.75 3.75 0 0 0 3.75-3.75m-1.5 0a2.25 2.25 0 0 1-2.25 2.25l.75.75v-6l-.75.75a2.25 2.25 0 0 1 2.25 2.25M18.5 4.5H20A2.25 2.25 0 0 0 20 0h-1.5a.75.75 0 0 0-.75.75v6a.75.75 0 0 0 1.5 0v-6l-.75.75H20A.75.75 0 0 1 20 3h-1.5a.75.75 0 0 0 0 1.5M4.25 6.75v4.5A2.25 2.25 0 0 0 6.5 13.5H8a.75.75 0 0 1 .75.75v4.5A2.25 2.25 0 0 0 11 21h3a.75.75 0 0 0 0-1.5h-3a.75.75 0 0 1-.75-.75v-4.5A2.25 2.25 0 0 0 8 12H6.5a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-1.5 0m3-3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0" />
+      </svg>
+    );
+  }
+
+  // ── Fuel (desktop row + mobile SpecsList fallback) ──────────────────
+  if (type === "fuel") {
+    return (
+      <svg
+        className="w-3.5 h-3.5 text-gray-600 shrink-0"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M13 10V3L4 14h7v7l9-11h-7z"
+        />
+      </svg>
+    );
+  }
+
+  // ── Legacy keys used by mobile SpecsList ────────────────────────────
   const paths: Record<string, string> = {
     user: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
     gear: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z",
     map: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7",
-    fuel: "M13 10V3L4 14h7v7l9-11h-7z",
   };
+
   return (
     <svg
       className="w-3.5 h-3.5 text-gray-500 shrink-0"
