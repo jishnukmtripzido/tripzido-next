@@ -785,14 +785,14 @@ export default function BikeCard({
             Price for {rentalDays} day{rentalDays > 1 ? "s" : ""}:
           </p>
           <div className="flex items-baseline gap-0.5">
-            <span className="text-[20px] font-extrabold text-black leading-none">
+            <span className="text-[22px] font-bold text-black leading-none">
               ₹{totalPrice!.toLocaleString("en-IN")}
             </span>
           </div>
         </>
       ) : price !== null ? (
         <div className="flex items-baseline gap-0.5">
-          <span className="text-[20px] font-extrabold text-black leading-none">
+          <span className="text-[22px] font-bold text-black leading-none">
             ₹{price.toLocaleString("en-IN")}
           </span>
           <span className="text-[12px] text-black">/day</span>
@@ -867,11 +867,11 @@ export default function BikeCard({
   );
 
   return (
-    <div className="group relative w-full max-w-sm bg-transparent border-2 border-brand-yellow rounded-md">
+    <div className="group relative w-full max-w-sm bg-transparent ">
       {/* ── MOBILE ── */}
       <div className="sm:hidden">
         {!isFlipped ? (
-          <div className="bg-white border border-gray-200 rounded-md shadow-lg overflow-visible">
+          <div className="bg-white border-2 border-brand-yellow rounded-md shadow-lg overflow-visible">
             <div className="p-4 pb-0">
               <Badges />
               <h3 className="text-[18px] font-bold text-black leading-snug mb-2.5">
@@ -886,7 +886,7 @@ export default function BikeCard({
                   <img
                     src={primary_image}
                     alt={name}
-                    className="w-[130px] h-[100px] object-contain mt-[-35px]"
+                    className="w-[130px] h-[100px] object-contain mt-[-40px]"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src =
                         `https://placehold.co/130x100/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
