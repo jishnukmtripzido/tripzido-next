@@ -28,7 +28,7 @@ export default function VehicleHeader({
   const allImages = images?.length ? images : [primaryImage];
 
   return (
-    <div className="bg-white rounded-md p-6 border border-gray-200 mb-8">
+    <div className="bg-white  pb-6 border-b  border-gray-200 mb-8">
       <div className="flex flex-col md:flex-row gap-8">
         {/* Left Side: Images */}
         <div className="w-full md:w-5/12">
