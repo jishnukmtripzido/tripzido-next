@@ -296,14 +296,14 @@ export default function BikeCard({
       {/* ── MOBILE ── */}
       <div className="sm:hidden">
         {!isFlipped ? (
-          <div className="bg-white  rounded-md shadow-sm  overflow-visible">
+          <div className="bg-white  rounded-md shadow-[0_6px_12px_-2px_rgba(50,50,93,0.25),0_3px_7px_-3px_rgba(0,0,0,0.3)]  overflow-visible">
             <div className="p-4 pb-0">
               <Badges />
-              <h3 className="text-[18px] font-bold text-black leading-snug mb-2.5">
+              <h3 className="text-[18px] font-bold text-black leading-snug mb-5">
                 {name}
                 {/* <span className="text-sm text-gray-700 ps-1">or similar</span> */}
               </h3>
-              <div className="grid grid-cols-[1fr_130px] gap-2.5 items-start">
+              <div className="grid grid-cols-[1fr_130px] gap-2.5 items-start mb-8">
                 <div className="min-w-0">
                   <SpecsList />
                 </div>
@@ -414,7 +414,7 @@ export default function BikeCard({
 
             {/* Back */}
             <div
-              className={`absolute inset-0 w-full h-full bg-white shadow-[0_6px_12px_-2px_rgba(50,50,93,0.25),0_3px_7px_-3px_rgba(0,0,0,0.3)] border border-gray-300/80 rounded-xl [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col overflow-hidden pt-4 ${isFlipped ? "pointer-events-auto" : "pointer-events-none"}`}
+              className={`absolute inset-0 w-full h-full bg-white shadow-[0_6px_12px_-2px_rgba(50,50,93,0.25),0_3px_7px_-3px_rgba(0,0,0,0.3)] border border-gray-300/80 rounded-md [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col overflow-hidden pt-4 ${isFlipped ? "pointer-events-auto" : "pointer-events-none"}`}
             >
               <SpecsBack
                 name={name}
