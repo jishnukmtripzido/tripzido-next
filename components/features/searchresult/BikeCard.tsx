@@ -255,7 +255,7 @@ export default function BikeCard({
       ].map(({ icon, label }) => (
         <li
           key={label}
-          className="flex items-center gap-2 text-[13px] text-black"
+          className="flex items-center gap-2 text-[14px] text-black"
         >
           <SpecIcon type={icon} />
           {label}
@@ -303,7 +303,7 @@ export default function BikeCard({
                 {name}
                 {/* <span className="text-sm text-gray-700 ps-1">or similar</span> */}
               </h3>
-              <div className="grid grid-cols-[1fr_130px] gap-2.5 items-start mb-8">
+              <div className="grid grid-cols-[1fr_130px] gap-2.5 items-start mb-6">
                 <div className="min-w-0">
                   <SpecsList />
                 </div>
