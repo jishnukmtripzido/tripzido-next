@@ -85,7 +85,7 @@ export default function SearchModifyBar({
                 Edit
               </button>
             </div>
-            <div className="flex items-center gap-1.5 text-blue-900 text-sm mt-2">
+            <div className="flex items-center gap-1.5 text-blue-500 text-sm mt-2">
               <InfoIcon />
               <span>You'll need to pick up your bike at {pickupTime}</span>
             </div>

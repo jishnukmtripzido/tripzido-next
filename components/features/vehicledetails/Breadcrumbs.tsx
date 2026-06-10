@@ -25,7 +25,7 @@ export default function Breadcrumbs({ locationName, vehicleName }: Props) {
       <div className="md:hidden">
         <Link
           href="/"
-          className="text-blue-900 hover:underline text-sm transition-colors"
+          className="text-blue-500 hover:underline text-sm transition-colors"
         >
           Back to search result
         </Link>
