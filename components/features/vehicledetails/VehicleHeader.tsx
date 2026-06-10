@@ -58,7 +58,7 @@ export default function VehicleHeader({
           <VehicleFeatures />
 
           {/* Pickup location */}
-          <div className="mt-8 pt-4 border-t border-gray-100">
+          <div className="mt-8 pt-4 hidden md:block border-t border-gray-100">
             <h3 className="text-base font-medium text-gray-900">
               {pickupLocationName} Pickup
             </h3>
