@@ -22,14 +22,14 @@ export default function Breadcrumbs({ locationName, vehicleName }: Props) {
         <span>›</span>
         <span className="text-gray-900 font-semibold">{vehicleName}</span>
       </div>
-      <div className="md:hidden">
+      {/* <div className="md:hidden">
         <Link
           href="/"
           className="text-blue-500 hover:underline text-sm transition-colors"
         >
           Back to search result
         </Link>
-      </div>
+      </div> */}
     </>
   );
 }
