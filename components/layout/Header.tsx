@@ -1,5 +1,5 @@
 // components/layout/Header.tsx
-import { getIsLoggedIn ,getRefreshToken} from "@/lib/auth";
+import { getIsLoggedIn, getRefreshToken } from "@/lib/auth";
 import HeaderClient from "./HeaderClient";
 
 type HeaderProps = {
@@ -26,7 +26,6 @@ export default async function Header({
   const isLoggedIn = await getIsLoggedIn();
   // const refreshToken = await getRefreshToken();
 
-
   return (
     <HeaderClient
       isLoggedIn={isLoggedIn}
@@ -41,5 +40,3 @@ export default async function Header({
     />
   );
 }
-
-
