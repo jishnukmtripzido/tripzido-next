@@ -64,7 +64,7 @@ export default function SearchModifyBar({
   }
 
   return (
-    <div className="w-full bg-white py-4 border-b border-gray-100">
+    <div className="w-full bg-white pt-4 border-none border-gray-100">
       <div className="xl:mx-[80.5px] mx-auto px-4 xl:px-0">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-2 border-brand-yellow rounded-lg p-3 md:px-4 md:py-3 bg-white gap-0 md:gap-0">
           {/* ── MOBILE ── */}
@@ -85,7 +85,7 @@ export default function SearchModifyBar({
                 Edit
               </button>
             </div>
-            <div className="flex items-center gap-1.5 text-blue-500 text-sm mt-2">
+            <div className="flex items-center gap-1.5 text-blue-900 text-sm mt-2">
               <InfoIcon />
               <span>You'll need to pick up your bike at {pickupTime}</span>
             </div>
