@@ -480,7 +480,7 @@ export default function SearchResultsClient({
 
       <OfferBanner />
 
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-[#f9fafb] md:bg-white">
         {/* xl:mx-[80.5px]  */}
         <div className="mx-auto px-4 pt-5 pb-6   xl:px-6  flex gap-6 items-start">
           {/* Desktop filter sidebar */}
