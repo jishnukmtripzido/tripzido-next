@@ -293,7 +293,7 @@ export default async function VehicleDetailsPage({
         dropoff={dropoff}
         cityId={Number(city_id ?? 0)}
       />
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen  bg-[#f1f3f5] md:bg-white">
         <main className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 py-4 xl:py-5 grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Column */}
           <div className="lg:col-span-8 space-y-5 order-1 lg:order-none">
