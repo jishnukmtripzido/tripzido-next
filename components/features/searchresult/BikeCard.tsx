@@ -414,7 +414,7 @@ export default function BikeCard({
 
             {/* Back */}
             <div
-              className={`absolute inset-0 w-full h-full bg-white border border-gray-200 rounded-xl [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col overflow-hidden pt-4 ${isFlipped ? "pointer-events-auto" : "pointer-events-none"}`}
+              className={`absolute inset-0 w-full h-full bg-white shadow-[0_6px_12px_-2px_rgba(50,50,93,0.25),0_3px_7px_-3px_rgba(0,0,0,0.3)] border border-gray-300/80 rounded-xl [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col overflow-hidden pt-4 ${isFlipped ? "pointer-events-auto" : "pointer-events-none"}`}
             >
               <SpecsBack
                 name={name}

@@ -344,7 +344,7 @@ export default async function VehicleDetailsPage({
 
           {/* Right Column — desktop sticky */}
           <div className="lg:col-span-4 relative hidden lg:block">
-            <div className="sticky top-[100px]">
+            <div className="sticky top-[40px]">
               <BookingWidget {...bookingWidgetProps} />
             </div>
           </div>

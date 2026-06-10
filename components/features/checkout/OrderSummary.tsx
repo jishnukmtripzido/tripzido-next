@@ -1,6 +1,6 @@
 export default function OrderSummary() {
   return (
-    <div className="bg-white border border-gray-200 rounded-md p-6 shadow-sm">
+    <div className="bg-white border border-gray-200 rounded-md p-6 shadow-none">
       {/* Vehicle Info */}
       <div>
         <h1 className="text-lg font-bold text-gray-900 mb-4">Summary</h1>

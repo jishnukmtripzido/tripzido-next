@@ -5,7 +5,7 @@ export default function FareDetails() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   return (
-    <div className="bg-gray-50 md:bg-white border md:border-gray-200 rounded-md p-6 shadow-sm">
+    <div className="bg-gray-50 md:bg-white border md:border-gray-200 rounded-md p-6 shadow-none">
       {/* FIX: Changed mb-6 to mb-4 to match OrderSummary heading */}
       <h3 className="text-lg font-bold text-gray-900 mb-4">Fare Details</h3>
 
