@@ -7,7 +7,7 @@ interface Props {
 
 export default function Breadcrumbs({ locationName, vehicleName }: Props) {
   return (
-    <div className="text-sm text-gray-500 flex items-center gap-2">
+    <div className="text-sm text-gray-500 hidden md:flex items-center gap-2 ">
       <Link href="/" className="hover:text-gray-900 transition-colors">
         Home
       </Link>
