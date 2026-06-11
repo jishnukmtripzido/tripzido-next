@@ -10,9 +10,9 @@ interface Props {
   fuelCapacityLitres: number;
   cc: number;
   kmLimitPerDay: number | null;
-  topSpeedKmph: number;
-  mileageKmpl: number;
-  kerbWeightKg: number;
+  topSpeedKmph: number | string | null;
+  mileageKmpl: number | string | null;
+  kerbWeightKg: number | string | null;
   availableCount: number;
   pickupLocationName: string;
 }
@@ -24,6 +24,13 @@ export default function VehicleHeader({
   primaryImage,
   availableCount,
   pickupLocationName,
+  cc,
+  seats,
+  fuelCapacityLitres,
+  kmLimitPerDay,
+  topSpeedKmph,
+  mileageKmpl,
+  kerbWeightKg,
 }: Props) {
   const allImages = images?.length ? images : [primaryImage];
 
@@ -40,7 +47,7 @@ export default function VehicleHeader({
         <div className="w-full md:w-7/12 flex flex-col justify-start">
           {/* Availability tag */}
           <div className="flex items-center gap-2 mb-3">
-            {availableCount > 0 && (
+            {availableCount && availableCount > 0 && (
               <span className="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded">
                 {availableCount} Bike{availableCount !== 1 ? "s" : ""} Available
               </span>
@@ -56,7 +63,15 @@ export default function VehicleHeader({
           </div>
 
           {/* Specs */}
-          <VehicleFeatures />
+          <VehicleFeatures
+            seats={seats}
+            topSpeed={topSpeedKmph}
+            fuelCapacity={fuelCapacityLitres}
+            mileageKmpl={mileageKmpl}
+            cc={cc}
+            kerbWeightKg={kerbWeightKg}
+            kmLimitPerDay={kmLimitPerDay}
+          />
 
           {/* Pickup location */}
           <div className="mt-8 pt-4 hidden md:block border-t border-gray-100">

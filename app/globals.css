@@ -6,6 +6,8 @@
 /* ── Brand theme (Tailwind v4 config lives here, not in tailwind.config.ts) ── */
 @theme {
   --color-brand-yellow: #ffc107;
+  --color-font-main-sub: #1a1a1a;
+  --color-font-dim: #595959;
   /* --font-sans: "Open Sans", sans-serif; */
   --font-sans:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
