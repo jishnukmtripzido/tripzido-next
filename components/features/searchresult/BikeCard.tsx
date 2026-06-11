@@ -98,11 +98,11 @@ export default function BikeCard({
   /** Build the vehicle details URL with all booking context */
   function buildDetailsUrl() {
     const params = new URLSearchParams();
-    params.set("location_id", String(selectedLocation.id));
+    params.set("location_id", String(selectedLocation.location_id)); // ← also fix: location_id not id
     params.set("location_name", selectedLocation.location_name);
     if (pickup) params.set("pickup", pickup);
     if (dropoff) params.set("dropoff", dropoff);
-    return `/vehicledetails/${id}?${params.toString()}`;
+    return `/vehicledetails/${selectedLocation.id}?${params.toString()}`; // ← selectedLocation.id instead of id
   }
 
   const MapThumbnail = () => (
