@@ -89,7 +89,7 @@ export default function BookingWidget({
         <span className="font-semibold text-font-main-sub">
           Amount Payable Today
         </span>
-        <span className="text-xl font-bold text-font-main-sub">
+        <span className=" font-bold text-font-main-sub">
           ₹ {fareDetails.advance_payment.toFixed(2)}
         </span>
       </div>

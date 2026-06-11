@@ -20,7 +20,7 @@ export default function ThingsToRemember({ policies }: Props) {
           ? "₹0"
           : `₹${policies.security_deposit.toLocaleString("en-IN")}`,
       icon: <BanknotesIcon className="w-5 h-5" />,
-      color: "text-green-600",
+      color: "text-gray-500",
     },
     {
       label: "Location timings",

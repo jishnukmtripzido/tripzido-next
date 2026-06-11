@@ -34,7 +34,7 @@ export async function getCancellationPolicyApi(
   vehicleId: string | number,
 ): Promise<CancellationPolicy> {
   const data = await api.get<{ data: CancellationPolicy }>(
-    `/api/vehicles/${vehicleId}/cancellation-policy/`,
+    `/api/administrations/cancellation-policy/`,
     { cache: "force-cache" }, // policy rarely changes — safe to cache
   );
   return data.data;
