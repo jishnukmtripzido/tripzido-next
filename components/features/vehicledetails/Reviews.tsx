@@ -79,7 +79,7 @@ export default async function Reviews({ vehicleId }: Props) {
                 <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-semibold text-gray-600 shrink-0">
                   {review.author_name.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm font-semibold text-font-main-sub">
                   {review.author_name}
                 </span>
               </div>
@@ -89,10 +89,10 @@ export default async function Reviews({ vehicleId }: Props) {
                 ))}
               </div>
             </div>
-            <p className="text-sm text-gray-600 leading-relaxed ml-10">
+            <p className="text-sm text-font-main-sub leading-relaxed ml-10">
               {review.comment}
             </p>
-            <p className="text-xs text-gray-400 mt-1.5 ml-10">
+            <p className="text-xs text-font-dim mt-1.5 ml-10">
               {new Date(review.created_at).toLocaleDateString("en-IN", {
                 day: "numeric",
                 month: "short",

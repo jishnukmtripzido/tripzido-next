@@ -44,21 +44,22 @@ export default function VehicleFeatures({
     <div className="mt-6">
       <div className="grid grid-cols-2 gap-y-4 gap-x-8">
         {features.map(({ label, value, icon: Icon }) => (
-          <div key={label} className="flex items-center gap-3">
-            <Icon className="w-5 h-5 text-gray-500 flex-shrink-0" />
+          <div
+            key={label}
+            className="flex items-center gap-3 text-font-main-sub"
+          >
+            <Icon className="w-5 h-5  flex-shrink-0" />
             <div className="flex flex-row items-baseline gap-1">
-              <span className="text-sm font-semibold text-gray-900">
-                {value}
-              </span>
-              <span className="text-xs text-gray-500 hidden sm:inline-block">
+              <span className="text-sm ">{value}</span>
+              <span className="text-xs text-font-main-sub hidden sm:inline-block">
                 • {label}
               </span>
             </div>
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-2 mt-4 text-sm text-gray-600">
-        <MapIcon className="w-5 h-5 text-gray-500 flex-shrink-0" />
+      <div className="flex items-center gap-2 mt-4 text-sm text-font-main-sub">
+        <MapIcon className="w-5 h-5  flex-shrink-0" />
         {kmLimitPerDay
           ? `${kmLimitPerDay} km/day limit`
           : "Unlimited distance limit"}

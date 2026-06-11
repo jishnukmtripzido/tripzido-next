@@ -56,10 +56,12 @@ export default function VehicleHeader({
 
           {/* Title and Make Year */}
           <div className="mb-2">
-            <h1 className="text-2xl font-bold text-gray-900 inline-block mr-2">
+            <h1 className="text-2xl  font-bold text-font-main-sub inline-block mr-2">
               {name}
             </h1>
-            <p className="text-gray-500 text-sm mt-1">Make Year: {makeYear}</p>
+            <p className="text-font-main-sub text-sm mt-1">
+              Make Year: {makeYear}
+            </p>
           </div>
 
           {/* Specs */}
@@ -75,15 +77,15 @@ export default function VehicleHeader({
 
           {/* Pickup location */}
           <div className="mt-8 pt-4 hidden md:block border-t border-gray-100">
-            <h3 className="text-base font-medium text-gray-900">
+            <h3 className="text-base font-semibold text-font-main-sub">
               {pickupLocationName} Pickup
             </h3>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-font-main-sub mt-1">
               Exact location provided after booking
             </p>
           </div>
 
-          <p className="text-xs text-gray-400 mt-4  hidden md:block">
+          <p className="text-xs text-font-dim mt-4  hidden md:block">
             *Images are for representation purposes only.
           </p>
         </div>

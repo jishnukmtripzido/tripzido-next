@@ -9,7 +9,7 @@ export default function TermsAndConditions({ terms }: Props) {
         Terms &amp; Conditions
       </h2>
       <div className="bg-white border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
-        <ul className="space-y-3 text-sm text-gray-600">
+        <ul className="space-y-3 text-sm text-main-sub">
           {terms.map((term, idx) => (
             <li key={idx} className="flex items-start gap-3">
               <svg

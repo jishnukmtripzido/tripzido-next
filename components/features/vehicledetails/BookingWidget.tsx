@@ -29,13 +29,13 @@ export default function BookingWidget({
 
   return (
     <div className="bg-white border-b border-gray-200 md:border-none  pb-6">
-      <h3 className="text-xl font-bold text-gray-900 mb-4">Select Package</h3>
+      <h3 className=" font-bold text-font-main-sub mb-4">Select a Package</h3>
 
       <div className="relative mb-6">
         <select
           value={selectedPackageId}
           onChange={(e) => setSelectedPackageId(Number(e.target.value))}
-          className="w-full appearance-none bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 text-sm font-medium"
+          className="w-full appearance-none bg-white border border-gray-300 text-font-main-sub py-3 px-4 pr-8 rounded-lg outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 text-sm font-medium"
         >
           {packages.map((pkg) => (
             <option key={pkg.id} value={pkg.id}>
@@ -55,29 +55,29 @@ export default function BookingWidget({
         </div>
       </div>
 
-      <h3 className="font-bold text-gray-900 mb-4">Fare Details</h3>
+      <h3 className="font-bold text-font-main-sub mb-4">Fare Details</h3>
 
-      <div className="space-y-3 text-sm text-gray-600 mb-4">
+      <div className="space-y-3 text-sm text-font-main-sub mb-4">
         <div className="flex justify-between">
           <span>Rent Amount</span>
-          <span className="font-medium text-gray-900">
+          <span className="text-font-main-sub">
             ₹ {fareDetails.rent_amount.toFixed(2)}
           </span>
         </div>
         <div className="flex justify-between">
           <span>Total</span>
-          <span className="font-medium text-gray-900">
+          <span className=" text-font-main-sub">
             ₹ {fareDetails.total.toFixed(2)}
           </span>
         </div>
-        <div className="flex justify-between text-gray-500">
+        <div className="flex justify-between text-font-main-sub">
           <span>
             Remaining Rent{" "}
             <span className="text-xs">(To be paid at pickup)</span>
           </span>
           <span>₹ {fareDetails.remaining_rent.toFixed(2)}</span>
         </div>
-        <div className="flex justify-between text-gray-500">
+        <div className="flex justify-between text-font-main-sub">
           <span>Advance Payment</span>
           <span>₹ {fareDetails.advance_payment.toFixed(2)}</span>
         </div>
@@ -86,8 +86,10 @@ export default function BookingWidget({
       <div className="border-t border-gray-200 my-4" />
 
       <div className="flex justify-between items-center mb-6">
-        <span className="font-bold text-gray-900">Amount Payable Today</span>
-        <span className="text-xl font-bold text-gray-900">
+        <span className="font-semibold text-font-main-sub">
+          Amount Payable Today
+        </span>
+        <span className="text-xl font-bold text-font-main-sub">
           ₹ {fareDetails.advance_payment.toFixed(2)}
         </span>
       </div>

@@ -58,8 +58,10 @@ export default function ThingsToRemember({ policies }: Props) {
           <div key={idx} className="flex items-center gap-3">
             <div className={`flex-shrink-0 ${rule.color}`}>{rule.icon}</div>
             <div className="text-sm">
-              <span className="text-gray-600">{rule.label}: </span>
-              <span className="font-semibold text-gray-900">{rule.value}</span>
+              <span className="text-font-main-sub">{rule.label} : </span>
+              <span className="font-semibold text-font-main-sub">
+                {rule.value}
+              </span>
             </div>
           </div>
         ))}

@@ -8,19 +8,19 @@ interface Props {
 export default function Breadcrumbs({ locationName, vehicleName }: Props) {
   return (
     <>
-      <div className="text-sm text-gray-500 hidden md:flex items-center gap-2 ">
-        <Link href="/" className="hover:text-gray-900 transition-colors">
+      <div className="text-sm text-font-dim hidden md:flex items-center gap-2 ">
+        <Link href="/" className="hover:text-font-main-sub transition-colors">
           Home
         </Link>
         <span>›</span>
         <Link
           href="/searchresult"
-          className="hover:text-gray-900 transition-colors"
+          className="hover:text-font-main-sub transition-colors"
         >
           Rentals in {locationName}
         </Link>
         <span>›</span>
-        <span className="text-gray-900 font-semibold">{vehicleName}</span>
+        <span className="text-font-main-sub font-semibold">{vehicleName}</span>
       </div>
       {/* <div className="md:hidden">
         <Link

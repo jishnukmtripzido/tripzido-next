@@ -57,13 +57,15 @@ export default async function CancellationPolicy({ vehicleId }: Props) {
               }`}
             />
             <div className="text-sm">
-              <span className="font-medium text-gray-900">{rule.label}: </span>
-              <span className="text-gray-600">{rule.description}</span>
+              <span className="font-medium text-font-main-sub">
+                {rule.label} :{" "}
+              </span>
+              <span className="text-font-main-sub">{rule.description}</span>
             </div>
           </div>
         ))}
         {policy.note && (
-          <p className="text-xs text-gray-400 mt-2 pl-5">{policy.note}</p>
+          <p className="text-xs text-font-dim mt-2 pl-5">{policy.note}</p>
         )}
       </div>
     </div>
