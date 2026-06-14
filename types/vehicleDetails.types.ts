@@ -72,5 +72,6 @@ export interface VehicleDetailsSearchParams {
   location_name: string;
   pickup: string; // ISO datetime
   dropoff: string; // ISO datetime
-  city_id: string; // ← added
+  city_id: string;
+  reviews_page?: string;
 }

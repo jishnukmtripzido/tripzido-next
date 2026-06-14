@@ -3,7 +3,7 @@ export type VehicleLocation = {
   id: number;
   location_id: number;
   location_name: string;
-  city_id: number;
+  city_id: string;
   city_name: string;
   vendor_id: number;
   vendor_name: string;

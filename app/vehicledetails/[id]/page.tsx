@@ -194,75 +194,16 @@ interface Props {
   searchParams: Promise<Partial<VehicleDetailsSearchParams>>;
 }
 
-// const MOCK_VEHICLE: VehicleDetailsResponse = {
-//   id: 2,
-//   name: "Yamaha Fascino",
-//   make_year: 2023,
-//   transmission_type: "SEMI_AUTO",
-//   fuel_type: "PETROL",
-//   seats: 2,
-//   cc: 113,
-//   mileage_kmpl: 50,
-//   top_speed_kmph: 85,
-//   fuel_capacity_litres: 5.2,
-//   kerb_weight_kg: 103,
-//   km_limit_per_day: null,
-//   images: [
-//     "https://gowheelo.com/_next/image?url=https%3A%2F%2Fstatic.gowheelo.com%2Fuploads%2Fold%2Fbike%2FYamaha-Fascino.png&w=640&q=75",
-//     "https://media.publit.io/file/cool-motorcycle-studio-1.jpg",
-//     "https://media.publit.io/file/cool-motorcycle-indoors-1.jpg",
-//   ],
-//   primary_image:
-//     "https://gowheelo.com/_next/image?url=https%3A%2F%2Fstatic.gowheelo.com%2Fuploads%2Fold%2Fbike%2FYamaha-Fascino.png&w=640&q=75",
-//   available_count: 7,
-//   packages: [
-//     {
-//       id: 1,
-//       name: "Daily Package",
-//       price_per_day: 499,
-//       label: "Daily Package (₹ 499 per Day)",
-//     },
-//   ],
-//   fare_details: {
-//     rent_amount: 998,
-//     total: 998,
-//     remaining_rent: 798.4,
-//     advance_payment: 199.6,
-//     refundable_deposit: 0,
-//   },
-//   pickup_location: {
-//     id: 1,
-//     location_name: "Wayanad",
-//     exact_address_revealed_after_booking: true,
-//     operating_hours: "9:00 AM - 10:00 PM",
-//     latitude: 11.6,
-//     longitude: 76.2,
-//   },
-//   policies: {
-//     security_deposit: 0,
-//     distance_limit: "No Limit",
-//     late_penalty_per_hour: 100,
-//     location_timings: "9:00 AM - 10:00 PM",
-//     excess_charge: "N/A",
-//   },
-//   terms_and_conditions: [
-//     "One Day will be considered from 9 am to 9 am.",
-//     "Documents Required: Aadhar Card and Driving License.",
-//     "One Original Govt Address Proof has to be submitted during pickup and will be returned during drop.",
-//     "Fuel Charges are not included in the security deposit or rent.",
-//   ],
-//   pay_at_pickup_enabled: true,
-// };
-
 export default async function VehicleDetailsPage({
   params,
   searchParams,
 }: Props) {
   const { id } = await params;
-  const { location_id, location_name, pickup, dropoff, city_id } =
+  const { location_id, location_name, pickup, dropoff, city_id, reviews_page } =
     await searchParams;
 
-  if (!location_id || !location_name || !pickup || !dropoff) notFound();
+  if (!location_id || !location_name || !pickup || !dropoff || !city_id)
+    notFound();
 
   const vehicle = await getVehicleDetailsApi({
     vehicle_id: id,
@@ -270,10 +211,9 @@ export default async function VehicleDetailsPage({
     location_name,
     pickup_datetime: pickup,
     dropoff_datetime: dropoff,
+    city_id: city_id,
   }).catch(() => null);
   if (!vehicle) notFound();
-
-  // const vehicle = MOCK_VEHICLE;
 
   const bookingWidgetProps = {
     packages: vehicle.packages,
@@ -334,11 +274,13 @@ export default async function VehicleDetailsPage({
 
             <div className="lg:border-t lg:border-gray-200" />
             <PickupLocation location={vehicle.pickup_location} />
-            <div className="lg:border-t lg:border-gray-200" />
 
             {/* Reviews — streams in independently */}
             <Suspense fallback={<ReviewsSkeleton />}>
-              <Reviews vehicleId={Number(id)} />
+              <Reviews
+                vehicleId={Number(id)}
+                page={reviews_page ? Number(reviews_page) : 1}
+              />
             </Suspense>
           </div>
 

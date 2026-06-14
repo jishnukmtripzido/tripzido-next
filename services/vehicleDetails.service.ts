@@ -8,6 +8,7 @@ export interface VehicleDetailsParams {
   location_name: string;
   pickup_datetime: string;
   dropoff_datetime: string;
+  city_id: string;
 }
 
 export async function getVehicleDetailsApi(
@@ -18,6 +19,7 @@ export async function getVehicleDetailsApi(
     location_name: params.location_name,
     pickup_datetime: params.pickup_datetime,
     dropoff_datetime: params.dropoff_datetime,
+    city_id: params.city_id,
   });
 
   const data = await api.get<{ data: VehicleDetailsResponse }>(
@@ -42,10 +44,12 @@ export async function getCancellationPolicyApi(
 
 export async function getVehicleReviewsApi(
   vehicleId: string | number,
+  page: number = 1,
+  pageSize: number = 10,
 ): Promise<ReviewsResponse> {
   const data = await api.get<{ data: ReviewsResponse }>(
-    `/api/vehicles/${vehicleId}/reviews/`,
-    { revalidate: 300 }, // revalidate every 5 min
+    `/api/vehicles/${vehicleId}/reviews/?page=${page}&page_size=${pageSize}`,
+    { revalidate: 300 },
   );
   return data.data;
 }
@@ -54,7 +58,7 @@ export async function getCityPickupLocationsApi(
   cityId: string | number,
 ): Promise<PickupLocationOption[]> {
   const data = await api.get<{ data: PickupLocationOption[] }>(
-    `/api/locations/?city_id=${cityId}`,
+    `/api/locations/pickup-locations/by-city/${cityId}/`,
     { revalidate: 3600 }, // revalidate every hour
   );
   return data.data;
@@ -74,19 +78,28 @@ export interface CancellationRule {
   description: string; // e.g. "Full refund"
 }
 
-export interface Review {
+export interface PaginationMeta {
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  next: string | null;
+  previous: string | null;
+}
+
+export interface ReviewItem {
   id: number;
   author_name: string;
-  rating: number; // 1–5
+  rating: number;
   comment: string;
-  created_at: string; // ISO date
+  created_at: string;
   vehicle_name: string;
 }
 
 export interface ReviewsResponse {
   average_rating: number;
-  total_count: number;
-  reviews: Review[];
+  pagination: PaginationMeta;
+  results: ReviewItem[];
 }
 
 export interface PickupLocationOption {

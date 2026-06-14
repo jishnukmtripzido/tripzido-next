@@ -5,12 +5,6 @@ import EditSearchBar from "./EditSearchBar";
 import { formatDateFromISO, formatTimeFromISO } from "@/lib/dateUtils";
 import type { PickupLocationOption } from "@/services/vehicleDetails.service";
 
-const MOCK_LOCATIONS: PickupLocationOption[] = [
-  { id: 1, location_name: "Mananthavadi", city_id: 5 },
-  { id: 2, location_name: "Sulthan Batheri", city_id: 5 },
-  { id: 3, location_name: "Kalpetta", city_id: 5 },
-];
-
 interface Props {
   locationName: string;
   pickup: string;
@@ -35,14 +29,19 @@ export default function SearchModifyBar({
   const mobileRange = `${pickupDate} – ${dropoffDate}`;
 
   async function handleEditClick() {
+    console.log("handle clicking...");
     if (locations.length === 0) {
       setLocationsLoading(true);
       try {
-        const res = await fetch(`/api/locations/?city_id=${cityId}`);
+        console.log("below is api calling");
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/locations/pickup-locations/by-city/${cityId}/`,
+        );
         const json = await res.json();
-        setLocations(json.data ?? MOCK_LOCATIONS);
+        console.log("locations -  ", json);
+        setLocations(json.data ?? []);
       } catch {
-        setLocations(MOCK_LOCATIONS);
+        setLocations([]);
       } finally {
         setLocationsLoading(false);
       }

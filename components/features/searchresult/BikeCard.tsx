@@ -100,6 +100,7 @@ export default function BikeCard({
     const params = new URLSearchParams();
     params.set("location_id", String(selectedLocation.location_id)); // ← also fix: location_id not id
     params.set("location_name", selectedLocation.location_name);
+    params.set("city_id", selectedLocation.city_id);
     if (pickup) params.set("pickup", pickup);
     if (dropoff) params.set("dropoff", dropoff);
     return `/vehicledetails/${selectedLocation.id}?${params.toString()}`; // ← selectedLocation.id instead of id

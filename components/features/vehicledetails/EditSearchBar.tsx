@@ -6,6 +6,7 @@ import TriggerButton from "@/components/ui/TriggerButton";
 import { FieldError } from "@/components/ui/FieldError";
 import DatePickerDropdown from "@/components/features/search/DatePickerDropdown";
 import TimePickerDropdown from "@/components/features/search/TimePickerDropdown";
+import LocationPickerDropdown from "@/components/features/vehicledetails/LocationPickerDropdown";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import {
   parseDate,
@@ -56,14 +57,18 @@ export default function EditSearchBar({
     initialDropoffMinute: parseMinute(initialDropoff),
   });
 
-  // Pre-select the current location if it exists in the list, else keep name as fallback
   const [selectedLocationId, setSelectedLocationId] = useState<string>(
     String(
       cityLocations.find((l) => l.location_name === initialLocationName)?.id ??
         "",
     ),
   );
+  const [locationOpen, setLocationOpen] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
+
+  const selectedLocationName =
+    cityLocations.find((l) => String(l.id) === selectedLocationId)
+      ?.location_name ?? initialLocationName;
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -82,7 +87,7 @@ export default function EditSearchBar({
           <div className="border-2 border-brand-yellow rounded-lg p-3 bg-white">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-gray-900 tracking-wide">
+              <h2 className="text-sm font-bold text-font-man-sub tracking-wide">
                 Edit search
               </h2>
               <button
@@ -108,48 +113,41 @@ export default function EditSearchBar({
             </div>
 
             <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
-              {/* Pick-up location — dropdown from city locations */}
+              {/* Pick-up location */}
               <div className="relative w-full md:flex-1 min-w-0">
                 <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
                   Pick-up location
                 </label>
-                <div
-                  className={`flex items-center gap-2 border rounded-md px-3 py-2.5 bg-white transition-colors ${
-                    locationError
-                      ? "border-red-400"
-                      : "border-gray-300 focus-within:border-brand-yellow"
-                  }`}
+                <TriggerButton
+                  onClick={() =>
+                    !cityLocationsLoading && setLocationOpen((o) => !o)
+                  }
+                  hasError={!!locationError}
+                  active={locationOpen}
                 >
                   <LocationIcon />
                   {cityLocationsLoading ? (
-                    <span className="flex-1 text-sm text-gray-400">
+                    <span className="text-sm text-gray-400">
                       Loading locations...
                     </span>
-                  ) : cityLocations.length > 0 ? (
-                    <select
-                      value={selectedLocationId}
-                      onChange={(e) => {
-                        setSelectedLocationId(e.target.value);
-                        if (e.target.value) setLocationError(null);
-                      }}
-                      className="flex-1 text-sm font-medium text-gray-900 bg-transparent outline-none"
-                    >
-                      <option value="" disabled>
-                        Select location
-                      </option>
-                      {cityLocations.map((loc) => (
-                        <option key={loc.id} value={String(loc.id)}>
-                          {loc.location_name}
-                        </option>
-                      ))}
-                    </select>
                   ) : (
-                    // Fallback: plain text if locations failed to load
-                    <span className="flex-1 text-sm font-medium text-gray-900">
-                      {initialLocationName}
+                    <span className="text-sm font-medium text-font-man-sub truncate">
+                      {selectedLocationName || "Select location"}
                     </span>
                   )}
-                </div>
+                </TriggerButton>
+                {locationOpen && (
+                  <LocationPickerDropdown
+                    isOpen
+                    onClose={() => setLocationOpen(false)}
+                    onSelect={(loc) => {
+                      setSelectedLocationId(String(loc.id));
+                      setLocationError(null);
+                    }}
+                    selectedLocationId={selectedLocationId}
+                    locations={cityLocations}
+                  />
+                )}
                 <FieldError message={locationError ?? undefined} />
               </div>
 
@@ -254,7 +252,7 @@ export default function EditSearchBar({
                 </div>
               </div>
 
-              {/* Search */}
+              {/* Search button */}
               <div className="shrink-0 w-full md:w-auto">
                 <button
                   type="submit"

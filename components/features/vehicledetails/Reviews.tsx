@@ -1,14 +1,25 @@
 // components/features/vehicledetails/Reviews.tsx
-import { getVehicleReviewsApi } from "@/services/vehicleDetails.service";
-import type { ReviewsResponse } from "@/services/vehicleDetails.service";
+import Link from "next/link";
+import {
+  getVehicleReviewsApi,
+  ReviewItem,
+  ReviewsResponse,
+} from "@/services/vehicleDetails.service";
 
 const MOCK_REVIEWS: ReviewsResponse = {
   average_rating: 4.5,
-  total_count: 3,
-  reviews: [
+  pagination: {
+    total: 3,
+    page: 1,
+    page_size: 10,
+    total_pages: 1,
+    next: null,
+    previous: null,
+  },
+  results: [
     {
       id: 1,
-      author_name: "Rahul Menon",
+      author_name: "Rahul M.",
       rating: 5,
       comment:
         "Excellent bike, very smooth ride through the hills. Pickup was hassle-free and the staff were helpful. Would definitely rent again!",
@@ -17,7 +28,7 @@ const MOCK_REVIEWS: ReviewsResponse = {
     },
     {
       id: 2,
-      author_name: "Priya Nair",
+      author_name: "Priya N.",
       rating: 4,
       comment:
         "Good condition scooter. The fuel economy was great for our day trip. Minor scratch on the body but nothing that affected the ride.",
@@ -26,7 +37,7 @@ const MOCK_REVIEWS: ReviewsResponse = {
     },
     {
       id: 3,
-      author_name: "Aditya Sharma",
+      author_name: "Aditya S.",
       rating: 4,
       comment:
         "Comfortable ride for two. Documents process was straightforward. Pickup location was easy to find once we got the confirmed address.",
@@ -38,23 +49,25 @@ const MOCK_REVIEWS: ReviewsResponse = {
 
 interface Props {
   vehicleId: number;
+  page?: number;
 }
 
-export default async function Reviews({ vehicleId }: Props) {
+export default async function Reviews({ vehicleId, page = 1 }: Props) {
   let data: ReviewsResponse;
 
   try {
-    data = await getVehicleReviewsApi(vehicleId);
+    data = await getVehicleReviewsApi(vehicleId, page);
   } catch {
     data = MOCK_REVIEWS;
   }
 
-  const { average_rating, total_count, reviews } = data;
+  const { average_rating, pagination, results } = data;
 
-  if (total_count === 0) return null;
+  if (pagination.total === 0) return null;
 
   return (
     <div className="mb-8">
+      <div className="lg:border-t lg:border-gray-200 lg:mt-8 lg:mb-5 mb-8" />
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
         <h2 className="text-lg font-bold text-gray-900">Reviews</h2>
@@ -63,16 +76,16 @@ export default async function Reviews({ vehicleId }: Props) {
           <span className="text-sm font-semibold text-gray-900">
             {average_rating.toFixed(1)}
           </span>
-          <span className="text-sm text-gray-500">({total_count})</span>
+          <span className="text-sm text-gray-500">({pagination.total})</span>
         </div>
       </div>
 
       {/* Review cards */}
       <div className="space-y-4 border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
-        {reviews.map((review, idx) => (
+        {results.map((review: ReviewItem, idx: number) => (
           <div
             key={review.id}
-            className={`pb-4 ${idx < reviews.length - 1 ? "border-b border-gray-100" : ""}`}
+            className={`pb-4 ${idx < results.length - 1 ? "border-b border-gray-100" : ""}`}
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -102,6 +115,39 @@ export default async function Reviews({ vehicleId }: Props) {
           </div>
         ))}
       </div>
+
+      {/* Pagination controls */}
+      {pagination.total_pages > 1 && (
+        <div className="flex items-center justify-center gap-4 mt-6">
+          <Link
+            href={`?reviews_page=${pagination.page - 1}`}
+            scroll={false}
+            aria-disabled={!pagination.previous}
+            className={`text-sm font-medium px-3 py-1.5 rounded-md border ${
+              pagination.previous
+                ? "border-gray-300 text-gray-700 hover:bg-gray-50"
+                : "border-gray-100 text-gray-300 pointer-events-none"
+            }`}
+          >
+            Previous
+          </Link>
+          <span className="text-sm text-gray-500">
+            Page {pagination.page} of {pagination.total_pages}
+          </span>
+          <Link
+            href={`?reviews_page=${pagination.page + 1}`}
+            scroll={false}
+            aria-disabled={!pagination.next}
+            className={`text-sm font-medium px-3 py-1.5 rounded-md border ${
+              pagination.next
+                ? "border-gray-300 text-gray-700 hover:bg-gray-50"
+                : "border-gray-100 text-gray-300 pointer-events-none"
+            }`}
+          >
+            Next
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

@@ -68,9 +68,9 @@ export default function SearchResultHeader({
 
   return (
     <>
-      <div className="hidden md:block top-0 z-50 bg-black/60 border-b border-gray-300/80">
+      <div className="hidden md:block top-0 z-50 bg-black border-b border-gray-300/80">
         <section className="px-4 xl:px-0 py-3 mx-auto xl:mx-[80.5px]">
-          <div className="flex w-full items-center bg-white border-2 border-brand-yellow rounded-md h-[52px] shadow-md">
+          <div className="flex w-full items-center bg-white border-2 border-brand-yellow rounded-md h-[55px] ">
             {/* City */}
             <SearchCell
               onClick={() => setOpenModal("city")}
@@ -227,7 +227,7 @@ export default function SearchResultHeader({
             <button
               onClick={handleSearch}
               disabled={isLoading}
-              className="bg-[#ffc107] hover:bg-yellow-500 text-black text-base font-semibold px-8 h-full transition-colors whitespace-nowrap cursor-pointer disabled:opacity-60"
+              className="bg-[#ffc107] hover:bg-yellow-500 text-font-main-sub text-base font-semibold px-8 h-full transition-colors whitespace-nowrap cursor-pointer disabled:opacity-60"
             >
               {isLoading ? "Searching..." : "Search"}
             </button>
@@ -303,10 +303,10 @@ function SearchCell({
 function CellLabel({ top, bottom }: { top: string; bottom: string }) {
   return (
     <div className="flex flex-col justify-center flex-1 overflow-hidden">
-      <span className="text-[11px] font-thin text-gray-500 leading-none mb-1">
+      <span className="text-[11px]  text-font-dim leading-none mb-1">
         {top}
       </span>
-      <span className="text-sm font-normal text-gray-900 truncate leading-none">
+      <span className="text-sm font-normal text-font-main-sub truncate leading-none">
         {bottom}
       </span>
     </div>
