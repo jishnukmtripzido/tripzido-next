@@ -39,10 +39,6 @@ export default function BikeCard({
   const [selectedLocation, setSelectedLocation] = useState<VehicleLocation>(
     locations[0],
   );
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [dropUp, setDropUp] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
 
   // Derived values
   const transmission = transmission_type
@@ -55,39 +51,9 @@ export default function BikeCard({
   const mileage = `${mileage_kmpl} kmpl`;
   const price = getLocationPrice(selectedLocation);
   const kmLimit = selectedLocation.pricing_packages[0].total_km_limit;
-  const totalPrice = price !== null && rentalDays ? price * rentalDays : price;
+  const totalPrice = price;
   const mapLat = (selectedLocation as any).latitude ?? 11.6;
   const mapLng = (selectedLocation as any).longitude ?? 76.2;
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setDropdownOpen(false);
-        onDropdownOpenChange?.(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onDropdownOpenChange]);
-
-  function handleTriggerClick() {
-    if (!dropdownOpen && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      setDropUp(window.innerHeight - rect.bottom < 160);
-    }
-    const next = !dropdownOpen;
-    setDropdownOpen(next);
-    onDropdownOpenChange?.(next);
-  }
-
-  function handleSelectLocation(loc: VehicleLocation) {
-    setSelectedLocation(loc);
-    setDropdownOpen(false);
-    onDropdownOpenChange?.(false);
-  }
 
   function tagClass(variant: string) {
     if (variant === "highlight") return "bg-[#ffc107] text-[#6b3d00]";
@@ -106,105 +72,6 @@ export default function BikeCard({
     return `/vehicledetails/${selectedLocation.id}?${params.toString()}`; // ← selectedLocation.id instead of id
   }
 
-  const MapThumbnail = () => (
-    <div className="relative w-8 h-8 mr-1 rounded-md self-stretch shrink-0 overflow-hidden">
-      <img
-        src={getMapThumbnailUrl(mapLat, mapLng)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
-      <div className="absolute inset-0 bg-black/10" />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="#1e3a5f"
-          stroke="white"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" fill="white" stroke="none" />
-        </svg>
-      </div>
-    </div>
-  );
-
-  const LocationDropdown = ({ mobile = false }: { mobile?: boolean }) => (
-    <div className="relative mt-3" ref={dropdownRef} style={{ zIndex: 50 }}>
-      <div
-        ref={triggerRef}
-        onClick={handleTriggerClick}
-        className={`w-full flex items-center gap-2 border pl-3 py-2 cursor-pointer bg-white transition-all overflow-hidden ${
-          dropdownOpen
-            ? `border-gray-400 rounded-md ${dropUp ? "" : "rounded-b-none"}`
-            : "border-gray-200 rounded-md hover:border-gray-300"
-        }`}
-      >
-        <PinIcon />
-        <span className="flex flex-col flex-1 min-w-0 py-0.5">
-          <span className="text-[9.5px] tracking-wider text-font-dim leading-none">
-            Available at
-          </span>
-          <span className="text-[13px] text-black leading-snug truncate mt-0.5">
-            {selectedLocation.location_name}
-          </span>
-        </span>
-        <MapThumbnail />
-      </div>
-      <div
-        className={`absolute left-0 right-0 bg-white border border-gray-200 shadow-xl overflow-hidden transition-all duration-200 ease-in-out z-50 ${
-          dropdownOpen
-            ? "opacity-100 translate-y-0 pointer-events-auto scale-100"
-            : "opacity-0 -translate-y-2 pointer-events-none scale-[0.98]"
-        } ${dropUp ? "bottom-full border-b-0 rounded-t-lg origin-bottom" : "top-full border-t-0 rounded-b-lg origin-top"}`}
-      >
-        <div className="max-h-60 overflow-y-auto divide-y divide-gray-100">
-          {locations.map((loc) => {
-            const locPrice = getLocationPrice(loc);
-            const isSelected = loc.id === selectedLocation.id;
-            return (
-              <div
-                key={loc.id}
-                onClick={() => handleSelectLocation(loc)}
-                className={`flex items-center justify-between px-4 py-3 cursor-pointer text-[13px] transition-colors ${isSelected ? "bg-gray-50 font-medium" : "hover:bg-gray-50/60"}`}
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <span className="w-3 h-3 rounded-[3px] bg-green-500 shrink-0" />
-                  <div className="flex flex-col min-w-0">
-                    <span
-                      className={`truncate text-black ${isSelected ? "font-semibold" : ""}`}
-                    >
-                      {loc.location_name}
-                    </span>
-                    <span
-                      className={`text-[11px] text-f mt-0.5 truncate text-black ${isSelected ? "font-semibold" : ""}`}
-                    >
-                      {locPrice !== null
-                        ? `₹${locPrice.toLocaleString("en-IN")}`
-                        : "No price"}
-                    </span>
-                  </div>
-                </div>
-                <div className="shrink-0 ml-2">
-                  {isSelected ? (
-                    <div className="w-4 h-4 rounded-full border-[1.5px] border-gray-900 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-gray-900" />
-                    </div>
-                  ) : (
-                    <div className="w-4 h-4 rounded-full border-[1.5px] border-gray-300" />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-
   const PriceDisplay = () => (
     <div>
       {rentalDays && totalPrice !== null ? (
@@ -214,16 +81,16 @@ export default function BikeCard({
           </p>
           <div className="flex items-baseline gap-0.5">
             <span className="text-[22px] font-bold text-black leading-none">
-              ₹{totalPrice!.toLocaleString("en-IN")}
+              ₹{totalPrice!.toLocaleString()}
             </span>
           </div>
         </>
       ) : price !== null ? (
         <div className="flex flex-col items-start gap-0.5">
           <span className="text-[22px] font-bold text-black leading-none">
-            ₹{price.toLocaleString("en-IN")}
+            ₹{price.toLocaleString()}
           </span>
-          <span className="text-[14px] text-font-main-sub">{kmLimit}</span>
+          <span className="text-[14px] text-font-main-sub">({kmLimit})</span>
           {/* <span className="text-[12px] text-black">/day</span> */}
         </div>
       ) : (
@@ -253,7 +120,7 @@ export default function BikeCard({
         { icon: "gear", label: transmission },
         {
           icon: "map",
-          label: kmLimit ? `${kmLimit} km/day` : "Unlimited km/day",
+          label: kmLimit ? `${kmLimit}` : "Unlimited Km",
         },
         { icon: "fuel", label: `${fuelTypeLabel} · ${engine}` },
       ].map(({ icon, label }) => (
@@ -303,7 +170,7 @@ export default function BikeCard({
           <div className="bg-white  rounded-md shadow-[0px_1px_2px_0px_rgba(60,64,67,0.3),0px_2px_6px_2px_rgba(60,64,67,0.15)]  overflow-visible">
             <div className="p-4 pb-0">
               <Badges />
-              <h3 className="text-[18px] font-bold text-black leading-snug mb-5">
+              <h3 className="text-[20px] font-bold text-black leading-snug mb-5">
                 {name}
                 {/* <span className="text-sm text-gray-700 ps-1">or similar</span> */}
               </h3>
@@ -323,7 +190,14 @@ export default function BikeCard({
                   />
                 </div>
               </div>
-              <LocationDropdown mobile />
+              <LocationDropdown
+                locations={locations}
+                selectedLocation={selectedLocation}
+                mapLat={mapLat}
+                mapLng={mapLng}
+                onSelect={setSelectedLocation}
+                onOpenChange={onDropdownOpenChange}
+              />
             </div>
             <div className="flex items-center justify-between px-4 py-3 mt-3 border-t border-gray-100">
               <PriceDisplay />
@@ -353,9 +227,6 @@ export default function BikeCard({
             className={`relative w-full h-full transition-all duration-700 [transform-style:preserve-3d] ${isFlipped ? "[transform:rotateY(180deg)]" : ""}`}
           >
             {/* Front */}
-            {/* <div
-              className={`absolute inset-0 w-full h-full bg-white shadow-xl border border-gray-300/80 rounded-md [backface-visibility:hidden] flex flex-col pt-4 ${isFlipped ? "pointer-events-none" : "pointer-events-auto"}`}
-            > */}
             <div
               className={`absolute inset-0 w-full h-full bg-white shadow-[0px_1px_2px_0px_rgba(60,64,67,0.3),0px_2px_6px_2px_rgba(60,64,67,0.15)]  rounded-md [backface-visibility:hidden] flex flex-col pt-4 ${isFlipped ? "pointer-events-none" : "pointer-events-auto"}`}
             >
@@ -397,15 +268,22 @@ export default function BikeCard({
                     </div>
                   ))}
                 </div>
-                <LocationDropdown />
+                <LocationDropdown
+                  locations={locations}
+                  selectedLocation={selectedLocation}
+                  mapLat={mapLat}
+                  mapLng={mapLng}
+                  onSelect={setSelectedLocation}
+                  onOpenChange={onDropdownOpenChange}
+                />
                 <div className="flex justify-between items-end border-t-2 border-gray-200 pt-3 mt-3">
                   {price !== null ? (
                     <div className="flex flex-col items-start gap-0.5">
                       <span className="text-[20px] font-bold text-black leading-none">
-                        ₹{price.toLocaleString("en-IN")}
+                        ₹{price.toLocaleString()}
                       </span>
                       <span className="text-[12px]  text-font-main-sub">
-                        {kmLimit}
+                        ({kmLimit})
                       </span>
                       {/* <span className="text-[12px] text-black">/day</span> */}
                     </div>
@@ -442,6 +320,172 @@ export default function BikeCard({
 }
 
 // ── Sub-components ────────────────────────────────────────────────────
+
+/**
+ * Standalone location dropdown. Each instance owns its own open/dropUp
+ * state and its own refs. This is mounted twice per card (once in the
+ * mobile layout, once in the desktop layout) and only one of those is
+ * ever visible at a given viewport width — but both stay in the DOM at
+ * the same time because the mobile/desktop split is done with CSS
+ * (`sm:hidden` / `hidden sm:block`), not by unmounting. Previously this
+ * was a closure defined inside BikeCard that referenced a single shared
+ * dropdownRef/triggerRef, so whichever instance rendered last (desktop)
+ * "won" the ref, and the mobile instance's outside-click handler closed
+ * the dropdown before the select click could register — selecting a
+ * location on mobile never worked. Giving each instance its own
+ * useRef/useState fixes that.
+ */
+function LocationDropdown({
+  locations,
+  selectedLocation,
+  mapLat,
+  mapLng,
+  onSelect,
+  onOpenChange,
+}: {
+  locations: VehicleLocation[];
+  selectedLocation: VehicleLocation;
+  mapLat: number;
+  mapLng: number;
+  onSelect: (loc: VehicleLocation) => void;
+  onOpenChange?: (open: boolean) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [dropUp, setDropUp] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false);
+        onOpenChange?.(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onOpenChange]);
+
+  function handleTriggerClick() {
+    if (!open && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setDropUp(window.innerHeight - rect.bottom < 160);
+    }
+    const next = !open;
+    setOpen(next);
+    onOpenChange?.(next);
+  }
+
+  function handleSelect(loc: VehicleLocation) {
+    onSelect(loc);
+    setOpen(false);
+    onOpenChange?.(false);
+  }
+
+  return (
+    <div className="relative mt-3" ref={dropdownRef} style={{ zIndex: 50 }}>
+      <div
+        ref={triggerRef}
+        onClick={handleTriggerClick}
+        className={`w-full flex items-center gap-2 border pl-3 py-2 cursor-pointer bg-white transition-all overflow-hidden ${
+          open
+            ? `border-gray-400 rounded-md ${dropUp ? "" : "rounded-b-none"}`
+            : "border-gray-200 rounded-md hover:border-gray-300"
+        }`}
+      >
+        <PinIcon />
+        <span className="flex flex-col flex-1 min-w-0 py-0.5">
+          <span className="text-[9.5px] tracking-wider text-font-dim leading-none">
+            Available at
+          </span>
+          <span className="text-[13px] text-black leading-snug truncate mt-0.5">
+            {selectedLocation.location_name}
+          </span>
+        </span>
+        <MapThumbnail lat={mapLat} lng={mapLng} />
+      </div>
+      <div
+        className={`absolute left-0 right-0 bg-white border border-gray-200 shadow-xl overflow-hidden transition-all duration-200 ease-in-out z-50 ${
+          open
+            ? "opacity-100 translate-y-0 pointer-events-auto scale-100"
+            : "opacity-0 -translate-y-2 pointer-events-none scale-[0.98]"
+        } ${dropUp ? "bottom-full border-b-0 rounded-t-lg origin-bottom" : "top-full border-t-0 rounded-b-lg origin-top"}`}
+      >
+        <div className="max-h-60 overflow-y-auto divide-y divide-gray-100">
+          {locations.map((loc) => {
+            const locPrice = getLocationPrice(loc);
+            const isSelected = loc.id === selectedLocation.id;
+            return (
+              <div
+                key={loc.id}
+                onClick={() => handleSelect(loc)}
+                className={`flex items-center justify-between px-4 py-3 cursor-pointer text-[13px] transition-colors ${isSelected ? "bg-gray-50 font-medium" : "hover:bg-gray-50/60"}`}
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="w-3 h-3 rounded-[3px] bg-green-500 shrink-0" />
+                  <div className="flex flex-col min-w-0">
+                    <span
+                      className={`truncate text-black ${isSelected ? "font-semibold" : ""}`}
+                    >
+                      {loc.location_name}
+                    </span>
+                    <span
+                      className={`text-[11px] text-f mt-0.5 truncate text-black ${isSelected ? "font-semibold" : ""}`}
+                    >
+                      {locPrice !== null
+                        ? `₹${locPrice.toLocaleString()}`
+                        : "No price"}
+                    </span>
+                  </div>
+                </div>
+                <div className="shrink-0 ml-2">
+                  {isSelected ? (
+                    <div className="w-4 h-4 rounded-full border-[1.5px] border-gray-900 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-gray-900" />
+                    </div>
+                  ) : (
+                    <div className="w-4 h-4 rounded-full border-[1.5px] border-gray-300" />
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MapThumbnail({ lat, lng }: { lat: number; lng: number }) {
+  return (
+    <div className="relative w-8 h-8 mr-1 rounded-md self-stretch shrink-0 overflow-hidden">
+      <img
+        src={getMapThumbnailUrl(lat, lng)}
+        alt=""
+        className="w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-black/10" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="#1e3a5f"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" fill="white" stroke="none" />
+        </svg>
+      </div>
+    </div>
+  );
+}
 
 function SpecsBack({
   name,
@@ -522,7 +566,7 @@ function SpecsBack({
           { label: "Year", value: String(makeYear) },
           { label: "Mileage", value: mileage },
           {
-            label: "Km/day limit",
+            label: "Km limit",
             value:
               kmLimit !== null && kmLimit !== undefined
                 ? String(kmLimit)
