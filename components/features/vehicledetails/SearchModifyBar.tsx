@@ -63,9 +63,9 @@ export default function SearchModifyBar({
   }
 
   return (
-    <div className="w-full bg-white pt-4 border-none border-gray-100">
+    <div className="w-full md:bg-gray-500  pt-4 md:py-2 md:pt-2 border-none border-gray-100">
       <div className="xl:mx-[80.5px] mx-auto px-4 xl:px-0">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-2 border-brand-yellow rounded-lg p-3 md:px-4 md:py-3 bg-white gap-0 md:gap-0">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-2 md:border-3 border-brand-yellow rounded-lg p-3 md:px-4 md:py-3 bg-white gap-0 md:gap-0">
           {/* ── MOBILE ── */}
           <div className="flex flex-col w-full md:hidden">
             <div className="flex items-center justify-between">
@@ -118,7 +118,7 @@ export default function SearchModifyBar({
             </div>
             <button
               onClick={handleEditClick}
-              className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2.5 rounded-md transition-colors shadow-sm shrink-0"
+              className="bg-yellow-400 hover:cursor-pointer hover:bg-yellow-500 text-black font-semibold px-6 py-2.5 rounded-md transition-colors shadow-sm shrink-0"
             >
               Edit
             </button>

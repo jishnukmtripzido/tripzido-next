@@ -145,7 +145,7 @@ export default function BikeCard({
       >
         <PinIcon />
         <span className="flex flex-col flex-1 min-w-0 py-0.5">
-          <span className="text-[9.5px] tracking-wider text-gray-400 leading-none">
+          <span className="text-[9.5px] tracking-wider text-font-dim leading-none">
             Available at
           </span>
           <span className="text-[13px] text-black leading-snug truncate mt-0.5">
@@ -179,9 +179,11 @@ export default function BikeCard({
                     >
                       {loc.location_name}
                     </span>
-                    <span className="text-[11px] text-gray-400 mt-0.5">
+                    <span
+                      className={`text-[11px] text-f mt-0.5 truncate text-black ${isSelected ? "font-semibold" : ""}`}
+                    >
                       {locPrice !== null
-                        ? `₹${locPrice.toLocaleString("en-IN")}/day`
+                        ? `₹${locPrice.toLocaleString("en-IN")}`
                         : "No price"}
                     </span>
                   </div>
@@ -217,11 +219,12 @@ export default function BikeCard({
           </div>
         </>
       ) : price !== null ? (
-        <div className="flex items-baseline gap-0.5">
+        <div className="flex flex-col items-start gap-0.5">
           <span className="text-[22px] font-bold text-black leading-none">
             ₹{price.toLocaleString("en-IN")}
           </span>
-          <span className="text-[12px] text-black">/day</span>
+          <span className="text-[14px] text-gray-600">( 698 km included)</span>
+          {/* <span className="text-[12px] text-black">/day</span> */}
         </div>
       ) : (
         <span className="text-[13px] text-gray-400">Contact for price</span>
@@ -401,7 +404,7 @@ export default function BikeCard({
                       <span className="text-black font-bold text-[20px] leading-none">
                         ₹{price.toLocaleString("en-IN")}
                       </span>
-                      <span className="text-[11px] text-black">/day</span>
+                      {/* <span className="text-[11px] text-black">/day</span> */}
                     </div>
                   ) : (
                     <span className="text-[13px] text-gray-400">

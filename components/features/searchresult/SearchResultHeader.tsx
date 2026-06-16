@@ -68,7 +68,7 @@ export default function SearchResultHeader({
 
   return (
     <>
-      <div className="hidden md:block top-0 z-50 bg-black border-b border-gray-300/80">
+      <div className="hidden md:block top-0 z-50 md:bg-gray-500 border-b border-gray-300/80">
         <section className="px-4 xl:px-0 py-3 mx-auto xl:mx-[80.5px]">
           <div className="flex w-full items-center bg-white border-2 border-brand-yellow rounded-md h-[55px] ">
             {/* City */}

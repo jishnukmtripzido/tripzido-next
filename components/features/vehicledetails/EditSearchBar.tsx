@@ -84,7 +84,7 @@ export default function EditSearchBar({
 
   return (
     <>
-      <div className="w-full bg-white border-b border-gray-100">
+      <div className="w-full md:bg-gray-500 border-b border-gray-100">
         <div className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 py-3">
           <form onSubmit={handleSubmit} noValidate>
             <div className="border-2 border-brand-yellow rounded-lg p-3 bg-white">
@@ -118,7 +118,7 @@ export default function EditSearchBar({
               <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
                 {/* Pick-up location */}
                 <div className="relative w-full md:flex-1 min-w-0">
-                  <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
+                  <label className="block text-xs  text-font-main-sub mb-2 ml-1">
                     Pick-up location
                   </label>
                   <TriggerButton
@@ -134,7 +134,7 @@ export default function EditSearchBar({
                         Loading locations...
                       </span>
                     ) : (
-                      <span className="text-sm font-medium text-font-man-sub truncate">
+                      <span className="text-font-man-sub truncate">
                         {selectedLocationName || "Select location"}
                       </span>
                     )}
@@ -157,7 +157,7 @@ export default function EditSearchBar({
                 <div className="grid grid-cols-2 gap-2 w-full md:contents">
                   {/* Pick-up date */}
                   <div className="relative w-full md:w-[130px] md:shrink-0">
-                    <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
+                    <label className="block text-xs   text-font-main-sub mb-2 ml-1">
                       Pick-up date
                     </label>
                     {/* Mobile: opens modal */}
@@ -167,7 +167,7 @@ export default function EditSearchBar({
                         hasError={!!errors.pickup_datetime}
                       >
                         <CalendarIcon />
-                        <span className="text-sm font-medium whitespace-nowrap">
+                        <span className="text-font-man-sub whitespace-nowrap">
                           {formatDate(dateRange.start)}
                         </span>
                       </TriggerButton>
@@ -180,7 +180,7 @@ export default function EditSearchBar({
                         active={openDropdown === "date"}
                       >
                         <CalendarIcon />
-                        <span className="text-sm font-medium whitespace-nowrap">
+                        <span className="text-font-man-sub whitespace-nowrap">
                           {formatDate(dateRange.start)}
                         </span>
                       </TriggerButton>
@@ -199,7 +199,7 @@ export default function EditSearchBar({
 
                   {/* Pick-up time */}
                   <div className="relative w-full md:w-[120px] md:shrink-0">
-                    <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
+                    <label className="block text-xs   text-font-main-sub mb-2 ml-1">
                       Time
                     </label>
                     <TriggerButton
@@ -207,7 +207,7 @@ export default function EditSearchBar({
                       active={openDropdown === "pickup-time"}
                     >
                       <ClockIcon />
-                      <span className="text-sm font-medium whitespace-nowrap">
+                      <span className="text-font-man-sub whitespace-nowrap">
                         {formatTime(pickupTime.hour, pickupTime.minute)}
                       </span>
                     </TriggerButton>
@@ -227,7 +227,7 @@ export default function EditSearchBar({
 
                   {/* Drop-off date */}
                   <div className="relative w-full md:w-[130px] md:shrink-0">
-                    <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
+                    <label className="block text-xs  text-font-main-sub mb-2 ml-1">
                       Drop-off date
                     </label>
                     {/* Mobile: opens modal */}
@@ -237,7 +237,7 @@ export default function EditSearchBar({
                         hasError={!!errors.dropoff_datetime}
                       >
                         <CalendarIcon />
-                        <span className="text-sm font-medium whitespace-nowrap">
+                        <span className="text-font-man-sub whitespace-nowrap">
                           {formatDate(dateRange.end)}
                         </span>
                       </TriggerButton>
@@ -250,7 +250,7 @@ export default function EditSearchBar({
                         active={openDropdown === "date"}
                       >
                         <CalendarIcon />
-                        <span className="text-sm font-medium whitespace-nowrap">
+                        <span className="text-font-man-sub whitespace-nowrap">
                           {formatDate(dateRange.end)}
                         </span>
                       </TriggerButton>
@@ -260,7 +260,7 @@ export default function EditSearchBar({
 
                   {/* Drop-off time */}
                   <div className="relative w-full md:w-[120px] md:shrink-0">
-                    <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
+                    <label className="block text-xs   text-font-main-sub mb-2 ml-1">
                       Time
                     </label>
                     <TriggerButton
@@ -268,7 +268,7 @@ export default function EditSearchBar({
                       active={openDropdown === "dropoff-time"}
                     >
                       <ClockIcon />
-                      <span className="text-sm font-medium whitespace-nowrap">
+                      <span className="text-font-man-sub whitespace-nowrap">
                         {formatTime(dropoffTime.hour, dropoffTime.minute)}
                       </span>
                     </TriggerButton>
