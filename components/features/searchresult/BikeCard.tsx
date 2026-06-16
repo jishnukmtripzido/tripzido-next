@@ -223,7 +223,9 @@ export default function BikeCard({
           <span className="text-[22px] font-bold text-black leading-none">
             ₹{price.toLocaleString("en-IN")}
           </span>
-          <span className="text-[14px] text-gray-600">( 698 km included)</span>
+          <span className="text-[14px] text-font-main-sub">
+            {kmLimit ? `(${kmLimit} km included)` : "No distance limit"}
+          </span>
           {/* <span className="text-[12px] text-black">/day</span> */}
         </div>
       ) : (
@@ -235,7 +237,7 @@ export default function BikeCard({
   const BookButton = ({ size = "sm" }: { size?: "sm" | "md" }) => (
     <Link href={buildDetailsUrl()}>
       <button
-        className={`bg-[#ffc107] hover:bg-yellow-500 text-black font-bold rounded-lg transition-colors cursor-pointer ${
+        className={`bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold rounded-lg transition-colors cursor-pointer ${
           size === "md"
             ? "text-[13px] px-5 py-2 rounded-md"
             : "text-[14px] px-6 py-2.5"
@@ -400,11 +402,16 @@ export default function BikeCard({
                 <LocationDropdown />
                 <div className="flex justify-between items-end border-t-2 border-gray-200 pt-3 mt-3">
                   {price !== null ? (
-                    <div className="flex items-baseline gap-0.5">
-                      <span className="text-black font-bold text-[20px] leading-none">
+                    <div className="flex flex-col items-start gap-0.5">
+                      <span className="text-[20px] font-bold text-black leading-none">
                         ₹{price.toLocaleString("en-IN")}
                       </span>
-                      {/* <span className="text-[11px] text-black">/day</span> */}
+                      <span className="text-[12px]  text-font-main-sub">
+                        {kmLimit
+                          ? `(${kmLimit} km included)`
+                          : "No distance limit"}
+                      </span>
+                      {/* <span className="text-[12px] text-black">/day</span> */}
                     </div>
                   ) : (
                     <span className="text-[13px] text-gray-400">
