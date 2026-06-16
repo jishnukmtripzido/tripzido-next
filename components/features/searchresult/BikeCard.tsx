@@ -54,7 +54,7 @@ export default function BikeCard({
   const engine = `${cc} cc`;
   const mileage = `${mileage_kmpl} kmpl`;
   const price = getLocationPrice(selectedLocation);
-  const kmLimit = selectedLocation.km_limit_per_day;
+  const kmLimit = selectedLocation.pricing_packages[0].total_km_limit;
   const totalPrice = price !== null && rentalDays ? price * rentalDays : price;
   const mapLat = (selectedLocation as any).latitude ?? 11.6;
   const mapLng = (selectedLocation as any).longitude ?? 76.2;
@@ -223,9 +223,7 @@ export default function BikeCard({
           <span className="text-[22px] font-bold text-black leading-none">
             ₹{price.toLocaleString("en-IN")}
           </span>
-          <span className="text-[14px] text-font-main-sub">
-            {kmLimit ? `(${kmLimit} km included)` : "No distance limit"}
-          </span>
+          <span className="text-[14px] text-font-main-sub">{kmLimit}</span>
           {/* <span className="text-[12px] text-black">/day</span> */}
         </div>
       ) : (
@@ -407,9 +405,7 @@ export default function BikeCard({
                         ₹{price.toLocaleString("en-IN")}
                       </span>
                       <span className="text-[12px]  text-font-main-sub">
-                        {kmLimit
-                          ? `(${kmLimit} km included)`
-                          : "No distance limit"}
+                        {kmLimit}
                       </span>
                       {/* <span className="text-[12px] text-black">/day</span> */}
                     </div>
@@ -462,7 +458,7 @@ function SpecsBack({
   engine: string;
   makeYear: number;
   mileage: string;
-  kmLimit: number;
+  kmLimit: string;
   onBack: () => void;
   desktop?: boolean;
 }) {

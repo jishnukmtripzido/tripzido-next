@@ -23,8 +23,12 @@ export type VehicleLocation = {
     id: number;
     package_type: { id: number; name: string };
     price: string;
+    total_price: string;
     min_days: number;
     max_days: number | null;
+    km_limit: string | number;
+    total_km_limit: string;
+    total_duration: string;
   }[];
   images: {
     id: number;
