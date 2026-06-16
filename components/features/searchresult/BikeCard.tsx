@@ -80,14 +80,14 @@ export default function BikeCard({
             Price for {rentalDays} day{rentalDays > 1 ? "s" : ""}:
           </p>
           <div className="flex items-baseline gap-0.5">
-            <span className="text-[22px] font-bold text-black leading-none">
+            <span className="text-[20px] font-bold text-black leading-none">
               ₹{totalPrice!.toLocaleString()}
             </span>
           </div>
         </>
       ) : price !== null ? (
         <div className="flex flex-col items-start gap-0.5">
-          <span className="text-[22px] font-bold text-black leading-none">
+          <span className="text-[20px] font-bold text-black leading-none">
             ₹{price.toLocaleString()}
           </span>
           <span className="text-[14px] text-font-main-sub">({kmLimit})</span>
