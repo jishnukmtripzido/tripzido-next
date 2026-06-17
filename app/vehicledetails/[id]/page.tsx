@@ -13,6 +13,7 @@ import {
   CancellationPolicySkeleton,
   ReviewsSkeleton,
 } from "@/components/features/vehicledetails/Skeletons";
+import { PackageSelectionProvider } from "@/contexts/PackageSelectionContext";
 import type {
   VehicleDetailsSearchParams,
   VehicleDetailsResponse,
@@ -29,8 +30,15 @@ export default async function VehicleDetailsPage({
   searchParams,
 }: Props) {
   const { id } = await params;
-  const { location_id, location_name, pickup, dropoff, city_id, reviews_page } =
-    await searchParams;
+  const {
+    location_id,
+    location_name,
+    pickup,
+    dropoff,
+    city_id,
+    reviews_page,
+    package_id,
+  } = await searchParams;
 
   if (!location_id || !location_name || !pickup || !dropoff || !city_id)
     notFound();
@@ -42,11 +50,11 @@ export default async function VehicleDetailsPage({
     pickup_datetime: pickup,
     dropoff_datetime: dropoff,
     city_id: city_id,
+    package_id: package_id,
   }).catch(() => null);
   if (!vehicle) notFound();
 
   const bookingWidgetProps = {
-    packages: vehicle.packages,
     fareDetails: vehicle.fare_details,
     payAtPickupEnabled: vehicle.pay_at_pickup_enabled,
     pickup,
@@ -62,65 +70,71 @@ export default async function VehicleDetailsPage({
         pickup={pickup}
         dropoff={dropoff}
         cityId={Number(city_id ?? 0)}
+        vehicleTypeId={vehicle.vehicle_type_id}
       />
       <div className="min-h-screen">
-        <main className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 pb-4 md:py-4  xl:py-5 grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column */}
-          <div className="lg:col-span-8 space-y-5 order-1 lg:order-none">
-            <Breadcrumbs
-              locationName={location_name}
-              vehicleName={vehicle.name}
-            />
-            <VehicleHeader
-              name={vehicle.name}
-              makeYear={vehicle.make_year}
-              images={vehicle.images}
-              primaryImage={vehicle.primary_image}
-              seats={vehicle.seats}
-              fuelCapacityLitres={vehicle.fuel_capacity_litres}
-              cc={vehicle.cc}
-              kmLimitPerDay={vehicle.km_limit_per_day}
-              topSpeedKmph={vehicle.top_speed_kmph}
-              mileageKmpl={vehicle.mileage_kmpl}
-              kerbWeightKg={vehicle.kerb_weight_kg}
-              availableCount={vehicle.available_count}
-              pickupLocationName={location_name}
-            />
-
-            {/* Mobile booking widget */}
-            <div className="block lg:hidden">
-              <BookingWidget {...bookingWidgetProps} />
-            </div>
-
-            <ThingsToRemember policies={vehicle.policies} />
-            <div className="lg:border-t lg:border-gray-200" />
-            <TermsAndConditions terms={vehicle.terms_and_conditions} />
-            <div className="lg:border-t lg:border-gray-200" />
-
-            {/* Cancellation policy — streams in independently */}
-            <Suspense fallback={<CancellationPolicySkeleton />}>
-              <CancellationPolicy vehicleId={Number(id)} />
-            </Suspense>
-
-            <div className="lg:border-t lg:border-gray-200" />
-            <PickupLocation location={vehicle.pickup_location} />
-
-            {/* Reviews — streams in independently */}
-            <Suspense fallback={<ReviewsSkeleton />}>
-              <Reviews
-                vehicleId={Number(id)}
-                page={reviews_page ? Number(reviews_page) : 1}
+        <PackageSelectionProvider
+          packages={vehicle.packages}
+          defaultPackageId={vehicle.selected_package_id}
+        >
+          <main className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 pb-4 md:py-4  xl:py-5 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Left Column */}
+            <div className="lg:col-span-8 space-y-5 order-1 lg:order-none">
+              <Breadcrumbs
+                locationName={location_name}
+                vehicleName={vehicle.name}
               />
-            </Suspense>
-          </div>
+              <VehicleHeader
+                name={vehicle.name}
+                makeYear={vehicle.make_year}
+                images={vehicle.images}
+                primaryImage={vehicle.primary_image}
+                seats={vehicle.seats}
+                fuelCapacityLitres={vehicle.fuel_capacity_litres}
+                cc={vehicle.cc}
+                kmLimitPerDay={vehicle.km_limit_per_day}
+                topSpeedKmph={vehicle.top_speed_kmph}
+                mileageKmpl={vehicle.mileage_kmpl}
+                kerbWeightKg={vehicle.kerb_weight_kg}
+                availableCount={vehicle.available_count}
+                pickupLocationName={location_name}
+              />
 
-          {/* Right Column — desktop sticky */}
-          <div className="lg:col-span-4 relative hidden lg:block">
-            <div className="sticky top-[40px]">
-              <BookingWidget {...bookingWidgetProps} />
+              {/* Mobile booking widget */}
+              <div className="block lg:hidden">
+                <BookingWidget {...bookingWidgetProps} />
+              </div>
+
+              <ThingsToRemember policies={vehicle.policies} />
+              <div className="lg:border-t lg:border-gray-200" />
+              <TermsAndConditions terms={vehicle.terms_and_conditions} />
+              <div className="lg:border-t lg:border-gray-200" />
+
+              {/* Cancellation policy — streams in independently */}
+              <Suspense fallback={<CancellationPolicySkeleton />}>
+                <CancellationPolicy vehicleId={Number(id)} />
+              </Suspense>
+
+              <div className="lg:border-t lg:border-gray-200" />
+              <PickupLocation location={vehicle.pickup_location} />
+
+              {/* Reviews — streams in independently */}
+              <Suspense fallback={<ReviewsSkeleton />}>
+                <Reviews
+                  vehicleId={Number(id)}
+                  page={reviews_page ? Number(reviews_page) : 1}
+                />
+              </Suspense>
             </div>
-          </div>
-        </main>
+
+            {/* Right Column — desktop sticky */}
+            <div className="lg:col-span-4 relative hidden lg:block">
+              <div className="sticky top-[40px]">
+                <BookingWidget {...bookingWidgetProps} />
+              </div>
+            </div>
+          </main>
+        </PackageSelectionProvider>
       </div>
     </>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BanknotesIcon,
   ClockIcon,
@@ -6,12 +8,22 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import type { VehicleDetailsResponse } from "@/types/vehicleDetails.types";
+import { useSelectedPackage } from "@/contexts/PackageSelectionContext";
 
 interface Props {
   policies: VehicleDetailsResponse["policies"];
 }
 
 export default function ThingsToRemember({ policies }: Props) {
+  const { selectedPackage } = useSelectedPackage();
+
+  // Distance limit follows whichever package is selected (scales with
+  // duration), falling back to the listing-level policy value if no
+  // package is selected yet.
+  const distanceLimit = selectedPackage
+    ? selectedPackage.total_km_limit
+    : policies.distance_limit;
+
   const rules = [
     {
       label: "Security Deposit",
@@ -30,7 +42,7 @@ export default function ThingsToRemember({ policies }: Props) {
     },
     {
       label: "Distance limit",
-      value: policies.distance_limit,
+      value: distanceLimit,
       icon: <MapIcon className="w-5 h-5" />,
       color: "text-gray-700",
     },

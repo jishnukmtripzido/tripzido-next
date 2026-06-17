@@ -4,13 +4,11 @@ import { useState } from "react";
 import {
   FilterState,
   FilterOptions,
-  PRICE_RANGE_META,
   CC_RANGE_META,
   TRANSMISSION_LABELS,
   FUEL_LABELS,
   VEHICLE_TYPE_LABELS,
 } from "@/hooks/useVehicleFilters";
-
 // ── Collapsible section ──────────────────────────────────────────────
 
 function FilterSection({
@@ -123,6 +121,7 @@ export default function FilterSidebar({
     priceAbsoluteMax,
     transmissionCounts,
     fuelTypeCounts,
+    priceRangeDefs,
     vehicleTypeCounts,
     ccRangeCounts,
     priceRangeCounts,
@@ -130,7 +129,7 @@ export default function FilterSidebar({
     locationOptions,
   } = options;
 
-  const visiblePriceRanges = PRICE_RANGE_META.filter(
+  const visiblePriceRanges = priceRangeDefs.filter(
     (r) => priceRangeCounts[r.key] != null,
   );
   const visibleCcRanges = CC_RANGE_META.filter(

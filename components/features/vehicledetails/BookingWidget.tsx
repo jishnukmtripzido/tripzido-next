@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
-import type { VehiclePackage, FareDetails } from "@/types/vehicleDetails.types";
+import type { FareDetails } from "@/types/vehicleDetails.types";
+import { useSelectedPackage } from "@/contexts/PackageSelectionContext";
 
 interface Props {
-  packages: VehiclePackage[];
   fareDetails: FareDetails;
   payAtPickupEnabled: boolean;
   pickup: string;
@@ -14,8 +14,14 @@ interface Props {
   locationId: number;
 }
 
+// TODO: replace with selectedPackage.partial_payment_percentage once the
+// backend wires PricingPackage.partial_payment_percentage (already on
+// the model) through _build_packages in apps/vehicles/services.py and
+// VehicleDetailPackageSerializer in apps/vehicles/serializers.py.
+// Hardcoded at 20% for now per product decision.
+const ADVANCE_PERCENTAGE = 20;
+
 export default function BookingWidget({
-  packages,
   fareDetails,
   payAtPickupEnabled,
   vehicleId,
@@ -23,15 +29,28 @@ export default function BookingWidget({
   pickup,
   dropoff,
 }: Props) {
-  const [selectedPackageId, setSelectedPackageId] = useState<number>(
-    packages[0]?.id ?? 0,
-  );
+  const { packages, selectedPackageId, setSelectedPackageId, selectedPackage } =
+    useSelectedPackage();
+
   const [packageOpen, setPackageOpen] = useState(false);
+  const [paymentMode, setPaymentMode] = useState<"partial" | "full">("partial");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const selectedRef = useRef<HTMLButtonElement>(null);
 
-  const selectedPackage = packages.find((p) => p.id === selectedPackageId);
+  // Figures follow whichever package is selected.
+  const rentAmount = selectedPackage ? Number(selectedPackage.total_price) : 0;
+
+  // No pay-at-pickup support on this listing → force full payment now,
+  // regardless of whatever paymentMode was last toggled to.
+  const canPayPartially = payAtPickupEnabled;
+  const effectiveMode = canPayPartially ? paymentMode : "full";
+
+  const advancePayment =
+    effectiveMode === "partial"
+      ? rentAmount * (ADVANCE_PERCENTAGE / 100)
+      : rentAmount;
+  const remainingRent = rentAmount - advancePayment;
 
   // Close on outside click / Escape
   useEffect(() => {
@@ -66,7 +85,8 @@ export default function BookingWidget({
     }
   }, [packageOpen]);
 
-  function getPackageLabel(pkg: VehiclePackage) {
+  function getPackageLabel(pkg: typeof selectedPackage) {
+    if (!pkg) return "";
     return (
       pkg.label ??
       `${pkg.name} (₹ ${pkg.price_per_day.toLocaleString("en-IN")} per Day)`
@@ -79,7 +99,6 @@ export default function BookingWidget({
 
       {/* Package picker */}
       <div className="relative mb-6" ref={dropdownRef}>
-        {/* Trigger */}
         <button
           type="button"
           onClick={() => setPackageOpen((o) => !o)}
@@ -104,7 +123,6 @@ export default function BookingWidget({
           </svg>
         </button>
 
-        {/* Dropdown */}
         {packageOpen && (
           <div
             onClick={(e) => e.stopPropagation()}
@@ -153,31 +171,66 @@ export default function BookingWidget({
         )}
       </div>
 
+      {/* Partial payment / pay now toggle — only when pay-at-pickup is enabled */}
+      {canPayPartially && (
+        <div className="mb-6">
+          <h3 className="font-bold text-font-main-sub mb-3">Payment Option</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setPaymentMode("partial")}
+              className={`py-2.5 px-3 rounded-lg text-sm font-medium border transition-colors hover:cursor-pointer
+                ${
+                  paymentMode === "partial"
+                    ? "border-yellow-400 bg-yellow-50 text-font-main-sub"
+                    : "border-gray-300 text-font-main-sub hover:border-gray-400"
+                }`}
+            >
+              Partial Payment
+              <span className="block text-xs text-font-dim">
+                Pay {ADVANCE_PERCENTAGE}% now
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentMode("full")}
+              className={`py-2.5 px-3 rounded-lg text-sm font-medium border transition-colors hover:cursor-pointer
+                ${
+                  paymentMode === "full"
+                    ? "border-yellow-400 bg-yellow-50 text-font-main-sub"
+                    : "border-gray-300 text-font-main-sub hover:border-gray-400"
+                }`}
+            >
+              Pay Now
+              <span className="block text-xs text-font-dim">
+                Pay full amount
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
+
       <h3 className="font-bold text-font-main-sub mb-4">Fare Details</h3>
 
       <div className="space-y-3 text-sm text-font-main-sub mb-4">
         <div className="flex justify-between">
           <span>Rent Amount</span>
-          <span className="text-font-main-sub">
-            ₹ {fareDetails.rent_amount.toFixed(2)}
-          </span>
+          <span className="text-font-main-sub">₹ {rentAmount.toFixed(2)}</span>
         </div>
         <div className="flex justify-between">
           <span>Total</span>
-          <span className="text-font-main-sub">
-            ₹ {fareDetails.total.toFixed(2)}
-          </span>
+          <span className="text-font-main-sub">₹ {rentAmount.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-font-main-sub">
           <span>
             Remaining Rent{" "}
             <span className="text-xs">(To be paid at pickup)</span>
           </span>
-          <span>₹ {fareDetails.remaining_rent.toFixed(2)}</span>
+          <span>₹ {remainingRent.toFixed(2)}</span>
         </div>
         <div className="flex justify-between text-font-main-sub">
           <span>Advance Payment</span>
-          <span>₹ {fareDetails.advance_payment.toFixed(2)}</span>
+          <span>₹ {advancePayment.toFixed(2)}</span>
         </div>
       </div>
 
@@ -188,7 +241,7 @@ export default function BookingWidget({
           Amount Payable Today
         </span>
         <span className="font-bold text-font-main-sub">
-          ₹ {fareDetails.advance_payment.toFixed(2)}
+          ₹ {advancePayment.toFixed(2)}
         </span>
       </div>
 

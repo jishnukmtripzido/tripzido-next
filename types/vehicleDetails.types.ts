@@ -4,9 +4,22 @@
 export interface VehiclePackage {
   id: number;
   name: string;
+  /** Package category, e.g. "Daily", "Weekly", "Hourly" */
+  category: string;
+  /** The package's own standard duration, in hours */
+  duration_hours: number;
+  /** Base price for one unit of this package (e.g. one day, one week) */
   price_per_day: number;
+  /** price_per_day × however many units are needed to cover the searched duration */
+  total_price: number;
+  /** Per-package km cap, or null if unlimited */
+  km_limit: number | null;
+  /** Pre-formatted km limit string, e.g. "700 km included" or "No Distance Limit" */
+  total_km_limit: string;
   /** e.g. "Daily Package (₹ 499 per Day)" — pre-formatted label from API */
   label?: string;
+  /** True if this is the package the backend selected by default for the searched dates */
+  is_default: boolean;
 }
 
 /** Fare breakdown returned for a specific package + date range */
@@ -36,6 +49,7 @@ export interface VehiclePickupLocation {
 /** Full vehicle details response from GET /api/vehicles/:id */
 export interface VehicleDetailsResponse {
   id: number;
+  vehicle_type_id: number;
   name: string;
   make_year: number;
   transmission_type: string;
@@ -52,6 +66,10 @@ export interface VehicleDetailsResponse {
   primary_image: string;
   available_count: number;
   packages: VehiclePackage[];
+  /** id of the package the backend picked as default (matches an entry in `packages`, or null if none applicable) */
+  selected_package_id: number | null;
+  /** Human-readable searched duration, e.g. "2 weeks" — null if no dates were supplied */
+  searched_duration: string | null;
   fare_details: FareDetails;
   pickup_location: VehiclePickupLocation;
   /** Policies shown in "Things to remember" */
@@ -64,6 +82,8 @@ export interface VehicleDetailsResponse {
   };
   terms_and_conditions: string[];
   pay_at_pickup_enabled: boolean;
+  is_available: boolean;
+  availability_message: string | null;
 }
 
 /** Query params expected on /vehicledetails/[id] */
@@ -74,4 +94,5 @@ export interface VehicleDetailsSearchParams {
   dropoff: string; // ISO datetime
   city_id: string;
   reviews_page?: string;
+  package_id?: string;
 }

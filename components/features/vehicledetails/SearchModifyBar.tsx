@@ -10,6 +10,7 @@ interface Props {
   pickup: string;
   dropoff: string;
   cityId: number;
+  vehicleTypeId: number;
 }
 
 export default function SearchModifyBar({
@@ -17,6 +18,7 @@ export default function SearchModifyBar({
   pickup,
   dropoff,
   cityId,
+  vehicleTypeId,
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [locations, setLocations] = useState<PickupLocationOption[]>([]);
@@ -58,6 +60,8 @@ export default function SearchModifyBar({
         initialDropoff={dropoff}
         cityLocations={locations}
         cityLocationsLoading={locationsLoading}
+        cityId={cityId}
+        vehicleTypeId={vehicleTypeId}
       />
     );
   }
@@ -65,7 +69,7 @@ export default function SearchModifyBar({
   return (
     <div className="w-full md:bg-gray-500  pt-4 md:py-2 md:pt-2 border-none border-gray-100">
       <div className="xl:mx-[80.5px] mx-auto px-4 xl:px-0">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-2 md:border-3 border-brand-yellow rounded-lg p-3 md:px-4 md:py-3 bg-white gap-0 md:gap-0">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-2 md:border-3 border-brand-yellow rounded-md p-3 md:px-4 md:py-3 bg-white gap-0 md:gap-0">
           {/* ── MOBILE ── */}
           <div className="flex flex-col w-full md:hidden">
             <div className="flex items-center justify-between">

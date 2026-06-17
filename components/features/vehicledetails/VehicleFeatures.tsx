@@ -1,3 +1,5 @@
+"use client";
+
 import {
   UserGroupIcon,
   BoltIcon,
@@ -7,6 +9,7 @@ import {
   ScaleIcon,
   MapIcon,
 } from "@heroicons/react/24/outline";
+import { useSelectedPackage } from "@/contexts/PackageSelectionContext";
 
 interface Props {
   seats: number | string | null;
@@ -27,6 +30,8 @@ export default function VehicleFeatures({
   kerbWeightKg,
   kmLimitPerDay,
 }: Props) {
+  const { selectedPackage } = useSelectedPackage();
+
   const features = [
     { label: "Seats", value: `${seats} Seater`, icon: UserGroupIcon },
     { label: "Top Speed", value: `${topSpeed} kmph`, icon: BoltIcon },
@@ -39,6 +44,15 @@ export default function VehicleFeatures({
     { label: "Displacement", value: `${cc} cc`, icon: CogIcon },
     { label: "Kerb Weight", value: `${kerbWeightKg} kg`, icon: ScaleIcon },
   ];
+
+  // Prefer the selected package's distance cap (scales with duration —
+  // e.g. a 3-hour package booked twice over doubles its km_limit) over
+  // the static listing-level kmLimitPerDay fallback.
+  const distanceLimitDisplay = selectedPackage
+    ? selectedPackage.total_km_limit
+    : kmLimitPerDay
+      ? `${kmLimitPerDay} km/day limit`
+      : "Unlimited distance limit";
 
   return (
     <div className="mt-6">
@@ -60,9 +74,7 @@ export default function VehicleFeatures({
       </div>
       <div className="flex items-center gap-2 mt-4 text-sm text-font-main-sub">
         <MapIcon className="w-5 h-5  flex-shrink-0" />
-        {kmLimitPerDay
-          ? `${kmLimitPerDay} km/day limit`
-          : "Unlimited distance limit"}
+        {distanceLimitDisplay}
       </div>
     </div>
   );

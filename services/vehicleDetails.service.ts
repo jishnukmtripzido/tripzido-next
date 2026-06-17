@@ -9,6 +9,7 @@ export interface VehicleDetailsParams {
   pickup_datetime: string;
   dropoff_datetime: string;
   city_id: string;
+  package_id?: string;
 }
 
 export async function getVehicleDetailsApi(
@@ -20,6 +21,7 @@ export async function getVehicleDetailsApi(
     pickup_datetime: params.pickup_datetime,
     dropoff_datetime: params.dropoff_datetime,
     city_id: params.city_id,
+    ...(params.package_id && { package_id: params.package_id }),
   });
 
   const data = await api.get<{ data: VehicleDetailsResponse }>(
