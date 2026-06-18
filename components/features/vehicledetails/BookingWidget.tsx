@@ -14,13 +14,6 @@ interface Props {
   locationId: number;
 }
 
-// TODO: replace with selectedPackage.partial_payment_percentage once the
-// backend wires PricingPackage.partial_payment_percentage (already on
-// the model) through _build_packages in apps/vehicles/services.py and
-// VehicleDetailPackageSerializer in apps/vehicles/serializers.py.
-// Hardcoded at 20% for now per product decision.
-const ADVANCE_PERCENTAGE = 20;
-
 export default function BookingWidget({
   fareDetails,
   payAtPickupEnabled,
@@ -41,14 +34,18 @@ export default function BookingWidget({
   // Figures follow whichever package is selected.
   const rentAmount = selectedPackage ? Number(selectedPackage.total_price) : 0;
 
-  // No pay-at-pickup support on this listing → force full payment now,
-  // regardless of whatever paymentMode was last toggled to.
-  const canPayPartially = payAtPickupEnabled;
+  // Partial payment is only offered if the listing supports
+  // pay-at-pickup AND the backend returned a percentage for this
+  // package (sourced from the vendor's subscription commission —
+  // null means the vendor's plan doesn't permit it, or they have no
+  // current active subscription).
+  const advancePercentage = selectedPackage?.partial_payment_percentage ?? null;
+  const canPayPartially = payAtPickupEnabled && advancePercentage !== null;
   const effectiveMode = canPayPartially ? paymentMode : "full";
 
   const advancePayment =
-    effectiveMode === "partial"
-      ? rentAmount * (ADVANCE_PERCENTAGE / 100)
+    effectiveMode === "partial" && advancePercentage !== null
+      ? rentAmount * (advancePercentage / 100)
       : rentAmount;
   const remainingRent = rentAmount - advancePayment;
 
@@ -91,6 +88,18 @@ export default function BookingWidget({
       pkg.label ??
       `${pkg.name} (₹ ${pkg.price_per_day.toLocaleString("en-IN")} per Day)`
     );
+  }
+
+  function buildCheckoutUrl() {
+    const params = new URLSearchParams();
+    // vehicleId is this listing's id — named for historical reasons,
+    // see page.tsx where it's set to Number(id) from the route param.
+    params.set("listing_id", String(vehicleId));
+    params.set("package_id", String(selectedPackageId));
+    if (pickup) params.set("pickup", pickup);
+    if (dropoff) params.set("dropoff", dropoff);
+    params.set("payment_mode", effectiveMode);
+    return `/checkout?${params.toString()}`;
   }
 
   return (
@@ -171,7 +180,8 @@ export default function BookingWidget({
         )}
       </div>
 
-      {/* Partial payment / pay now toggle — only when pay-at-pickup is enabled */}
+      {/* Partial payment / pay now toggle — only when the backend says
+          this package supports it */}
       {canPayPartially && (
         <div className="mb-6">
           <h3 className="font-bold text-font-main-sub mb-3">Payment Option</h3>
@@ -188,7 +198,7 @@ export default function BookingWidget({
             >
               Partial Payment
               <span className="block text-xs text-font-dim">
-                Pay {ADVANCE_PERCENTAGE}% now
+                Pay {advancePercentage}% now
               </span>
             </button>
             <button
@@ -257,12 +267,21 @@ export default function BookingWidget({
         paid at pickup)
       </div>
 
-      <Link
-        href="/checkout"
-        className="w-full inline-block text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-xl transition duration-200"
-      >
-        Book Now
-      </Link>
+      {selectedPackage ? (
+        <Link
+          href={buildCheckoutUrl()}
+          className="w-full inline-block text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-xl transition duration-200"
+        >
+          Book Now
+        </Link>
+      ) : (
+        <button
+          disabled
+          className="w-full text-center bg-gray-200 text-gray-400 font-bold py-3 px-4 rounded-xl cursor-not-allowed"
+        >
+          Book Now
+        </button>
+      )}
 
       <div className="mt-4 text-center">
         <a href="#" className="text-sm text-blue-600 hover:underline">

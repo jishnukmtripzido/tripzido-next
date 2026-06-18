@@ -1,22 +1,58 @@
-import OrderSummary from "@/components/features/checkout/OrderSummary";
-import FareDetails from "@/components/features/checkout/FareDetails";
+import { notFound } from "next/navigation";
+import { getCheckoutSummaryApi } from "@/services/checkout.service";
+import type { CheckoutSummary } from "@/services/checkout.service";
+import CheckoutClient from "@/components/features/checkout/CheckoutClient";
 
-export default function CheckoutPage() {
+interface Props {
+  searchParams: Promise<{
+    listing_id?: string;
+    package_id?: string;
+    pickup?: string;
+    dropoff?: string;
+    payment_mode?: string;
+  }>;
+}
+
+export default async function CheckoutPage({ searchParams }: Props) {
+  const { listing_id, package_id, pickup, dropoff, payment_mode } =
+    await searchParams;
+
+  if (!listing_id || !package_id || !pickup || !dropoff) notFound();
+
+  let summary: CheckoutSummary | null = null;
+  let errorMessage: string | null = null;
+
+  try {
+    summary = await getCheckoutSummaryApi({
+      listing_id,
+      package_id,
+      pickup_datetime: pickup,
+      dropoff_datetime: dropoff,
+    });
+  } catch (err) {
+    errorMessage =
+      err instanceof Error ? err.message : "Unable to load checkout details.";
+  }
+
   return (
     <div className="min-h-screen font-sans text-gray-800 flex flex-col overflow-x-hidden mb-10">
       <main className="xl:mx-[80.5px] flex-grow mx-auto px-4 lg:px-0 py-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Order Summary */}
-          <div className="lg:col-span-8">
-            <OrderSummary />
+        {summary ? (
+          <CheckoutClient
+            summary={summary}
+            paymentMode={payment_mode === "full" ? "full" : "partial"}
+          />
+        ) : (
+          <div className="max-w-lg mx-auto text-center py-20">
+            <p className="text-lg font-semibold text-gray-900 mb-2">
+              Unable to load checkout
+            </p>
+            <p className="text-sm text-gray-500">
+              {errorMessage ??
+                "This booking could not be completed. Please go back and try again."}
+            </p>
           </div>
-
-          {/* Right Column: Fare Details & Payment */}
-          {/* FIX: Removed 'sticky top-8' from this div */}
-          <div className="lg:col-span-4">
-            <FareDetails />
-          </div>
-        </div>
+        )}
       </main>
     </div>
   );

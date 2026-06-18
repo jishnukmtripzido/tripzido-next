@@ -20,6 +20,8 @@ export interface VehiclePackage {
   label?: string;
   /** True if this is the package the backend selected by default for the searched dates */
   is_default: boolean;
+
+  partial_payment_percentage: number | null;
 }
 
 /** Fare breakdown returned for a specific package + date range */

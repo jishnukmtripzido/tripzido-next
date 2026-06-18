@@ -114,3 +114,12 @@ export function getDefaultDatetimes() {
   dropoff.setDate(dropoff.getDate() + 1);
   return { pickup, dropoff };
 }
+
+export function formatDayNumber(iso: string): string {
+  return String(new Date(iso).getDate());
+}
+
+export function formatMonthYear(iso: string): string {
+  const d = new Date(iso);
+  return `${MONTHS_FULL[d.getMonth()]} ${d.getFullYear()}`;
+}
