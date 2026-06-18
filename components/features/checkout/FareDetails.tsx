@@ -21,7 +21,7 @@ export default function FareDetails({
       <h3 className="text-lg font-bold text-gray-900 mb-4">Fare Details</h3>
 
       <div className="space-y-4 text-sm mb-6">
-        <div className="flex justify-between items-center text-gray-600">
+        <div className="flex justify-between items-center text-font-main-sub">
           <div className="flex items-center gap-2">
             <span className="w-4 h-4 border border-gray-400 rounded-sm flex items-center justify-center text-gray-500">
               <span className="text-[10px]">+</span>
@@ -32,12 +32,12 @@ export default function FareDetails({
         </div>
 
         <div className="border-t border-gray-200 pt-4">
-          <div className="flex justify-between items-center font-medium text-gray-900 mb-3">
+          <div className="flex justify-between items-center font-medium text-font-main-sub mb-3">
             <span>Total</span>
             <span>₹ {rentAmount.toFixed(2)}</span>
           </div>
 
-          <div className="flex justify-between items-center text-gray-500 pl-6 mb-2">
+          <div className="flex justify-between items-center text-font-main-sub pl-6 mb-2">
             <span>
               Rent Remaining{" "}
               <span className="text-xs ml-1">
@@ -47,7 +47,7 @@ export default function FareDetails({
             <span>₹ {remainingRent.toFixed(2)}</span>
           </div>
 
-          <div className="flex justify-between items-center text-gray-500 pl-6">
+          <div className="flex justify-between items-center text-font-main-sub pl-6">
             <span>Advance Payment</span>
             <span>₹ {advancePayment.toFixed(2)}</span>
           </div>
@@ -55,12 +55,12 @@ export default function FareDetails({
       </div>
 
       <div className="border-t border-gray-200 pt-4 mb-6">
-        <div className="flex justify-between items-center text-base font-bold text-gray-900 mb-2">
+        <div className="flex justify-between items-center text-base font-bold text-font-main-sub mb-2">
           <span>Total Payable Amount</span>
           <span>₹ {advancePayment.toFixed(2)}</span>
         </div>
 
-        <div className="flex justify-between items-start text-sm text-gray-500 mt-4">
+        <div className="flex justify-between items-start text-sm text-font-main-sub mt-4">
           <div className="flex flex-col">
             <span>Refundable Deposit</span>
             <span className="text-xs">(To be paid at the time of pickup)</span>
@@ -78,7 +78,7 @@ export default function FareDetails({
             onChange={(e) => setAcceptedTerms(e.target.checked)}
           />
         </div>
-        <span className="text-sm text-gray-600 group-hover:text-gray-900 transition">
+        <span className="text-sm text-font-main-sub group-hover:text-gray-900 transition">
           I have read the terms and conditions
         </span>
       </label>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { VehicleSearchResult } from "@/types/vehicles.types";
 
 export type FilterState = {
@@ -288,6 +288,11 @@ export function useVehicleFilters(bikes: VehicleSearchResult[]) {
   const [filters, setFilters] = useState<FilterState>(() =>
     buildInitialFilters(options),
   );
+
+  // ADDED: This syncs the state whenever new search results (bikes) come in
+  useEffect(() => {
+    setFilters(buildInitialFilters(options));
+  }, [options]);
 
   const filteredBikes = useMemo(
     () => applyFilters(bikes, filters, options.priceRangeDefs),

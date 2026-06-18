@@ -46,13 +46,13 @@ export default function OrderSummary({
             )}
           </div>
           <div className="flex-grow w-full">
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-bold text-font-main-sub">
               {summary.vehicle_name}
             </h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-font-main-sub mt-1">
               {summary.package_name} Package
             </p>
-            <div className="mt-2 space-y-1 text-sm text-gray-600">
+            <div className="mt-2 space-y-1 text-sm text-font-main-sub">
               <p>
                 Rent Amount :{" "}
                 <span className="font-semibold text-gray-900">
@@ -88,7 +88,7 @@ export default function OrderSummary({
               </button>
             </div>
             {maxQuantity > 1 && (
-              <p className="text-xs text-gray-400 mt-1.5">
+              <p className="text-xs text-font-dim mt-1.5">
                 {maxQuantity} available at this location
               </p>
             )}
@@ -104,14 +104,14 @@ export default function OrderSummary({
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-4xl font-bold text-gray-900">
+            <span className="text-4xl font-bold text-font-main-sub">
               {formatDayNumber(summary.pickup_datetime)}
             </span>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-gray-600">
+              <span className="text-sm font-medium text-font-main-sub">
                 {formatMonthYear(summary.pickup_datetime)}
               </span>
-              <span className="text-sm font-bold text-gray-900">
+              <span className="text-sm font-bold text-font-main-sub">
                 {formatTimeFromISO(summary.pickup_datetime)}
               </span>
             </div>
@@ -119,21 +119,21 @@ export default function OrderSummary({
 
           <div className="flex-grow mx-8 flex items-center justify-center relative hidden md:flex">
             <div className="w-full border-t border-dashed border-gray-300"></div>
-            <span className="absolute bg-white px-2 text-xs font-medium text-gray-500">
+            <span className="absolute bg-white px-2 text-xs font-medium text-font-main-sub">
               {summary.duration_label}
             </span>
           </div>
 
           <div className="flex items-center gap-3 text-right">
             <div className="flex flex-col items-end">
-              <span className="text-sm font-medium text-gray-600">
+              <span className="text-sm font-medium text-font-main-sub">
                 {formatMonthYear(summary.dropoff_datetime)}
               </span>
-              <span className="text-sm font-bold text-gray-900">
+              <span className="text-sm font-bold text-font-main-sub">
                 {formatTimeFromISO(summary.dropoff_datetime)}
               </span>
             </div>
-            <span className="text-4xl font-bold text-gray-900">
+            <span className="text-4xl font-bold text-font-main-sub">
               {formatDayNumber(summary.dropoff_datetime)}
             </span>
           </div>
@@ -145,7 +145,7 @@ export default function OrderSummary({
         <h3 className="text-sm font-semibold text-green-600 mb-3">
           Pickup and Drop Location
         </h3>
-        <div className="flex items-center gap-2 text-gray-700 font-medium">
+        <div className="flex items-center gap-2 text-font-main-sub font-medium">
           <svg
             className="w-5 h-5 text-gray-400"
             fill="none"
@@ -177,24 +177,28 @@ export default function OrderSummary({
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 text-sm">
             <div className="flex justify-between items-center border-b md:border-none border-gray-200 pb-2 md:pb-0">
-              <span className="text-gray-500">Kilometer Limit</span>
-              <span className="font-medium text-gray-900">{ttr.km_limit}</span>
+              <span className="text-font-main-sub">Kilometer Limit</span>
+              <span className="font-medium text-font-main-sub">
+                {ttr.km_limit}
+              </span>
             </div>
             <div className="flex justify-between items-center border-b md:border-none border-gray-200 pb-2 md:pb-0">
-              <span className="text-gray-500">Excess Kilometer Charges</span>
-              <span className="font-medium text-gray-900">
+              <span className="text-font-main-sub">
+                Excess Kilometer Charges
+              </span>
+              <span className="font-medium text-font-main-sub">
                 {ttr.excess_charge}
               </span>
             </div>
             <div className="flex justify-between items-center border-b md:border-none border-gray-200 pb-2 md:pb-0">
-              <span className="text-gray-500">Location Timings</span>
-              <span className="font-medium text-gray-900">
+              <span className="text-font-main-sub">Location Timings</span>
+              <span className="font-medium text-font-main-sub">
                 {ttr.location_timings}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-500">Late Drop Fee</span>
-              <span className="font-medium text-gray-900">
+              <span className="text-font-main-sub">Late Drop Fee</span>
+              <span className="font-medium text-font-main-sub">
                 ₹ {ttr.late_penalty_per_hour}/hr
               </span>
             </div>
