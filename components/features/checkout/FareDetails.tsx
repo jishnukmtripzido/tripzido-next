@@ -6,6 +6,9 @@ interface Props {
   remainingRent: number;
   advancePayment: number;
   refundableDeposit: number;
+  onPayNow: () => void;
+  isPaying: boolean;
+  payError: string | null;
 }
 
 export default function FareDetails({
@@ -13,6 +16,9 @@ export default function FareDetails({
   remainingRent,
   advancePayment,
   refundableDeposit,
+  onPayNow,
+  isPaying,
+  payError,
 }: Props) {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
@@ -78,20 +84,23 @@ export default function FareDetails({
             onChange={(e) => setAcceptedTerms(e.target.checked)}
           />
         </div>
-        <span className="text-sm text-font-main-sub group-hover:text-gray-900 transition">
+        <span className="text-sm text-gray-600 group-hover:text-font-main-sub transition">
           I have read the terms and conditions
         </span>
       </label>
 
+      {payError && <p className="text-sm text-red-500 mb-4">{payError}</p>}
+
       <button
-        disabled={!acceptedTerms}
+        onClick={onPayNow}
+        disabled={!acceptedTerms || isPaying}
         className={`w-full py-3.5 px-4 rounded-xl font-bold text-center transition duration-200 ${
-          acceptedTerms
+          acceptedTerms && !isPaying
             ? "bg-yellow-400 hover:bg-yellow-500 text-black shadow-md"
             : "bg-gray-200 text-gray-400 cursor-not-allowed"
         }`}
       >
-        Pay Now
+        {isPaying ? "Redirecting to payment..." : "Pay Now"}
       </button>
     </div>
   );

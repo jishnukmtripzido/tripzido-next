@@ -12,6 +12,8 @@ interface Props {
   dropoff: string;
   vehicleId: number;
   locationId: number;
+  isAvailable?: boolean;
+  availabilityMessage?: string | null;
 }
 
 export default function BookingWidget({
@@ -21,6 +23,8 @@ export default function BookingWidget({
   locationId,
   pickup,
   dropoff,
+  isAvailable = true,
+  availabilityMessage,
 }: Props) {
   const { packages, selectedPackageId, setSelectedPackageId, selectedPackage } =
     useSelectedPackage();
@@ -31,14 +35,8 @@ export default function BookingWidget({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const selectedRef = useRef<HTMLButtonElement>(null);
 
-  // Figures follow whichever package is selected.
   const rentAmount = selectedPackage ? Number(selectedPackage.total_price) : 0;
 
-  // Partial payment is only offered if the listing supports
-  // pay-at-pickup AND the backend returned a percentage for this
-  // package (sourced from the vendor's subscription commission —
-  // null means the vendor's plan doesn't permit it, or they have no
-  // current active subscription).
   const advancePercentage = selectedPackage?.partial_payment_percentage ?? null;
   const canPayPartially = payAtPickupEnabled && advancePercentage !== null;
   const effectiveMode = canPayPartially ? paymentMode : "full";
@@ -92,8 +90,6 @@ export default function BookingWidget({
 
   function buildCheckoutUrl() {
     const params = new URLSearchParams();
-    // vehicleId is this listing's id — named for historical reasons,
-    // see page.tsx where it's set to Number(id) from the route param.
     params.set("listing_id", String(vehicleId));
     params.set("package_id", String(selectedPackageId));
     if (pickup) params.set("pickup", pickup);
@@ -104,6 +100,29 @@ export default function BookingWidget({
 
   return (
     <div className="bg-white border-b border-gray-200 md:border-none pb-6">
+      {/* ── Unavailability banner ─────────────────────────────────── */}
+      {!isAvailable && (
+        <div className="mb-5 flex items-start gap-2.5 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3">
+          <svg
+            className="w-4 h-4 mt-0.5 shrink-0"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-9a1 1 0 112 0v4a1 1 0 11-2 0V9zm1-4a1 1 0 100 2 1 1 0 000-2z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <p>
+            {availabilityMessage ??
+              "This vehicle is not available for the selected dates and times."}{" "}
+            Please adjust your pickup and drop-off times using the Edit button
+            above.
+          </p>
+        </div>
+      )}
+
       <h3 className="font-bold text-font-main-sub mb-4">Select a Package</h3>
 
       {/* Package picker */}
@@ -149,7 +168,7 @@ export default function BookingWidget({
                       setSelectedPackageId(pkg.id);
                       setPackageOpen(false);
                     }}
-                    className={`w-full  flex items-center justify-between px-3 py-2 text-sm transition-colors hover:cursor-pointer
+                    className={`w-full flex items-center justify-between px-3 py-2 text-sm transition-colors hover:cursor-pointer
                       ${
                         isSelected
                           ? "bg-[#ffc107] text-black font-normal"
@@ -180,8 +199,7 @@ export default function BookingWidget({
         )}
       </div>
 
-      {/* Partial payment / pay now toggle — only when the backend says
-          this package supports it */}
+      {/* Partial payment toggle — only when backend says this package supports it */}
       {canPayPartially && (
         <div className="mb-6">
           <h3 className="font-bold text-font-main-sub mb-3">Payment Option</h3>
@@ -267,7 +285,8 @@ export default function BookingWidget({
         paid at pickup)
       </div>
 
-      {selectedPackage ? (
+      {/* ── Book Now — disabled when unavailable ─────────────────── */}
+      {isAvailable && selectedPackage ? (
         <Link
           href={buildCheckoutUrl()}
           className="w-full inline-block text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-xl transition duration-200"
@@ -279,7 +298,7 @@ export default function BookingWidget({
           disabled
           className="w-full text-center bg-gray-200 text-gray-400 font-bold py-3 px-4 rounded-xl cursor-not-allowed"
         >
-          Book Now
+          {!isAvailable ? "Not Available" : "Book Now"}
         </button>
       )}
 

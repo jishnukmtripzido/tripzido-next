@@ -61,6 +61,8 @@ export default async function VehicleDetailsPage({
     dropoff,
     vehicleId: Number(id),
     locationId: Number(location_id),
+    isAvailable: vehicle.is_available,
+    availabilityMessage: vehicle.availability_message,
   };
 
   return (

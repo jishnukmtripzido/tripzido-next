@@ -46,13 +46,18 @@ export default function VehicleHeader({
         {/* Right Side: Details & Features */}
         <div className="w-full md:w-7/12 flex flex-col justify-start">
           {/* Availability tag */}
-          <div className="flex items-center gap-2 mb-3">
-            {availableCount && availableCount > 0 && (
-              <span className="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded">
-                {availableCount} Bike{availableCount !== 1 ? "s" : ""} Available
-              </span>
-            )}
-          </div>
+          {availableCount > 0 ? (
+            <div className="flex items-center gap-2 mb-3">
+              {availableCount && availableCount > 0 && (
+                <span className="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded">
+                  {availableCount} Bike{availableCount !== 1 ? "s" : ""}{" "}
+                  Available
+                </span>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
 
           {/* Title and Make Year */}
           <div className="mb-2">
