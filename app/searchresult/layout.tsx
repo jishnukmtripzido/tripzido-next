@@ -13,8 +13,6 @@ export default function SearchResultLayout({
         logoHeight={4}
         logoTextSize="xl"
         linkIconsSize={4}
-        userNameFirstLetterSize={8}
-        userNameFirstLetter="J"
         headerLgScreenMx=" xl:px-5"
         headerValues=" w-full  py-2 border-b border-gray-100 text-gray-900"
       />
