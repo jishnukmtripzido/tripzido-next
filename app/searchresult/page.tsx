@@ -1,4 +1,4 @@
-// app/(search)/searchresult/page.tsx
+// app/searchresult/page.tsx
 import { getCitiesCached } from "@/lib/cache";
 import SearchResultsShell from "@/components/features/searchresult/SearchResultsShell";
 import SearchResultsData from "@/components/features/searchresult/SearchResultsData";
