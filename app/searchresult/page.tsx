@@ -1,9 +1,7 @@
 // app/(search)/searchresult/page.tsx
 import { getCitiesCached } from "@/lib/cache";
-import { searchVehiclesApi } from "@/services/vehicle.service";
-import SearchResultsClient from "@/components/features/searchresult/SearchResultsClient";
-import Header from "@/components/layout/Header";
-import type { VehicleSearchResult } from "@/types/vehicles.types";
+import SearchResultsShell from "@/components/features/searchresult/SearchResultsShell";
+import SearchResultsData from "@/components/features/searchresult/SearchResultsData";
 
 interface Props {
   searchParams: Promise<{
@@ -16,27 +14,29 @@ interface Props {
 
 export default async function SearchResultPage({ searchParams }: Props) {
   const { city_id, city_name, pickup, dropoff } = await searchParams;
+
+  // Cities are cached/fast — safe to await directly, doesn't block streaming.
   const { cities, error: citiesError } = await getCitiesCached();
 
-  let vehicles: VehicleSearchResult[] = [];
-
-  if (city_id && pickup && dropoff) {
-    vehicles = await searchVehiclesApi({
-      city_id,
-      pickup_datetime: pickup,
-      dropoff_datetime: dropoff,
-    }).catch(() => []);
-  }
-
   return (
-    <SearchResultsClient
-      bikes={vehicles}
+    <SearchResultsShell
       city={city_name ?? ""}
       cityId={city_id ? Number(city_id) : null}
       pickup={pickup ?? ""}
       dropoff={dropoff ?? ""}
       cities={cities}
       citiesError={citiesError}
-    />
+    >
+      {/*
+        SearchResultsData is a Server Component that awaits
+        searchVehiclesApi. Passed as children into the client
+        SearchResultsShell, its slow await stays on the server and
+        streams in under the <Suspense> boundary that
+        SearchResultsShell wraps around {children} — the shell itself
+        (header, search bar, filter/sort buttons) renders instantly,
+        not blocked by this fetch.
+      */}
+      <SearchResultsData cityId={city_id} pickup={pickup} dropoff={dropoff} />
+    </SearchResultsShell>
   );
 }

@@ -3,51 +3,36 @@
 import { useState } from "react";
 import BikeCard from "./BikeCard";
 import FilterSidebar from "./FilterSidebar";
-import FilterSortBar from "./FilterSortBar";
 import MobileFilterDrawer from "./MobileFilterDrawer";
-import MobileSearchBar from "./MobileSearchBar";
-import MobileSearchDrawer from "./MobileSearchDrawer";
-import SearchResultHeader from "./SearchResultHeader";
-import OfferBanner from "../../ui/OfferBanner";
 import VehicleDisclaimer from "./VehicleDisclaimer";
+import { useDrawerMode } from "./DrawerModeContext";
 import { useVehicleFilters } from "@/hooks/useVehicleFilters";
-import { useScrollTracking } from "@/hooks/useScrollTracking";
-import {
-  parseHour,
-  parseMinute,
-  parseDate,
-  formatDateFromISO,
-  formatTimeFromISO,
-} from "@/lib/dateUtils";
 import { SORT_OPTIONS } from "@/lib/constants";
 import type { VehicleSearchResult } from "@/types/vehicles.types";
-import type { City } from "@/types/locations.types";
 
 interface Props {
   bikes: VehicleSearchResult[];
-  city: string;
-  cityId: number | null;
   pickup: string;
   dropoff: string;
-  cities: City[];
-  citiesError: string | null;
 }
 
-export default function SearchResultsClient({
-  bikes,
-  city,
-  cityId,
-  pickup,
-  dropoff,
-  cities,
-  citiesError,
-}: Props) {
-  const [drawerMode, setDrawerMode] = useState<"filter" | "sort" | null>(null);
-  const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
+/**
+ * Data-dependent half of the search results page: tabs, sort, filter
+ * sidebar, and the bike grid. Rendered by SearchResultsData (a Server
+ * Component) only after searchVehiclesApi resolves, inside the
+ * Suspense boundary owned by SearchResultsShell.
+ *
+ * Header, search bar, and offer banner have moved to
+ * SearchResultsShell since they don't depend on `bikes` and should
+ * render immediately. drawerMode (filter/sort drawer open state) is
+ * read from context — see DrawerModeContext — because the trigger
+ * buttons (FilterSortBar) live in the static shell, outside this
+ * component's Suspense boundary.
+ */
+export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
+  const { drawerMode, setDrawerMode } = useDrawerMode();
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"all" | "electric">("all");
-
-  const scrolled = useScrollTracking(10);
 
   const {
     filters,
@@ -78,103 +63,68 @@ export default function SearchResultsClient({
   };
 
   return (
-    <>
-      <SearchResultHeader
-        cities={cities}
-        citiesError={citiesError}
-        initialCityId={cityId}
-        initialCityName={city}
-        initialPickupDate={parseDate(pickup)}
-        initialDropoffDate={parseDate(dropoff)}
-        initialPickupHour={parseHour(pickup)}
-        initialPickupMinute={parseMinute(pickup)}
-        initialDropoffHour={parseHour(dropoff)}
-        initialDropoffMinute={parseMinute(dropoff)}
-      />
+    <div className="min-h-screen md:bg-gray-50">
+      <div className="mx-auto flex gap-6 items-start">
+        {/* Desktop filter sidebar */}
+        <aside className="hidden lg:block xl:w-80 shrink-0 sticky top-[130px] self-start md:border-r border-gray-100 md:shadow-sm">
+          <FilterSidebar {...filterSidebarProps} />
+        </aside>
 
-      <MobileSearchBar
-        city={city}
-        pickupDate={formatDateFromISO(pickup)}
-        dropoffDate={formatDateFromISO(dropoff)}
-        pickupTime={formatTimeFromISO(pickup)}
-        dropoffTime={formatTimeFromISO(dropoff)}
-        onModify={() => setSearchDrawerOpen(true)}
-        visible={!scrolled}
-      />
-
-      <FilterSortBar
-        onFilterClick={() => setDrawerMode("filter")}
-        onSortClick={() => setDrawerMode("sort")}
-        scrolled={scrolled}
-      />
-
-      <OfferBanner />
-
-      <div className="min-h-screen md:bg-gray-50">
-        {/* xl:mx-[80.5px]  */}
-        {/* <div className="mx-auto px-4 pt-5 pb-6   xl:px-6  flex gap-6 items-start"> */}
-        <div className="mx-auto    flex gap-6 items-start ">
-          {/* Desktop filter sidebar */}
-          <aside className="hidden lg:block xl:w-80  shrink-0 sticky top-[130px] self-start md:border-r border-gray-100 md:shadow-sm">
-            <FilterSidebar {...filterSidebarProps} />
-          </aside>
-
-          <div className="flex-1 min-w-0 ">
-            {/* Desktop: Tabs + Sort */}
-            <div className="hidden md:flex pt-5 pr-5 items-end justify-between flex-wrap gap-3 mb-4">
-              <TabBar
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                allCount={allModelsCount}
-                electricCount={electricCount}
-              />
-              <SortDropdown
-                sortValue={filters.sortValue}
-                onChange={setSortValue}
-              />
-            </div>
-
-            {tabFilteredBikes.length > 0 && (
-              <div className="hidden md:block">
-                <VehicleDisclaimer />
-              </div>
-            )}
-
-            {/* Results */}
-            {tabFilteredBikes.length === 0 ? (
-              <EmptyState
-                activeTab={activeTab}
-                onViewAll={() => setActiveTab("all")}
-                onClearFilters={clearAll}
-              />
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 items-start px-5 py-5 md:px-0 md:py-0 md:pt-1 md:pr-5">
-                {tabFilteredBikes.map((bike) => (
-                  <div
-                    key={bike.id}
-                    style={{
-                      zIndex: activeCardId === bike.id ? 10 : 0,
-                      position: "relative",
-                    }}
-                    className={
-                      activeTab === "electric"
-                        ? "ring-1 ring-green-200 rounded-xl bg-green-50/30"
-                        : ""
-                    }
-                  >
-                    <BikeCard
-                      {...bike}
-                      pickup={pickup}
-                      dropoff={dropoff}
-                      onDropdownOpenChange={(open) =>
-                        setActiveCardId(open ? bike.id : null)
-                      }
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
+        <div className="flex-1 min-w-0">
+          {/* Desktop: Tabs + Sort */}
+          <div className="hidden md:flex pt-5 pr-5 items-end justify-between flex-wrap gap-3 mb-4">
+            <TabBar
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              allCount={allModelsCount}
+              electricCount={electricCount}
+            />
+            <SortDropdown
+              sortValue={filters.sortValue}
+              onChange={setSortValue}
+            />
           </div>
+
+          {tabFilteredBikes.length > 0 && (
+            <div className="hidden md:block">
+              <VehicleDisclaimer />
+            </div>
+          )}
+
+          {/* Results */}
+          {tabFilteredBikes.length === 0 ? (
+            <EmptyState
+              activeTab={activeTab}
+              onViewAll={() => setActiveTab("all")}
+              onClearFilters={clearAll}
+            />
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 items-start px-5 py-5 md:px-0 md:py-0 md:pt-1 md:pr-5">
+              {tabFilteredBikes.map((bike) => (
+                <div
+                  key={bike.id}
+                  style={{
+                    zIndex: activeCardId === bike.id ? 10 : 0,
+                    position: "relative",
+                  }}
+                  className={
+                    activeTab === "electric"
+                      ? "ring-1 ring-green-200 rounded-xl bg-green-50/30"
+                      : ""
+                  }
+                >
+                  <BikeCard
+                    {...bike}
+                    pickup={pickup}
+                    dropoff={dropoff}
+                    onDropdownOpenChange={(open) =>
+                      setActiveCardId(open ? bike.id : null)
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -189,26 +139,11 @@ export default function SearchResultsClient({
         }}
         {...filterSidebarProps}
       />
-
-      <MobileSearchDrawer
-        isOpen={searchDrawerOpen}
-        onClose={() => setSearchDrawerOpen(false)}
-        cities={cities}
-        citiesError={citiesError}
-        initialCityId={cityId}
-        initialCityName={city}
-        initialPickupDate={parseDate(pickup)}
-        initialDropoffDate={parseDate(dropoff)}
-        initialPickupHour={parseHour(pickup)}
-        initialPickupMinute={parseMinute(pickup)}
-        initialDropoffHour={parseHour(dropoff)}
-        initialDropoffMinute={parseMinute(dropoff)}
-      />
-    </>
+    </div>
   );
 }
 
-// ── Sub-components ────────────────────────────────────────────────────
+// ── Sub-components (unchanged from original) ──────────────────────────
 
 function TabBar({
   activeTab,

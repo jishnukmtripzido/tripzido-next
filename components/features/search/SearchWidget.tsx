@@ -265,7 +265,7 @@ export default function SearchWidget({
                   disabled={isLoading}
                   className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-3 px-5 rounded-md transition-colors whitespace-nowrap cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  {isLoading ? "Searching..." : "Search"}
+                  {isLoading ? "Search" : "Search"}
                 </button>
               </div>
             </div>
