@@ -1,54 +1,49 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image"; // Assuming you use Next/Image for vehicles
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { getCustomerBookings } from "@/actions/bookings.actions";
+import type { BookingListItem, BookingTabFilter } from "@/types/booking.types";
 
-type BookingTab = "Confirmed" | "Pending" | "Cancelled";
+const TABS: { key: BookingTabFilter; label: string }[] = [
+  { key: "pending", label: "Pending" },
+  { key: "confirmed", label: "Confirmed" },
+  { key: "ongoing", label: "Ongoing" },
+  { key: "completed", label: "Completed" },
+  { key: "cancelled", label: "Cancelled" },
+];
+
+function formatDateTime(iso: string): string {
+  const date = new Date(iso);
+  return date.toLocaleString("en-IN", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
 
 export default function BookingsList() {
-  const [currentTab, setCurrentTab] = useState<BookingTab>("Pending");
+  const [currentTab, setCurrentTab] = useState<BookingTabFilter>("pending");
+  const [bookings, setBookings] = useState<BookingListItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const tabs: BookingTab[] = ["Confirmed", "Pending", "Cancelled"];
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoading(true);
 
-  // Hardcoded identical content based on screenshot
-  const bookings = [
-    {
-      id: "#122242",
-      vehicle: "Yamaha Fascino",
-      bookingDate: "Jun 8, 2026 12:45 PM",
-      location: "Calangute Beach",
-      startDate: "Jun 8, 2026 01:00 PM",
-      endDate: "Jun 9, 2026 01:00 PM",
-      duration: "1 Day",
-      paid: "₹ 199.60",
-      deposit: "₹ 0.00",
-      image: "https://via.placeholder.com/150?text=Fascino", // Replace with real asset path
-    },
-    {
-      id: "#116639",
-      vehicle: "Suzuki Access 125",
-      bookingDate: "Apr 21, 2026 02:33 PM",
-      location: "Satellite",
-      startDate: "Apr 23, 2026 03:00 PM",
-      endDate: "Apr 24, 2026 02:00 PM",
-      duration: "23 Hours",
-      paid: "₹ 149.75",
-      deposit: "₹ 1000.00",
-      image: "https://via.placeholder.com/150?text=Access", // Replace with real asset path
-    },
-    {
-      id: "#116281",
-      vehicle: "Yamaha Fascino",
-      bookingDate: "Apr 17, 2026 07:14 AM",
-      location: "KSRTC Bus Stand Alappuha",
-      startDate: "Apr 18, 2026 07:00 AM",
-      endDate: "Apr 19, 2026 07:00 AM",
-      duration: "1 Day",
-      paid: "₹ 279.60",
-      deposit: "₹ 4000.00",
-      image: "https://via.placeholder.com/150?text=Fascino", // Replace with real asset path
-    },
-  ];
+    getCustomerBookings(currentTab).then((data) => {
+      if (!isMounted) return;
+      setBookings(data?.results ?? []);
+      setIsLoading(false);
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentTab]);
 
   return (
     <div className="space-y-6">
@@ -61,19 +56,19 @@ export default function BookingsList() {
 
       <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
         {/* Internal Tabs */}
-        <div className="flex border-b border-gray-100 px-6 pt-2">
-          {tabs.map((tab) => (
+        <div className="flex border-b border-gray-100 px-6 pt-2 overflow-x-auto">
+          {TABS.map((tab) => (
             <button
-              key={tab}
-              onClick={() => setCurrentTab(tab)}
-              className={`px-6 py-4 text-sm font-semibold transition-all relative ${
-                currentTab === tab
+              key={tab.key}
+              onClick={() => setCurrentTab(tab.key)}
+              className={`px-6 py-4 text-sm font-semibold transition-all relative whitespace-nowrap ${
+                currentTab === tab.key
                   ? "text-black"
                   : "text-gray-500 hover:text-gray-800"
               }`}
             >
-              {tab}
-              {currentTab === tab && (
+              {tab.label}
+              {currentTab === tab.key && (
                 <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#ffc107] rounded-t-md" />
               )}
             </button>
@@ -82,7 +77,24 @@ export default function BookingsList() {
 
         {/* Bookings Feed */}
         <div className="p-6 space-y-6">
-          {currentTab === "Pending" &&
+          {isLoading && (
+            <div className="space-y-6">
+              {[1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="h-40 rounded-xl border border-gray-100 animate-pulse bg-gray-50"
+                />
+              ))}
+            </div>
+          )}
+
+          {!isLoading && bookings.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              No {currentTab} bookings found.
+            </div>
+          )}
+
+          {!isLoading &&
             bookings.map((booking) => (
               <div
                 key={booking.id}
@@ -90,12 +102,15 @@ export default function BookingsList() {
               >
                 {/* Vehicle Image */}
                 <div className="w-full xl:w-48 h-32 bg-gray-50 rounded-lg flex items-center justify-center shrink-0 overflow-hidden relative border border-gray-100">
-                  {/* Using standard img for hardcode, recommend next/image for prod */}
-                  <img
-                    src={booking.image}
-                    alt={booking.vehicle}
-                    className="object-contain h-full w-full p-2 mix-blend-multiply"
-                  />
+                  {booking.image ? (
+                    <img
+                      src={booking.image}
+                      alt={booking.vehicle}
+                      className="object-contain h-full w-full p-2 mix-blend-multiply"
+                    />
+                  ) : (
+                    <span className="text-xs text-gray-400">No image</span>
+                  )}
                 </div>
 
                 {/* Main Content */}
@@ -106,16 +121,19 @@ export default function BookingsList() {
                         {booking.vehicle}
                       </h3>
                       <p className="text-sm text-gray-500 mt-1">
-                        Booking ID : {booking.id} | Booking Date :{" "}
-                        {booking.bookingDate}
+                        Booking ID : {booking.booking_reference} | Booking Date
+                        : {formatDateTime(booking.booking_date)}
                       </p>
                       <p className="text-sm font-medium text-gray-700 mt-1">
                         Hub Details : {booking.location}
                       </p>
                     </div>
-                    <button className="text-xs font-bold text-[#ffc107] hover:text-[#e6ac00] uppercase tracking-wider hidden sm:block">
+                    <Link
+                      href={`/profile/bookings/${booking.id}`}
+                      className="text-xs font-bold text-[#ffc107] hover:text-[#e6ac00] uppercase tracking-wider hidden sm:block"
+                    >
                       View Details
-                    </button>
+                    </Link>
                   </div>
 
                   {/* Trip Details Footer */}
@@ -135,7 +153,7 @@ export default function BookingsList() {
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                           />
                         </svg>
-                        {booking.startDate}
+                        {formatDateTime(booking.start_date)}
                       </div>
                       <span className="text-gray-300 hidden md:block">---</span>
                       <span className="bg-gray-100 px-2 py-0.5 rounded text-gray-500">
@@ -156,34 +174,30 @@ export default function BookingsList() {
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                           />
                         </svg>
-                        {booking.endDate}
+                        {formatDateTime(booking.end_date)}
                       </div>
                     </div>
 
                     <div className="flex items-center gap-4 mt-2 sm:mt-0">
                       <p className="text-sm font-bold text-gray-900">
-                        Paid : {booking.paid}
+                        Paid : ₹ {booking.paid.toFixed(2)}
                       </p>
                       <p className="text-sm font-bold text-gray-900">
-                        Deposit : {booking.deposit}
+                        Deposit : ₹ {booking.deposit.toFixed(2)}
                       </p>
                     </div>
 
                     {/* View Details Mobile */}
-                    <button className="text-xs font-bold text-[#ffc107] hover:text-[#e6ac00] uppercase tracking-wider sm:hidden mt-2 w-full text-center">
+                    <Link
+                      href={`/profile/bookings/${booking.id}`}
+                      className="text-xs font-bold text-[#ffc107] hover:text-[#e6ac00] uppercase tracking-wider sm:hidden mt-2 w-full text-center"
+                    >
                       View Details
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
             ))}
-
-          {/* Handle empty states for other tabs */}
-          {(currentTab === "Confirmed" || currentTab === "Cancelled") && (
-            <div className="text-center py-12 text-gray-500">
-              No {currentTab.toLowerCase()} bookings found.
-            </div>
-          )}
         </div>
       </div>
     </div>

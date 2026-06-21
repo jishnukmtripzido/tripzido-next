@@ -1,4 +1,9 @@
 import { api } from "@/lib/api";
+import type {
+  BookingTabFilter,
+  BookingDetail,
+  PaginatedBookings,
+} from "@/types/booking.types";
 
 export interface CreateOrderParams {
   listing_id: number;
@@ -38,6 +43,36 @@ export async function getBookingPaymentStatusApi(
 ): Promise<PaymentStatusResult> {
   const data = await api.get<{ data: PaymentStatusResult }>(
     `/api/bookings/checkout/status/${orderId}/`,
+    { token, cache: "no-store" },
+  );
+  return data.data;
+}
+
+// ── Profile page: bookings list + detail ──────────────────────────────
+
+export async function getCustomerBookingsApi(
+  token: string,
+  tab: BookingTabFilter,
+  page: number = 1,
+): Promise<PaginatedBookings> {
+  const query = new URLSearchParams({
+    status: tab,
+    page: String(page),
+  });
+
+  const data = await api.get<{ data: PaginatedBookings }>(
+    `/api/bookings/?${query.toString()}`,
+    { token, cache: "no-store" },
+  );
+  return data.data;
+}
+
+export async function getBookingDetailApi(
+  token: string,
+  bookingId: number,
+): Promise<BookingDetail> {
+  const data = await api.get<{ data: BookingDetail }>(
+    `/api/bookings/${bookingId}/`,
     { token, cache: "no-store" },
   );
   return data.data;
