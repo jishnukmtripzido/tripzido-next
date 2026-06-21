@@ -534,7 +534,7 @@ export default function HeaderClient({
                   {/* Menu items */}
                   <div className="py-1.5">
                     <Link
-                      href="/account"
+                      href="/profile"
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors"
                     >
@@ -554,7 +554,7 @@ export default function HeaderClient({
                       Profile
                     </Link>
                     <Link
-                      href="/account/trips"
+                      href="/profile"
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors"
                     >
