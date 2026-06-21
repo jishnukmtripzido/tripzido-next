@@ -35,7 +35,7 @@ export default async function CheckoutPage({ searchParams }: Props) {
   }
 
   return (
-    <div className="min-h-screen font-sans text-gray-800 flex flex-col overflow-x-hidden mb-10">
+    <div className="min-h-screen font-sans text-gray-800 flex flex-col overflow-x-hidden pb-10 bg-gray-50">
       <main className="xl:mx-[80.5px] flex-grow mx-auto px-4 lg:px-0 py-4">
         {summary ? (
           <CheckoutClient
