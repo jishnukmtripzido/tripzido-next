@@ -3,6 +3,9 @@ import type {
   BookingTabFilter,
   BookingDetail,
   PaginatedBookings,
+  CancellationPreview,
+  CancellationReasonCode,
+  BookingCancellation,
 } from "@/types/booking.types";
 
 export interface CreateOrderParams {
@@ -74,6 +77,33 @@ export async function getBookingDetailApi(
   const data = await api.get<{ data: BookingDetail }>(
     `/api/bookings/${bookingId}/`,
     { token, cache: "no-store" },
+  );
+  return data.data;
+}
+
+// ── Cancellation ────────────────────────────────────────────────────────
+
+export async function getCancellationPreviewApi(
+  token: string,
+  bookingId: number,
+): Promise<CancellationPreview> {
+  const data = await api.get<{ data: CancellationPreview }>(
+    `/api/bookings/${bookingId}/cancellation-preview/`,
+    { token, cache: "no-store" },
+  );
+  return data.data;
+}
+
+export async function cancelBookingApi(
+  token: string,
+  bookingId: number,
+  reasonCode: CancellationReasonCode,
+  reasonText: string,
+): Promise<BookingCancellation> {
+  const data = await api.post<{ data: BookingCancellation }>(
+    `/api/bookings/${bookingId}/cancel/`,
+    { reason_code: reasonCode, reason_text: reasonText },
+    { token },
   );
   return data.data;
 }

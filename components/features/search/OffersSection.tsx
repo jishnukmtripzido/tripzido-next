@@ -111,7 +111,7 @@ export default function OffersSection() {
     <section className="px-4 lg:px-8 py-12 mx-auto xl:mx-[121.5px] xl:px-0">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl pb-2 md:pb-0 md:text-lg font-bold whitespace-nowrap">
-          Travel more, spend less
+          Ride more, pay less
         </h2>
         <Link
           href="#"

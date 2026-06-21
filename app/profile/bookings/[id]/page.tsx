@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { getBookingDetail } from "@/actions/bookings.actions";
+import CancelBookingButton from "@/components/features/profile/CancelBookingButton";
 
 function formatDateTime(iso: string): string {
   return new Date(iso).toLocaleString("en-IN", {
@@ -23,6 +23,45 @@ const STATUS_STYLES: Record<string, string> = {
   EXPIRED: "bg-gray-100 text-gray-600 border-gray-200",
 };
 
+function EmptyState({ message }: { message: string }) {
+  return (
+    <div className="space-y-6">
+      <Link
+        href="/profile"
+        className="text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors"
+      >
+        &larr; Back to Bookings
+      </Link>
+
+      <div className="bg-white rounded-md shadow-sm border border-gray-100 p-12 flex flex-col items-center justify-center text-center">
+        <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+          <svg
+            className="w-8 h-8 text-gray-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+        </div>
+        <h2 className="text-lg font-bold text-gray-900">Booking not found</h2>
+        <p className="text-sm text-gray-500 mt-1 max-w-sm">{message}</p>
+        <Link
+          href="/profile"
+          className="mt-6 px-5 py-2.5 text-sm font-semibold rounded-md bg-[#ffc107] text-black hover:bg-[#e6ac00] transition-colors"
+        >
+          Back to my bookings
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default async function BookingDetailPage({
   params,
 }: {
@@ -32,13 +71,17 @@ export default async function BookingDetailPage({
   const bookingId = Number(id);
 
   if (!Number.isFinite(bookingId)) {
-    notFound();
+    return (
+      <EmptyState message="That doesn't look like a valid booking link." />
+    );
   }
 
   const booking = await getBookingDetail(bookingId);
 
   if (!booking) {
-    notFound();
+    return (
+      <EmptyState message="We couldn't find this booking. It may not exist, or it may belong to a different account." />
+    );
   }
 
   const statusStyle =
@@ -47,7 +90,7 @@ export default async function BookingDetailPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <Link
             href="/profile"
@@ -59,12 +102,43 @@ export default async function BookingDetailPage({
             Booking {booking.booking_reference}
           </h1>
         </div>
-        <span
-          className={`inline-flex items-center py-1.5 px-3 rounded-full text-xs font-semibold border ${statusStyle}`}
-        >
-          {booking.status_label}
-        </span>
+
+        <div className="flex items-center gap-3">
+          <span
+            className={`inline-flex items-center py-1.5 px-3 rounded-full text-xs font-semibold border ${statusStyle}`}
+          >
+            {booking.status_label}
+          </span>
+          {booking.can_cancel && <CancelBookingButton bookingId={booking.id} />}
+        </div>
       </div>
+
+      {booking.cancellation && (
+        <div className="bg-red-50 border border-red-100 rounded-md p-5">
+          <h3 className="text-sm font-bold text-red-700 mb-2">
+            This booking was cancelled
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+            <DetailItem
+              label="Reason"
+              value={booking.cancellation.reason_label}
+            />
+            <DetailItem
+              label="Refund"
+              value={`${booking.cancellation.refund_percentage}% — ₹ ${booking.cancellation.refundable_amount}`}
+            />
+            <DetailItem
+              label="Cancelled On"
+              value={formatDateTime(booking.cancellation.created_at)}
+            />
+          </div>
+          {booking.cancellation.reason_text && (
+            <p className="text-sm text-red-700 mt-3">
+              &ldquo;{booking.cancellation.reason_text}&rdquo;
+            </p>
+          )}
+        </div>
+      )}
 
       <div className="bg-white rounded-md shadow-sm border border-gray-100 p-8 grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Vehicle + trip info */}

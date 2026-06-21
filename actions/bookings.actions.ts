@@ -1,11 +1,14 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import {
   createBookingOrderApi,
   getBookingPaymentStatusApi,
   getCustomerBookingsApi,
   getBookingDetailApi,
+  getCancellationPreviewApi,
+  cancelBookingApi,
   type CreateOrderParams,
   type CreateOrderResult,
   type PaymentStatusResult,
@@ -14,6 +17,9 @@ import type {
   BookingTabFilter,
   BookingDetail,
   PaginatedBookings,
+  CancellationPreview,
+  CancellationReasonCode,
+  BookingCancellation,
 } from "@/types/booking.types";
 
 export interface CreateOrderActionResult {
@@ -127,5 +133,86 @@ export async function getBookingDetail(
     return await getBookingDetailApi(accessToken, bookingId);
   } catch {
     return null;
+  }
+}
+
+// ── Cancellation ────────────────────────────────────────────────────────
+
+export interface CancellationPreviewActionResult {
+  success: boolean;
+  data?: CancellationPreview;
+  message?: string;
+}
+
+/**
+ * getCancellationPreview
+ * -----------------------
+ * Fetches the refund breakdown the customer would receive if they
+ * cancelled this booking right now, without actually cancelling it.
+ */
+export async function getCancellationPreview(
+  bookingId: number,
+): Promise<CancellationPreviewActionResult> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (!accessToken) {
+    return { success: false, message: "Please sign in to continue." };
+  }
+
+  try {
+    const data = await getCancellationPreviewApi(accessToken, bookingId);
+    return { success: true, data };
+  } catch (err) {
+    return {
+      success: false,
+      message:
+        err instanceof Error
+          ? err.message
+          : "Unable to load cancellation details.",
+    };
+  }
+}
+
+export interface CancelBookingActionResult {
+  success: boolean;
+  data?: BookingCancellation;
+  message?: string;
+}
+
+/**
+ * cancelBooking
+ * -------------
+ * Cancels a CONFIRMED booking owned by the logged-in user. Revalidates
+ * the booking detail page so the UI reflects the new CANCELLED status
+ * immediately after this resolves.
+ */
+export async function cancelBooking(
+  bookingId: number,
+  reasonCode: CancellationReasonCode,
+  reasonText: string = "",
+): Promise<CancelBookingActionResult> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (!accessToken) {
+    return { success: false, message: "Please sign in to continue." };
+  }
+
+  try {
+    const data = await cancelBookingApi(
+      accessToken,
+      bookingId,
+      reasonCode,
+      reasonText,
+    );
+    revalidatePath(`/profile/bookings/${bookingId}`);
+    revalidatePath("/profile");
+    return { success: true, data };
+  } catch (err) {
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Unable to cancel booking.",
+    };
   }
 }

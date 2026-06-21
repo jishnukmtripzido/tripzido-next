@@ -26,7 +26,14 @@ export default async function Header({
   let userName: string | null = null;
   if (isLoggedIn) {
     const profile = await getProfile();
-    userName = `${profile?.first_name} ${profile?.last_name}` || null;
+    if (profile) {
+      // Only set userName if there are actual name values
+      const fullName = [profile.first_name, profile.last_name]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
+      userName = fullName || null;
+    }
   }
 
   return (

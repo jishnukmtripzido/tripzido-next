@@ -283,7 +283,7 @@ export default function HeaderClient({
                   <div
                     className={`w-8 h-8 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold ring-2 ring-transparent group-hover:ring-amber-200 transition-all`}
                   >
-                    {userName?.charAt(0).toUpperCase() || "J"}
+                    {userName ? userName.charAt(0).toUpperCase() : "U"}
                   </div>
                   <span className="hidden sm:block text-sm font-bold text-gray-700 group-hover:text-black">
                     Your account
@@ -318,7 +318,7 @@ export default function HeaderClient({
                   <div className="px-4 py-3 bg-amber-50 border-b border-amber-100">
                     <p className="text-xs text-gray-500">Signed in as</p>
                     <p className="text-sm font-bold text-gray-800 truncate">
-                      {userName ? `${userName}` : "Your Account"}
+                      {userName && userName.trim() ? userName : "User"}
                     </p>
                   </div>
 
