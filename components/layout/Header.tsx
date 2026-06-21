@@ -1,5 +1,6 @@
 // components/layout/Header.tsx
-import { getIsLoggedIn, getRefreshToken } from "@/lib/auth";
+import { getIsLoggedIn } from "@/lib/auth";
+import { getProfile } from "@/actions/profile.actions";
 import HeaderClient from "./HeaderClient";
 
 type HeaderProps = {
@@ -7,8 +8,6 @@ type HeaderProps = {
   logoHeight?: number;
   logoTextSize?: string;
   linkIconsSize?: number;
-  userNameFirstLetterSize?: number;
-  userNameFirstLetter?: string;
   headerLgScreenMx?: string;
   headerValues?: string;
 };
@@ -18,13 +17,17 @@ export default async function Header({
   logoHeight,
   logoTextSize,
   linkIconsSize,
-  userNameFirstLetterSize,
-  userNameFirstLetter,
   headerLgScreenMx,
   headerValues,
 }: HeaderProps) {
   const isLoggedIn = await getIsLoggedIn();
-  // const refreshToken = await getRefreshToken();
+
+  // Fetch user profile if logged in to get the actual username
+  let userName: string | null = null;
+  if (isLoggedIn) {
+    const profile = await getProfile();
+    userName = `${profile?.first_name} ${profile?.last_name}` || null;
+  }
 
   return (
     <HeaderClient
@@ -33,10 +36,9 @@ export default async function Header({
       logoHeight={logoHeight}
       logoTextSize={logoTextSize}
       linkIconsSize={linkIconsSize}
-      userNameFirstLetterSize={userNameFirstLetterSize}
-      userNameFirstLetter={userNameFirstLetter}
       headerLgScreenMx={headerLgScreenMx}
       headerValues={headerValues}
+      userName={userName}
     />
   );
 }

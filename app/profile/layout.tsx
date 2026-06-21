@@ -14,8 +14,6 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
         logoHeight={4}
         logoTextSize="xl"
         linkIconsSize={4}
-        userNameFirstLetterSize={8}
-        userNameFirstLetter="J"
         headerLgScreenMx="xl:mx-[80.5px] xl:px-0"
         headerValues=" w-full  py-2 border-b border-gray-100 text-gray-900"
       />

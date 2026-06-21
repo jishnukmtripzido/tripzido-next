@@ -3,6 +3,8 @@
 export type Profile = {
   id: number;
   name: string;
+  first_name: string | null;
+  last_name: string | null;
   email: string | null;
   mobile_number: string;
   mobile_verified: boolean;
