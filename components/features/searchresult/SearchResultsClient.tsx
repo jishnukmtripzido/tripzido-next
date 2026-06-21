@@ -110,12 +110,12 @@ export default function SearchResultsClient({
 
       <OfferBanner />
 
-      <div className="min-h-screen ">
+      <div className="min-h-screen md:bg-gray-50">
         {/* xl:mx-[80.5px]  */}
         {/* <div className="mx-auto px-4 pt-5 pb-6   xl:px-6  flex gap-6 items-start"> */}
-        <div className="mx-auto    flex gap-6 items-start">
+        <div className="mx-auto    flex gap-6 items-start ">
           {/* Desktop filter sidebar */}
-          <aside className="hidden lg:block xl:w-80 px-6 py-2 shrink-0 sticky top-[130px] self-start md:border-r border-gray-100 md:shadow-sm">
+          <aside className="hidden lg:block xl:w-80  shrink-0 sticky top-[130px] self-start md:border-r border-gray-100 md:shadow-sm">
             <FilterSidebar {...filterSidebarProps} />
           </aside>
 

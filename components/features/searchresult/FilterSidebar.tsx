@@ -25,7 +25,7 @@ function FilterSection({
     <div className="border-b border-gray-100 last:border-0">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center justify-between w-full px-5 xl:px-0 py-4 text-left"
+        className="flex items-center justify-between w-full px-5 lg:px-6  py-4 text-left"
       >
         <span className="font-medium text-base text-black">{title}</span>
         <svg
@@ -43,7 +43,7 @@ function FilterSection({
         </svg>
       </button>
       {open && (
-        <div className="px-5 xl:px-0 pb-5 border-t border-gray-100 pt-3">
+        <div className="px-5 lg:px-6  pb-5 border-t border-gray-100 pt-3">
           {children}
         </div>
       )}
@@ -147,7 +147,7 @@ export default function FilterSidebar({
     <div className="bg-white rounded-md ">
       {/* Header */}
       <div className="hidden lg:block">
-        <div className=" flex items-center justify-between px-5 xl:px-0 py-4 border-b border-gray-100">
+        <div className=" flex items-center justify-between px-5 py-4 lg:px-6 lg:pt-6 border-b border-gray-100">
           <span className="font-semibold text-[20px] text-black">Filter</span>
           <button
             onClick={onClearAll}

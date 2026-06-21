@@ -936,8 +936,11 @@ export default function BikeCard({
             className={`relative w-full h-full transition-all duration-700 [transform-style:preserve-3d] ${isFlipped ? "[transform:rotateY(180deg)]" : ""}`}
           >
             {/* Front */}
-            <div
+            {/* <div
               className={`absolute inset-0 w-full h-full bg-white shadow-[0px_1px_2px_0px_rgba(60,64,67,0.3),0px_2px_6px_2px_rgba(60,64,67,0.15)]  rounded-md [backface-visibility:hidden] flex flex-col pt-4 ${isFlipped ? "pointer-events-none" : "pointer-events-auto"}`}
+            > */}
+            <div
+              className={`absolute inset-0 w-full h-full bg-white border border-gray-200 shadow-sm  rounded-md [backface-visibility:hidden] flex flex-col pt-4 ${isFlipped ? "pointer-events-none" : "pointer-events-auto"}`}
             >
               <h3 className="font-medium text-black text-[20px] leading-none text-center px-4 tracking-tight">
                 {name}
@@ -1008,7 +1011,7 @@ export default function BikeCard({
 
             {/* Back */}
             <div
-              className={`absolute inset-0 w-full h-full bg-white shadow-[0_6px_12px_-2px_rgba(50,50,93,0.25),0_3px_7px_-3px_rgba(0,0,0,0.3)] border border-gray-300/80 rounded-md [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col overflow-hidden pt-4 ${isFlipped ? "pointer-events-auto" : "pointer-events-none"}`}
+              className={`absolute inset-0 w-full h-full bg-white  border border-gray-300/80 shadow-sm rounded-md [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col overflow-hidden pt-4 ${isFlipped ? "pointer-events-auto" : "pointer-events-none"}`}
             >
               <SpecsBack
                 name={name}
