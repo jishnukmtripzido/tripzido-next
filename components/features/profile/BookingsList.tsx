@@ -59,7 +59,7 @@ export default function BookingsList() {
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden">
         {/* Internal Tabs */}
         <div className="flex border-b border-gray-100 px-6 pt-2">
           {tabs.map((tab) => (
