@@ -112,15 +112,16 @@ export default function SearchResultsClient({
 
       <div className="min-h-screen ">
         {/* xl:mx-[80.5px]  */}
-        <div className="mx-auto px-4 pt-5 pb-6   xl:px-6  flex gap-6 items-start">
+        {/* <div className="mx-auto px-4 pt-5 pb-6   xl:px-6  flex gap-6 items-start"> */}
+        <div className="mx-auto    flex gap-6 items-start">
           {/* Desktop filter sidebar */}
-          <aside className="hidden lg:block xl:w-80 shrink-0 sticky top-[130px] self-start">
+          <aside className="hidden lg:block xl:w-80 px-6 py-2 shrink-0 sticky top-[130px] self-start md:border-r border-gray-100 md:shadow-sm">
             <FilterSidebar {...filterSidebarProps} />
           </aside>
 
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 ">
             {/* Desktop: Tabs + Sort */}
-            <div className="hidden md:flex items-end justify-between flex-wrap gap-3 mb-4">
+            <div className="hidden md:flex pt-5 pr-5 items-end justify-between flex-wrap gap-3 mb-4">
               <TabBar
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
@@ -147,7 +148,7 @@ export default function SearchResultsClient({
                 onClearFilters={clearAll}
               />
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 items-start">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 items-start px-5 py-5 md:px-0 md:py-0 md:pt-1 md:pr-5">
                 {tabFilteredBikes.map((bike) => (
                   <div
                     key={bike.id}
