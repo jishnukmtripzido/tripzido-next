@@ -244,7 +244,7 @@ export default function BikeCard({
           to be hidden behind a click, so the card just shows everything
           at once. Calmer border + shadow, tighter type scale. */}
       <div className="hidden sm:block min-w-0">
-        <div className="relative w-full min-w-0 bg-white border border-gray-200/80 rounded-xl transition-shadow duration-200 hover:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col">
+        <div className="relative w-full min-w-0 bg-white border border-gray-200/80 rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col">
           {/* Image */}
           <div className="relative h-[140px] flex items-center justify-center bg-gray-50 m-3 mb-0 rounded-lg shrink-0">
             <img
@@ -291,7 +291,8 @@ export default function BikeCard({
               </div>
             )}
 
-            <h3 className="text-[16px] font-semibold text-font-main-sub leading-tight tracking-tight truncate">
+            {/* <h3 className="text-[16px] font-semibold text-font-main-sub leading-tight tracking-tight truncate"> */}
+            <h3 className="text-[18px] font-semibold text-font-main-sub leading-tight tracking-tight truncate">
               {name}
             </h3>
             <p className="text-[12px] text-gray-400 mt-0.5 truncate">
@@ -318,7 +319,7 @@ export default function BikeCard({
               ))}
             </div>
 
-            <div className="mt-3 min-w-0">
+            <div className="mt-4 min-w-0">
               <LocationDropdown
                 locations={locations}
                 selectedLocation={selectedLocation}
@@ -567,7 +568,7 @@ function InlineLocationPicker({
         type="button"
         onClick={toggle}
         aria-expanded={open}
-        className="w-full flex items-center gap-2 px-2.5 py-1.5 bg-white hover:bg-gray-50 transition-colors text-left"
+        className="w-full hover:cursor-pointer flex items-center gap-2 px-2.5 py-1.5 bg-white hover:bg-gray-50 transition-colors text-left"
       >
         <PinIcon />
         <span className="flex-1 min-w-0 text-[12.5px] text-gray-700 truncate">
@@ -592,7 +593,7 @@ function InlineLocationPicker({
                 key={loc.id}
                 type="button"
                 onClick={() => handleSelect(loc)}
-                className={`w-full flex items-center justify-between gap-2 px-2.5 py-2 text-left transition-colors ${
+                className={`w-full flex hover:cursor-pointer items-center justify-between gap-2 px-2.5 py-2 text-left transition-colors ${
                   isSelected ? "bg-gray-50" : "hover:bg-gray-50/70"
                 }`}
               >
