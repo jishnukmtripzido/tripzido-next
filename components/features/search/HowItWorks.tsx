@@ -69,12 +69,12 @@ export default function HowItWorks() {
             <div
               className={`relative z-10 flex items-center justify-center w-14 h-14 rounded-full shadow-md mb-5 shrink-0 transition-colors duration-200 ${
                 s.active
-                  ? "bg-[#ffc107]"
-                  : "bg-white border-2 border-gray-200 group-hover:border-[#ffc107] group-hover:bg-amber-50"
+                  ? "bg-brand-yellow"
+                  : "bg-white border-2 border-gray-200 group-hover:border-brand-yellow group-hover:bg-amber-50"
               }`}
             >
               <svg
-                className={`w-6 h-6 transition-colors duration-200 ${s.active ? "text-white" : "text-gray-500 group-hover:text-[#ffc107]"}`}
+                className={`w-6 h-6 transition-colors duration-200 ${s.active ? "text-white" : "text-gray-500 group-hover:text-brand-yellow"}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -84,8 +84,8 @@ export default function HowItWorks() {
               <span
                 className={`absolute -top-1 -right-1 w-5 h-5 rounded-full border-2 text-[10px] font-extrabold flex items-center justify-center leading-none transition-colors duration-200 ${
                   s.active
-                    ? "bg-white border-[#ffc107] text-gray-800"
-                    : "bg-gray-100 border-gray-300 text-gray-600 group-hover:bg-[#ffc107] group-hover:border-[#ffc107] group-hover:text-white"
+                    ? "bg-white border-brand-yellow text-gray-800"
+                    : "bg-gray-100 border-gray-300 text-gray-600 group-hover:bg-brand-yellow group-hover:border-brand-yellow group-hover:text-white"
                 }`}
               >
                 {s.step}

@@ -24,7 +24,7 @@ export default function ProfileSidebar({
         <div className="w-24 h-24 rounded-full bg-amber-100 border-4 border-white shadow-md flex items-center justify-center mb-4 overflow-hidden">
           {/* Placeholder for Avatar matching GoWheelo screenshot */}
           <svg
-            className="w-16 h-16 text-[#ffc107] mt-4"
+            className="w-16 h-16 text-brand-yellow mt-4"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -49,12 +49,12 @@ export default function ProfileSidebar({
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-3 px-8 py-4 text-sm font-medium transition-all duration-200 border-l-4 ${
                 isActive
-                  ? "bg-amber-50 text-black border-[#ffc107]"
+                  ? "bg-amber-50 text-black border-brand-yellow"
                   : "text-gray-500 border-transparent hover:bg-gray-50 hover:text-gray-900"
               }`}
             >
               <Icon
-                className={`w-5 h-5 ${isActive ? "text-[#ffc107]" : "text-gray-400"}`}
+                className={`w-5 h-5 ${isActive ? "text-brand-yellow" : "text-gray-400"}`}
               />
               {tab.label}
             </button>

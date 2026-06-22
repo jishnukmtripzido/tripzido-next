@@ -112,14 +112,14 @@ export default function CalendarMonth({
                   ${isPast ? "text-gray-300 cursor-not-allowed" : "cursor-pointer"}
                   ${
                     isSelected
-                      ? "bg-[#ffc107] text-black font-bold shadow-sm rounded-md"
+                      ? "bg-brand-yellow text-black font-bold shadow-sm rounded-md"
                       : isPast
                         ? ""
                         : inRange
-                          ? "hover:bg-[#ffc107]/40 hover:text-black rounded-md"
-                          : "hover:bg-[#ffc107]/25 hover:text-black rounded-md"
+                          ? "hover:bg-brand-yellow/40 hover:text-black rounded-md"
+                          : "hover:bg-brand-yellow/25 hover:text-black rounded-md"
                   }
-                  ${isToday && !isSelected ? "border-b-2 border-[#ffc107]" : ""}
+                  ${isToday && !isSelected ? "border-b-2 border-brand-yellow" : ""}
                   ${!isPast && !isSelected ? "text-gray-800" : ""}
                 `}
               >

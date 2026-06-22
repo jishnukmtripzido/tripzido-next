@@ -41,7 +41,7 @@ export default function MobileDrawer({
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <div className="flex items-center space-x-2">
-            <div className="bg-[#ffc107] p-1 rounded-lg">
+            <div className="bg-brand-yellow p-1 rounded-lg">
               <svg
                 className="w-5 h-5 text-white"
                 fill="none"
@@ -85,7 +85,7 @@ export default function MobileDrawer({
         {isLoggedIn ? (
           <Link href="/profile" onClick={onClose}>
             <div className="flex items-center gap-3 px-5 py-4 bg-amber-50 border-b border-amber-100 hover:bg-amber-100 transition-colors cursor-pointer">
-              <div className="w-10 h-10 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold text-base shrink-0">
+              <div className="w-10 h-10 rounded-full bg-brand-yellow flex items-center justify-center text-white font-bold text-base shrink-0">
                 {userName?.charAt(0).toUpperCase() || "J"}
               </div>
               <div className="flex-1 min-w-0">
@@ -115,7 +115,7 @@ export default function MobileDrawer({
                 onClose();
                 onLoginClick?.();
               }}
-              className="flex-1 cursor-pointer text-center text-sm font-semibold bg-[#ffc107] py-2.5 rounded-md hover:bg-[#e6ab00] transition-colors"
+              className="flex-1 cursor-pointer text-center text-sm font-semibold bg-brand-yellow py-2.5 rounded-md hover:bg-[#e6ab00] transition-colors"
             >
               Sign In
             </button>
@@ -135,7 +135,7 @@ export default function MobileDrawer({
                   onClick={onClose}
                   className="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-black transition-colors"
                 >
-                  <span className="text-[#ffc107]">{link.icon}</span>
+                  <span className="text-brand-yellow">{link.icon}</span>
                   {link.label}
                 </Link>
               </li>
@@ -151,7 +151,7 @@ export default function MobileDrawer({
               onClick={onClose}
               className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-black transition-colors"
             >
-              <span className="text-[#ffc107]">
+              <span className="text-brand-yellow">
                 <svg
                   className="w-5 h-5"
                   fill="none"

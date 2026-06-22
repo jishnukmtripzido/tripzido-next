@@ -74,8 +74,8 @@ function CheckItem({
       />
       <div
         className="w-4 h-4 rounded border border-gray-400 flex-shrink-0
-          peer-checked:bg-[#ffc107] peer-checked:border-[#ffc107]
-          peer-focus-visible:ring-2 peer-focus-visible:ring-[#ffc107] peer-focus-visible:ring-offset-1
+          peer-checked:bg-brand-yellow peer-checked:border-brand-yellow
+          peer-focus-visible:ring-2 peer-focus-visible:ring-brand-yellow peer-focus-visible:ring-offset-1
           flex items-center justify-center transition-colors"
       >
         {checked && (
@@ -171,7 +171,7 @@ export default function FilterSidebar({
           step={50}
           value={filters.priceMax}
           onChange={(e) => onPriceMaxChange(Number(e.target.value))}
-          className="w-full accent-[#ffc107]"
+          className="w-full accent-brand-yellow"
         />
         {visiblePriceRanges.length > 0 && (
           <div className="flex flex-col gap-1.5 mt-4">

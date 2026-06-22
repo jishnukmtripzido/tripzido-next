@@ -25,7 +25,7 @@ export default function ProfileContainer() {
           <div className="bg-white rounded-md p-8 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center h-[400px]">
             <div className="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mb-4">
               <svg
-                className="w-10 h-10 text-[#ffc107]"
+                className="w-10 h-10 text-brand-yellow"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

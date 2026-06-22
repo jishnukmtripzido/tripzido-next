@@ -56,7 +56,7 @@ const sliderThumbClasses = `
   [&::-webkit-slider-thumb]:w-5
   [&::-webkit-slider-thumb]:h-5
   [&::-webkit-slider-thumb]:rounded-full
-  [&::-webkit-slider-thumb]:bg-[#ffc107]
+  [&::-webkit-slider-thumb]:bg-brand-yellow
   [&::-webkit-slider-thumb]:shadow-md
   [&::-webkit-slider-thumb]:cursor-pointer
   [&::-webkit-slider-thumb]:border-2
@@ -65,7 +65,7 @@ const sliderThumbClasses = `
   [&::-moz-range-thumb]:w-5
   [&::-moz-range-thumb]:h-5
   [&::-moz-range-thumb]:rounded-full
-  [&::-moz-range-thumb]:bg-[#ffc107]
+  [&::-moz-range-thumb]:bg-brand-yellow
   [&::-moz-range-thumb]:border-2
   [&::-moz-range-thumb]:border-white
   [&::-moz-range-thumb]:cursor-pointer
@@ -215,7 +215,7 @@ export default function TimePickerModal({
                   [&::-webkit-slider-runnable-track]:h-1.5
                   ${sliderThumbClasses}`}
                 style={{
-                  background: `linear-gradient(to right, #ffc107 ${(pickupIdx / 47) * 100}%, #e5e7eb ${(pickupIdx / 47) * 100}%)`,
+                  background: `linear-gradient(to right, #fed250 ${(pickupIdx / 47) * 100}%, #e5e7eb ${(pickupIdx / 47) * 100}%)`,
                 }}
               />
             </div>
@@ -252,7 +252,7 @@ export default function TimePickerModal({
                   [&::-webkit-slider-runnable-track]:h-1.5
                   ${sliderThumbClasses}`}
                 style={{
-                  background: `linear-gradient(to right, #ffc107 ${(dropoffIdx / 47) * 100}%, #e5e7eb ${(dropoffIdx / 47) * 100}%)`,
+                  background: `linear-gradient(to right, #fed250 ${(dropoffIdx / 47) * 100}%, #e5e7eb ${(dropoffIdx / 47) * 100}%)`,
                 }}
               />
             </div>
@@ -268,7 +268,7 @@ export default function TimePickerModal({
         <div className="px-5 pb-6 pt-2">
           <button
             onClick={handleConfirm}
-            className="w-full bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl text-sm transition-colors"
+            className="w-full bg-brand-yellow hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl text-sm transition-colors"
           >
             Select times
           </button>

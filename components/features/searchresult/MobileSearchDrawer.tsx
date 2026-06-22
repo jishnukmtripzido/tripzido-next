@@ -107,7 +107,7 @@ export default function MobileSearchDrawer({
                 onClick={() => setOpenModal("city")}
                 disabled={!!citiesError}
                 className={`w-full flex items-center border rounded-md p-4 bg-white transition-colors cursor-pointer disabled:opacity-60
-                  ${errors.city_id ? "border-red-500" : "border-gray-300 hover:border-[#ffc107]"}`}
+                  ${errors.city_id ? "border-red-500" : "border-gray-300 hover:border-brand-yellow"}`}
               >
                 <LocationSvg />
                 <span className="flex-1 text-sm font-medium text-gray-900 text-left">
@@ -169,7 +169,7 @@ export default function MobileSearchDrawer({
 
             <button
               onClick={handleSearch}
-              className="w-full bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-4 rounded-xl text-base transition-colors cursor-pointer mt-1"
+              className="w-full bg-brand-yellow hover:bg-yellow-500 text-black font-semibold py-4 rounded-xl text-base transition-colors cursor-pointer mt-1"
             >
               Search
             </button>
@@ -240,7 +240,7 @@ function DateTimeField({
         type="button"
         onClick={onClick}
         className={`w-full flex items-center border rounded-md p-4 bg-white transition-colors cursor-pointer
-          ${hasError ? "border-red-500" : "border-gray-300 hover:border-[#ffc107]"}`}
+          ${hasError ? "border-red-500" : "border-gray-300 hover:border-brand-yellow"}`}
       >
         {icon === "date" ? <DateSvg /> : <TimeSvg />}
         {children}

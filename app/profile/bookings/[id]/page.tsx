@@ -53,7 +53,7 @@ function EmptyState({ message }: { message: string }) {
         <p className="text-sm text-gray-500 mt-1 max-w-sm">{message}</p>
         <Link
           href="/profile"
-          className="mt-6 px-5 py-2.5 text-sm font-semibold rounded-md bg-[#ffc107] text-black hover:bg-[#e6ac00] transition-colors"
+          className="mt-6 px-5 py-2.5 text-sm font-semibold rounded-md bg-brand-yellow text-black hover:bg-[#e6ac00] transition-colors"
         >
           Back to my bookings
         </Link>

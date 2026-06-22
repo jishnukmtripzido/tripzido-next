@@ -232,7 +232,7 @@ export default function SearchResultHeader({
             <button
               onClick={handleSearch}
               disabled={isLoading}
-              className="bg-[#ffc107] hover:bg-yellow-500 text-font-main-sub text-base font-semibold px-8 h-full transition-colors whitespace-nowrap cursor-pointer disabled:opacity-60"
+              className="bg-brand-yellow hover:bg-yellow-500 text-font-main-sub text-base font-semibold px-8 h-full transition-colors whitespace-nowrap cursor-pointer disabled:opacity-60"
             >
               {isLoading ? "Searching..." : "Search"}
             </button>

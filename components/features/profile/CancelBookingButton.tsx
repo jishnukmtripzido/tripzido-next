@@ -181,7 +181,7 @@ export default function CancelBookingButton({
                     onChange={(e) =>
                       setReasonCode(e.target.value as CancellationReasonCode)
                     }
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#ffc107]"
+                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-yellow"
                   >
                     {CANCELLATION_REASONS.map((reason) => (
                       <option key={reason.value} value={reason.value}>
@@ -200,7 +200,7 @@ export default function CancelBookingButton({
                       value={reasonText}
                       onChange={(e) => setReasonText(e.target.value)}
                       rows={3}
-                      className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#ffc107]"
+                      className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-yellow"
                     />
                   </div>
                 )}

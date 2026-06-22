@@ -60,7 +60,7 @@ export default function BikeCard({
   const isSoldOut = selectedLocation.available_count <= 0;
 
   function tagClass(variant: string) {
-    if (variant === "highlight") return "bg-[#ffc107] text-[#6b3d00]";
+    if (variant === "highlight") return "bg-brand-yellow text-[#6b3d00]";
     if (variant === "info") return "bg-blue-600 text-white";
     return "bg-gray-100 text-gray-600 border border-gray-200";
   }
@@ -122,7 +122,7 @@ export default function BikeCard({
     return (
       <Link href={buildDetailsUrl()}>
         <button
-          className={`bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold rounded-lg transition-colors cursor-pointer ${
+          className={`bg-brand-yellow hover:bg-yellow-500 text-black font-semibold rounded-lg transition-colors cursor-pointer ${
             size === "md"
               ? "text-[13px] px-5 py-2 rounded-md"
               : "text-[14px] px-6 py-2.5"
@@ -709,7 +709,7 @@ function SpecsBack({
             <h3 className="text-[20px] font-semibold text-black">{name}</h3>
             <button
               onClick={onBack}
-              className="text-[11px] text-gray-500 border border-gray-200 rounded-full px-3 py-0.5 hover:border-[#ffc107] hover:text-black transition-colors"
+              className="text-[11px] text-gray-500 border border-gray-200 rounded-full px-3 py-0.5 hover:border-brand-yellow hover:text-black transition-colors"
             >
               &larr; Back
             </button>
@@ -745,7 +745,7 @@ function SpecsBack({
             <div className="flex-1 border-t border-gray-200" />
             <button
               onClick={onBack}
-              className="px-4 py-1 bg-white border border-gray-200 rounded-full text-[11px] font-semibold text-gray-600 mx-3 hover:border-[#ffc107] hover:text-black transition-colors cursor-pointer shadow-sm"
+              className="px-4 py-1 bg-white border border-gray-200 rounded-full text-[11px] font-semibold text-gray-600 mx-3 hover:border-brand-yellow hover:text-black transition-colors cursor-pointer shadow-sm"
             >
               &larr; Back
             </button>
@@ -770,7 +770,7 @@ function SpecsBack({
         ].map(({ label, value, highlight }) => (
           <div
             key={label}
-            className={`flex flex-col items-center justify-center py-4 border-t border-gray-100 ${highlight ? "bg-[#ffc107] border-r border-[#e6ad00]" : ""}`}
+            className={`flex flex-col items-center justify-center py-4 border-t border-gray-100 ${highlight ? "bg-brand-yellow border-r border-[#e6ad00]" : ""}`}
           >
             <span
               className={`text-[11px] mb-0.5 ${highlight ? "font-medium text-yellow-900/70" : "text-gray-500"}`}

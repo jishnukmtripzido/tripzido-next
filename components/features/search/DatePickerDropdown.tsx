@@ -164,7 +164,7 @@
 //               }}
 //               className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
 //                 selecting === type
-//                   ? "border-[#ffc107] bg-[#fff8e1] text-[#b8860b]"
+//                   ? "border-brand-yellow bg-[#fff8e1] text-[#b8860b]"
 //                   : "border-gray-200 text-gray-500 bg-gray-50 hover:border-gray-300"
 //               }`}
 //             >
@@ -408,7 +408,7 @@ export default function DatePickerDropdown({
               }}
               className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
                 selecting === type
-                  ? "border-[#ffc107] bg-[#fff8e1] text-[#b8860b]"
+                  ? "border-brand-yellow bg-[#fff8e1] text-[#b8860b]"
                   : "border-gray-200 text-gray-500 bg-gray-50 hover:border-gray-300"
               }`}
             >

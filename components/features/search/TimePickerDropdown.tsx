@@ -94,7 +94,7 @@ export default function TimePickerDropdown({
               className={`w-full flex items-center justify-between px-3 py-2 text-sm transition-colors hover:cursor-pointer
                 ${
                   isSelected
-                    ? "bg-[#ffc107] text-black font-normal"
+                    ? "bg-brand-yellow text-black font-normal"
                     : "text-gray-700 hover:bg-gray-50"
                 }`}
             >

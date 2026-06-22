@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 
 import { Bike } from "@/types/home.types";
 
@@ -12,18 +11,17 @@ export default function BikeCard({ bike }: { bike: Bike }) {
           alt={bike.name}
           className="w-full h-full object-contain transition-transform duration-300 p-4"
           onError={(e) => {
-            (
-              e.target as HTMLImageElement
-            ).src = `https://placehold.co/400x200/f3f4f6/9ca3af?text=${encodeURIComponent(
-              bike.name
-            )}`;
+            (e.target as HTMLImageElement).src =
+              `https://placehold.co/400x200/f3f4f6/9ca3af?text=${encodeURIComponent(
+                bike.name,
+              )}`;
           }}
         />
         {bike.badge && (
           <span
             className={`absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide ${
               bike.badge.variant === "yellow"
-                ? "bg-[#ffc107] text-black"
+                ? "bg-brand-yellow text-black"
                 : "bg-green-500 text-white"
             }`}
           >
@@ -42,7 +40,7 @@ export default function BikeCard({ bike }: { bike: Bike }) {
           {bike.rating && (
             <div className="flex items-center gap-1 shrink-0 ml-2">
               <svg
-                className="w-4 h-4 text-[#ffc107]"
+                className="w-4 h-4 text-brand-yellow"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -77,7 +75,7 @@ export default function BikeCard({ bike }: { bike: Bike }) {
               <span className="text-xs text-gray-700 font-medium">/ day</span>
             </div>
           </div>
-          <button className="bg-[#ffc107] hover:bg-yellow-500 text-black text-sm font-medium px-5 py-2 rounded-md transition-colors">
+          <button className="bg-brand-yellow hover:bg-yellow-500 text-black text-sm font-medium px-5 py-2 rounded-md transition-colors">
             Book now
           </button>
         </div>

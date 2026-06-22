@@ -176,7 +176,7 @@ export default function DatePickerModal({
                 }}
                 className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
                   selecting === type
-                    ? "border-[#ffc107] bg-[#fff8e1] text-[#b8860b]"
+                    ? "border-brand-yellow bg-[#fff8e1] text-[#b8860b]"
                     : "border-gray-200 text-gray-500 bg-gray-50 hover:border-gray-300"
                 }`}
               >
@@ -251,7 +251,7 @@ export default function DatePickerModal({
               onClose();
             }}
             disabled={!canConfirm}
-            className="bg-[#ffc107] hover:bg-yellow-500 disabled:opacity-40 disabled:cursor-not-allowed text-black font-semibold px-6 py-2 rounded-xl text-sm transition-colors shrink-0"
+            className="bg-brand-yellow hover:bg-yellow-500 disabled:opacity-40 disabled:cursor-not-allowed text-black font-semibold px-6 py-2 rounded-xl text-sm transition-colors shrink-0"
           >
             Select Dates
           </button>

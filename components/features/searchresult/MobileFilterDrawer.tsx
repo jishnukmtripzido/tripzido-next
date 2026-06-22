@@ -1,5 +1,3 @@
-
-
 // "use client";
 
 // import { useEffect } from "react";
@@ -114,7 +112,7 @@
 //                   <span>{opt.label}</span>
 //                   {sortValue === opt.value && (
 //                     <svg
-//                       className="w-4 h-4 text-[#ffc107]"
+//                       className="w-4 h-4 text-brand-yellow"
 //                       fill="none"
 //                       stroke="currentColor"
 //                       viewBox="0 0 24 24"
@@ -138,7 +136,7 @@
 //           <div className="shrink-0 px-5 py-4 border-t border-gray-100">
 //             <button
 //               onClick={onClose}
-//               className="w-full bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl text-sm transition-colors cursor-pointer"
+//               className="w-full bg-brand-yellow hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl text-sm transition-colors cursor-pointer"
 //             >
 //               Show Results
 //             </button>
@@ -215,30 +213,30 @@ export default function MobileFilterDrawer({
           </h2>
 
           <div className="flex items-center gap-4">
-          <button
-          onClick={onClearAll}
-          className="text-[#006CE4] text-xs text-semibold hover:underline cursor-pointer"
-        >
-          Clear all filters
-        </button>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors cursor-pointer"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <button
+              onClick={onClearAll}
+              className="text-[#006CE4] text-xs text-semibold hover:underline cursor-pointer"
             >
-              <path
-                d="M6 18L18 6M6 6l12 12"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-              />
-            </svg>
-          </button>
+              Clear all filters
+            </button>
+            <button
+              onClick={onClose}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors cursor-pointer"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M6 18L18 6M6 6l12 12"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                />
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -270,7 +268,7 @@ export default function MobileFilterDrawer({
                   <span>{opt.label}</span>
                   {sortValue === opt.value && (
                     <svg
-                      className="w-4 h-4 text-[#ffc107]"
+                      className="w-4 h-4 text-brand-yellow"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -294,7 +292,7 @@ export default function MobileFilterDrawer({
           <div className="shrink-0 px-5 py-4 border-t border-gray-100">
             <button
               onClick={onClose}
-              className="w-full bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl text-sm transition-colors cursor-pointer"
+              className="w-full bg-brand-yellow hover:bg-yellow-500 text-black font-semibold py-3 rounded-xl text-sm transition-colors cursor-pointer"
             >
               Show Results
             </button>
@@ -302,6 +300,6 @@ export default function MobileFilterDrawer({
         )}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

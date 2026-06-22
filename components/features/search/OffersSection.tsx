@@ -140,7 +140,7 @@ export default function OffersSection() {
                   min-w-[260px] md:min-w-0
                   ${
                     offer.featured
-                      ? "bg-[#ffc107]"
+                      ? "bg-brand-yellow"
                       : "bg-white border border-gray-300 hover:shadow-md transition-shadow"
                   }`}
               >

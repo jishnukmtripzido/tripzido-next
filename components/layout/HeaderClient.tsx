@@ -206,7 +206,7 @@ export default function HeaderClient({
           <div className="flex items-center space-x-12">
             <Link href="/">
               <div className="flex items-center space-x-2">
-                <div className="bg-[#ffc107] p-1.5 rounded-lg">
+                <div className="bg-brand-yellow p-1.5 rounded-lg">
                   <svg
                     className={`w-${logoWidth || 5} h-${logoHeight || 5} text-white`}
                     fill="none"
@@ -282,7 +282,7 @@ export default function HeaderClient({
                   aria-expanded={dropdownOpen}
                   aria-haspopup="true"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold ring-2 ring-transparent group-hover:ring-amber-200 transition-all">
+                  <div className="w-8 h-8 rounded-full bg-brand-yellow flex items-center justify-center text-white font-bold ring-2 ring-transparent group-hover:ring-amber-200 transition-all">
                     {userName ? userName.charAt(0).toUpperCase() : "U"}
                   </div>
                   <span className="hidden sm:block text-sm font-bold text-gray-700 group-hover:text-black">
@@ -425,7 +425,7 @@ export default function HeaderClient({
                 </button>
                 <button
                   onClick={() => openModal("login")}
-                  className="px-4 py-2 cursor-pointer text-sm font-semibold bg-[#ffc107] rounded-lg hover:bg-[#e6ac00] transition-colors"
+                  className="px-4 py-2 cursor-pointer text-sm font-semibold bg-brand-yellow rounded-lg hover:bg-[#e6ac00] transition-colors"
                 >
                   Sign in
                 </button>

@@ -268,7 +268,7 @@ export default function LoginModal({
                     ? "Create account"
                     : "Welcome to"}{" "}
                 {!otpSent && !isRegister && (
-                  <span className="text-[#ffc107]">Tripzido</span>
+                  <span className="text-brand-yellow">Tripzido</span>
                 )}
               </h2>
               <p className="text-sm text-gray-500 mb-6">
@@ -344,7 +344,7 @@ export default function LoginModal({
 function BrandLogo() {
   return (
     <div className="flex items-center space-x-2">
-      <div className="bg-[#ffc107] p-1.5 rounded-lg">
+      <div className="bg-brand-yellow p-1.5 rounded-lg">
         <svg
           className="w-5 h-5 text-white"
           fill="none"
@@ -396,7 +396,7 @@ function CityRing({ cities }: { cities: typeof LOGIN_MODAL_CITIES }) {
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-16 h-16 rounded-full bg-[#ffc107] flex items-center justify-center shadow-lg">
+        <div className="w-16 h-16 rounded-full bg-brand-yellow flex items-center justify-center shadow-lg">
           <svg
             className="w-8 h-8 text-white"
             fill="none"
@@ -418,7 +418,7 @@ function CityRing({ cities }: { cities: typeof LOGIN_MODAL_CITIES }) {
           className="absolute -translate-x-1/2 -translate-y-1/2"
           style={{ top: city.top, left: city.left }}
         >
-          <div className="w-8 h-8 rounded-full bg-white border-2 border-[#ffc107] flex items-center justify-center shadow-sm">
+          <div className="w-8 h-8 rounded-full bg-white border-2 border-brand-yellow flex items-center justify-center shadow-sm">
             <span className="text-[7px] font-bold text-gray-700 text-center leading-tight px-0.5">
               {city.name}
             </span>
@@ -462,7 +462,7 @@ function PhoneStep({
   const canSend = phone.length === 10 && !!turnstileToken && !loading;
   return (
     <>
-      <div className="flex items-center border-2 border-[#ffc107] rounded-xl overflow-hidden mb-4 focus-within:ring-2 focus-within:ring-[#ffc10740]">
+      <div className="flex items-center border-2 border-brand-yellow rounded-xl overflow-hidden mb-4 focus-within:ring-2 focus-within:ring-[#ffc10740]">
         <IndiaPrefixBadge />
         <input
           type="tel"
@@ -488,13 +488,16 @@ function PhoneStep({
 
       <p className="text-xs text-black text-center mt-4">
         By continuing, you agree to our{" "}
-        <a href="/terms" className="text-[#ffc107] hover:underline font-medium">
+        <a
+          href="/terms"
+          className="text-brand-yellow hover:underline font-medium"
+        >
           Terms of Service
         </a>{" "}
         &amp;{" "}
         <a
           href="/privacy"
-          className="text-[#ffc107] hover:underline font-medium"
+          className="text-brand-yellow hover:underline font-medium"
         >
           Privacy Policy
         </a>
@@ -505,7 +508,7 @@ function PhoneStep({
           Don&apos;t have an account?{" "}
           <button
             onClick={onSwitchToRegister}
-            className="font-semibold text-[#ffc107] hover:underline"
+            className="font-semibold text-brand-yellow hover:underline"
           >
             Register now
           </button>
@@ -615,7 +618,7 @@ function RegisterStep({
           Mobile number <span className="text-red-500">*</span>
         </label>
         <div
-          className={`flex items-center border-2 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-[#ffc10740] ${fieldErrors.phone ? "border-red-400" : "border-[#ffc107]"}`}
+          className={`flex items-center border-2 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-[#ffc10740] ${fieldErrors.phone ? "border-red-400" : "border-brand-yellow"}`}
         >
           <IndiaPrefixBadge />
           <input
@@ -645,13 +648,16 @@ function RegisterStep({
 
       <p className="text-xs text-black text-center mt-4">
         By continuing, you agree to our{" "}
-        <a href="/terms" className="text-[#ffc107] hover:underline font-medium">
+        <a
+          href="/terms"
+          className="text-brand-yellow hover:underline font-medium"
+        >
           Terms of Service
         </a>{" "}
         &amp;{" "}
         <a
           href="/privacy"
-          className="text-[#ffc107] hover:underline font-medium"
+          className="text-brand-yellow hover:underline font-medium"
         >
           Privacy Policy
         </a>
@@ -662,7 +668,7 @@ function RegisterStep({
           Already have an account?{" "}
           <button
             onClick={onSwitchToLogin}
-            className="font-semibold text-[#ffc107] hover:underline"
+            className="font-semibold text-brand-yellow hover:underline"
           >
             Sign in
           </button>
@@ -721,9 +727,9 @@ function OtpStep({
               otpError
                 ? "border-red-400 bg-red-50"
                 : digit
-                  ? "border-[#ffc107] bg-[#fffbea]"
+                  ? "border-brand-yellow bg-[#fffbea]"
                   : "border-gray-200 bg-gray-50"
-            } focus:border-[#ffc107] focus:ring-2 focus:ring-[#ffc10730]`}
+            } focus:border-brand-yellow focus:ring-2 focus:ring-[#ffc10730]`}
           />
         ))}
       </div>
@@ -754,7 +760,7 @@ function OtpStep({
         disabled={!canVerify}
         className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${
           canVerify
-            ? "bg-[#ffc107] text-white hover:bg-[#e6ac00] shadow-md"
+            ? "bg-brand-yellow text-white hover:bg-[#e6ac00] shadow-md"
             : "bg-gray-200 text-gray-400 cursor-not-allowed"
         }`}
       >
@@ -779,7 +785,7 @@ function OtpStep({
         Didn&apos;t receive an OTP?{" "}
         <button
           onClick={onResend}
-          className="text-[#ffc107] font-semibold hover:underline"
+          className="text-brand-yellow font-semibold hover:underline"
         >
           Resend
         </button>
@@ -820,7 +826,7 @@ function SendOtpButton({
       disabled={!canSend}
       className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${
         canSend
-          ? "bg-[#ffc107] text-white hover:bg-[#e6ac00] shadow-md"
+          ? "bg-brand-yellow text-white hover:bg-[#e6ac00] shadow-md"
           : "bg-gray-200 text-gray-400 cursor-not-allowed"
       }`}
     >
@@ -845,6 +851,6 @@ function inputCls(hasError: boolean) {
   return `w-full h-11 border-2 rounded-xl px-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-all ${
     hasError
       ? "border-red-400 focus:ring-2 focus:ring-red-200"
-      : "border-gray-200 focus:border-[#ffc107] focus:ring-2 focus:ring-[#ffc10740]"
+      : "border-gray-200 focus:border-brand-yellow focus:ring-2 focus:ring-[#ffc10740]"
   }`;
 }

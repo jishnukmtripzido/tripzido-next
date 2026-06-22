@@ -28,7 +28,7 @@ const CityCard = memo(function CityCard({
       onMouseLeave={onMouseLeave}
       className={`
         relative rounded-md overflow-hidden aspect-[4/3] text-left
-        focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffc107]
+        focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-yellow
         transition-transform duration-150 cursor-pointer
         ${isHighlighted ? "scale-[1.03]" : "scale-100"}
       `}
@@ -55,7 +55,7 @@ const CityCard = memo(function CityCard({
 
       {/* Selected ring */}
       {isSelected && (
-        <div className="absolute inset-0 ring-3 ring-[#ffc107] ring-inset rounded-md" />
+        <div className="absolute inset-0 ring-3 ring-brand-yellow ring-inset rounded-md" />
       )}
 
       {/* City name + check */}
@@ -69,7 +69,7 @@ const CityCard = memo(function CityCard({
           </span>
         </div>
         {isSelected && (
-          <span className="w-5 h-5 rounded-full bg-[#ffc107] flex items-center justify-center shrink-0 ml-1">
+          <span className="w-5 h-5 rounded-full bg-brand-yellow flex items-center justify-center shrink-0 ml-1">
             <svg
               className="w-3 h-3 text-black"
               fill="none"
@@ -172,7 +172,7 @@ export default function CityPickerModal({
           {/* ── Header ── */}
           <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-gray-100 shrink-0">
             <div className="flex items-center gap-2.5">
-              <div className="bg-[#ffc107] p-1.5 rounded-lg">
+              <div className="bg-brand-yellow p-1.5 rounded-lg">
                 <svg
                   className="w-4 h-4 text-white"
                   fill="none"
@@ -214,7 +214,7 @@ export default function CityPickerModal({
 
           {/* ── Search bar ── */}
           <div className="px-5 py-3 shrink-0">
-            <div className="flex items-center gap-2.5 border border-gray-300 rounded-md px-3.5 py-2.5 focus-within:border-[#ffc107] focus-within:ring-2 focus-within:ring-[#ffc107]/20 transition-all bg-gray-50">
+            <div className="flex items-center gap-2.5 border border-gray-300 rounded-md px-3.5 py-2.5 focus-within:border-brand-yellow focus-within:ring-2 focus-within:ring-brand-yellow/20 transition-all bg-gray-50">
               <svg
                 className="w-4 h-4 text-gray-400 shrink-0"
                 fill="none"
@@ -345,7 +345,7 @@ export default function CityPickerModal({
             {selectedCity ? (
               <button
                 onClick={onClose}
-                className="w-full cursor-pointer bg-[#ffc107] hover:bg-yellow-500 active:bg-yellow-600 text-black font-semibold py-3 rounded-md transition-colors text-sm"
+                className="w-full cursor-pointer bg-brand-yellow hover:bg-yellow-500 active:bg-yellow-600 text-black font-semibold py-3 rounded-md transition-colors text-sm"
               >
                 Continue with {selectedCity.name}
               </button>

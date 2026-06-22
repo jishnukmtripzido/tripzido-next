@@ -161,7 +161,7 @@ function TabBar({
       <TabButton
         active={activeTab === "all"}
         onClick={() => onTabChange("all")}
-        activeColor="border-[#ffc107] text-black"
+        activeColor="border-brand-yellow text-black"
         badgeActive="bg-blue-50 text-blue-600"
         label="All models"
         count={allCount}
@@ -237,7 +237,7 @@ function SortDropdown({
         <select
           value={sortValue === "none" ? "" : sortValue}
           onChange={(e) => onChange(e.target.value || "none")}
-          className="appearance-none border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#ffc107] cursor-pointer"
+          className="appearance-none border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-brand-yellow cursor-pointer"
         >
           <option value="" disabled>
             Select

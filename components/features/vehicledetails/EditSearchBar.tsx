@@ -391,7 +391,7 @@ export default function EditSearchBar({
                   <button
                     type="submit"
                     disabled={isResolving}
-                    className="w-full md:w-auto bg-[#ffc107] hover:bg-yellow-500 text-black font-semibold py-3 px-5 rounded-md transition-colors whitespace-nowrap cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full md:w-auto bg-brand-yellow hover:bg-yellow-500 text-black font-semibold py-3 px-5 rounded-md transition-colors whitespace-nowrap cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {isResolving ? "Searching..." : "Search"}
                   </button>

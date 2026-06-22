@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 // 2. Put your browser theme color here
 export const viewport: Viewport = {
-  themeColor: "#ffc107",
+  themeColor: "#fed250",
 };
 
 export default function RootLayout({

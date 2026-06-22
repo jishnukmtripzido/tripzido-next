@@ -69,7 +69,7 @@ export default function BookingsList() {
             >
               {tab.label}
               {currentTab === tab.key && (
-                <span className="absolute bottom-0 left-0 w-full h-[3px] bg-[#ffc107] rounded-t-md" />
+                <span className="absolute bottom-0 left-0 w-full h-[3px] bg-brand-yellow rounded-t-md" />
               )}
             </button>
           ))}
@@ -130,7 +130,7 @@ export default function BookingsList() {
                     </div>
                     <Link
                       href={`/profile/bookings/${booking.id}`}
-                      className="text-xs font-bold text-[#ffc107] hover:text-[#e6ac00] uppercase tracking-wider hidden sm:block"
+                      className="text-xs font-bold text-brand-yellow hover:text-[#e6ac00] uppercase tracking-wider hidden sm:block"
                     >
                       View Details
                     </Link>
@@ -190,7 +190,7 @@ export default function BookingsList() {
                     {/* View Details Mobile */}
                     <Link
                       href={`/profile/bookings/${booking.id}`}
-                      className="text-xs font-bold text-[#ffc107] hover:text-[#e6ac00] uppercase tracking-wider sm:hidden mt-2 w-full text-center"
+                      className="text-xs font-bold text-brand-yellow hover:text-[#e6ac00] uppercase tracking-wider sm:hidden mt-2 w-full text-center"
                     >
                       View Details
                     </Link>

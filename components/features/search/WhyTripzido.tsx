@@ -189,7 +189,7 @@ export default function WhyTripzido() {
                 />
                 <path
                   d="M24 56h22"
-                  stroke="#FFC107"
+                  stroke="#FED250"
                   strokeWidth="2"
                   strokeLinecap="round"
                 />

@@ -44,7 +44,7 @@ export default function EditFieldModal({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           autoFocus
-          className="w-full border border-gray-200 rounded-md px-3 py-2 text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#ffc107]"
+          className="w-full border border-gray-200 rounded-md px-3 py-2 text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-yellow"
         />
 
         {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
@@ -60,7 +60,7 @@ export default function EditFieldModal({
           <button
             onClick={handleSave}
             disabled={isSaving || value.trim().length === 0}
-            className="px-4 py-2 text-sm font-semibold rounded-md bg-[#ffc107] text-black hover:bg-[#e6ac00] transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-sm font-semibold rounded-md bg-brand-yellow text-black hover:bg-[#e6ac00] transition-colors disabled:opacity-50"
           >
             {isSaving ? "Saving..." : "Save"}
           </button>

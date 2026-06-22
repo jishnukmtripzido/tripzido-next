@@ -244,7 +244,7 @@ function DetailRow({
       {editable && (
         <button
           onClick={onEdit}
-          className="text-sm font-semibold text-[#ffc107] hover:text-[#e6ac00] transition-colors underline-offset-4 group-hover:underline"
+          className="text-sm font-semibold text-brand-yellow hover:text-[#e6ac00] transition-colors underline-offset-4 group-hover:underline"
         >
           Edit
         </button>

@@ -12,7 +12,7 @@ export default function OfferBanner() {
           </span>{" "}
           at checkout.
         </p>
-        {/* <span className="shrink-0 text-[10px] md:text-[12.8px] font-thin bg-black text-[#ffc107] px-3 py-1 rounded-full whitespace-nowrap">
+        {/* <span className="shrink-0 text-[10px] md:text-[12.8px] font-thin bg-black text-brand-yellow px-3 py-1 rounded-full whitespace-nowrap">
           ⏰ Ends soon
         </span> */}
       </div>
