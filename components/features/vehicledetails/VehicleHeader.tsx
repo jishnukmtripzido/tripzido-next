@@ -39,7 +39,7 @@ export default function VehicleHeader({
       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-3/4 bg-gray-200" />
       <div className="flex flex-col md:flex-row gap-8">
         {/* Left Side: Images */}
-        <div className="w-full md:w-5/12">
+        <div className="w-full md:w-6/12">
           <ImageGallery images={allImages} />
         </div>
 

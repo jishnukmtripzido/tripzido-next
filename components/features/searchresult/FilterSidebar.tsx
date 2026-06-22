@@ -148,7 +148,7 @@ export default function FilterSidebar({
       {/* Header */}
       <div className="hidden lg:block">
         <div className=" flex items-center justify-between px-5 py-4 lg:px-6 lg:pt-6 border-b border-gray-100">
-          <span className="font-semibold text-[20px] text-black">Filter</span>
+          <span className="font-semibold text-[19px] text-black">Filter</span>
           <button
             onClick={onClearAll}
             className="text-[#006CE4] text-sm font-semibold hover:underline cursor-pointer"

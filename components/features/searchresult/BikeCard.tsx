@@ -246,11 +246,11 @@ export default function BikeCard({
       <div className="hidden sm:block min-w-0">
         <div className="relative w-full min-w-0 bg-white border border-gray-200/80 rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col">
           {/* Image */}
-          <div className="relative h-[140px] flex items-center justify-center bg-gray-50 m-3 mb-0 rounded-lg shrink-0">
+          <div className="relative h-[150px] flex items-center justify-center bg-gray-50 m-3 mb-0 rounded-lg shrink-0">
             <img
               src={primary_image}
               alt={name}
-              className="h-[82%] w-[82%] object-contain"
+              className="h-[100%] w-[82%] object-contain"
               onError={(e) => {
                 (e.target as HTMLImageElement).src =
                   `https://placehold.co/300x160/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
@@ -291,13 +291,13 @@ export default function BikeCard({
               </div>
             )}
 
-            <h3 className="text-[16px] font-semibold text-font-main-sub leading-tight tracking-tight truncate">
+            <h3 className="text-base font-semibold text-font-main-sub leading-tight tracking-tight truncate">
               {/* <h3 className="text-[18px] font-semibold text-font-main-sub leading-tight tracking-tight truncate"> */}
               {name}
             </h3>
-            <p className="text-[12px] text-gray-400 mt-0.5 truncate">
+            {/* <p className="text-[12px] text-gray-400 mt-0.5 truncate">
               {make_year} · {transmission}
-            </p>
+            </p> */}
 
             <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 mt-3">
               {[
@@ -307,11 +307,11 @@ export default function BikeCard({
                   icon: "map",
                   label: kmLimit ? kmLimit : "Unlimited Km",
                 },
-                { icon: "transmission", label: `${mileage} mileage` },
+                { icon: "transmission", label: `${mileage}` },
               ].map(({ icon, label }) => (
                 <div
                   key={label}
-                  className="flex items-center gap-1.5 text-[12.5px] text-gray-600 min-w-0"
+                  className="flex items-center gap-1.5 text-sm text-font-main-sub min-w-0"
                 >
                   <SpecIcon type={icon} />
                   <span className="truncate">{label}</span>
@@ -575,7 +575,7 @@ function InlineLocationPicker({
           {selectedLocation.location_name}
         </span>
         {locations.length > 1 && (
-          <span className="text-[10.5px] text-gray-400 shrink-0">
+          <span className="text-[10.5px] text-font-dim shrink-0">
             +{locations.length - 1} more
           </span>
         )}
