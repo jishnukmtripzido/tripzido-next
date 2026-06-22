@@ -21,6 +21,8 @@ interface DatePickerModalProps {
   onClose: () => void;
   onSelect: (range: DateRange) => void;
   initialRange: DateRange;
+  mode?: "range" | "dropoff";
+  pickupDate?: Date;
 }
 
 export default function DatePickerModal({
@@ -28,11 +30,19 @@ export default function DatePickerModal({
   onClose,
   onSelect,
   initialRange,
+  mode = "range",
+  pickupDate,
 }: DatePickerModalProps) {
+  const isDropoff = mode === "dropoff";
+
   const [mounted, setMounted] = useState(false);
   const [range, setRange] = useState<DateRange>(initialRange);
-  const [selecting, setSelecting] = useState<"start" | "end">("start");
-  const [pendingStart, setPendingStart] = useState<Date | null>(null);
+  const [selecting, setSelecting] = useState<"start" | "end">(
+    isDropoff ? "end" : "start",
+  );
+  const [pendingStart, setPendingStart] = useState<Date | null>(
+    isDropoff ? (pickupDate ?? initialRange.start) : null,
+  );
   const [hoverDate, setHoverDate] = useState<Date | null>(null);
   const [hasSelection, setHasSelection] = useState(false);
   const [viewMonth, setViewMonth] = useState<Date>(
@@ -45,11 +55,20 @@ export default function DatePickerModal({
 
   useEffect(() => {
     if (isOpen) {
-      setRange(initialRange);
-      setPendingStart(null);
-      setSelecting("start");
-      setHasSelection(false);
-      setViewMonth(startOfMonth(initialRange.start));
+      if (isDropoff) {
+        const anchor = pickupDate ?? initialRange.start;
+        setRange({ start: anchor, end: anchor });
+        setPendingStart(anchor);
+        setSelecting("end");
+        setHasSelection(false);
+        setViewMonth(startOfMonth(anchor));
+      } else {
+        setRange(initialRange);
+        setPendingStart(null);
+        setSelecting("start");
+        setHasSelection(false);
+        setViewMonth(startOfMonth(initialRange.start));
+      }
     }
   }, [isOpen]);
 
@@ -65,6 +84,43 @@ export default function DatePickerModal({
   }, [handleKey]);
 
   function handleDayClick(date: Date) {
+    if (isDropoff) {
+      const originalPickup = pickupDate ?? initialRange.start;
+
+      if (
+        selecting === "end" &&
+        pendingStart !== null &&
+        pendingStart < originalPickup
+      ) {
+        // Second click in pre-pickup two-date flow — apply min/max
+        const finalStart = date <= pendingStart ? date : pendingStart;
+        const finalEnd = date <= pendingStart ? pendingStart : date;
+        const newRange = { start: finalStart, end: finalEnd };
+        setRange(newRange);
+        setPendingStart(null);
+        setSelecting("end");
+        setHasSelection(true);
+        // ✅ No onClose() — user hits "Select Dates" button
+        return;
+      }
+
+      if (date >= originalPickup) {
+        // On or after original pickup → update dropoff, stay open
+        const newRange = { start: originalPickup, end: date };
+        setRange(newRange);
+        setHasSelection(true);
+        // ✅ No onClose() — user hits "Select Dates" button
+      } else {
+        // Before original pickup → becomes new pending pickup
+        setRange({ start: date, end: date });
+        setPendingStart(date);
+        setSelecting("end");
+        setHasSelection(false);
+      }
+      return;
+    }
+
+    // ── range mode (unchanged) ──
     if (selecting === "start") {
       setPendingStart(date);
       setSelecting("end");
@@ -78,6 +134,7 @@ export default function DatePickerModal({
       setPendingStart(null);
       setSelecting("start");
       setHasSelection(true);
+      // ✅ No onClose() — user hits "Select Dates" button
     }
   }
 
@@ -98,29 +155,35 @@ export default function DatePickerModal({
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100 shrink-0">
           <h2 className="font-bold text-gray-900 text-base">
-            Choose your rental dates
+            {isDropoff
+              ? "Choose your drop-off date"
+              : "Choose your rental dates"}
           </h2>
           <CloseButton onClick={onClose} />
         </div>
 
         {/* Selection pills */}
         <div className="flex gap-2 px-5 py-4 shrink-0">
-          {(["start", "end"] as const).map((type) => (
-            <button
-              key={type}
-              onClick={() => {
-                setSelecting(type);
-                if (type === "start") setPendingStart(null);
-              }}
-              className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
-                selecting === type
-                  ? "border-[#ffc107] bg-[#fff8e1] text-[#b8860b]"
-                  : "border-gray-200 text-gray-500 bg-gray-50 hover:border-gray-300"
-              }`}
-            >
-              {type === "start" ? "Pick-up date" : "Drop-off date"}
-            </button>
-          ))}
+          {(["start", "end"] as const).map((type) => {
+            if (isDropoff && type === "start") return null;
+            return (
+              <button
+                key={type}
+                onClick={() => {
+                  if (isDropoff) return;
+                  setSelecting(type);
+                  if (type === "start") setPendingStart(null);
+                }}
+                className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
+                  selecting === type
+                    ? "border-[#ffc107] bg-[#fff8e1] text-[#b8860b]"
+                    : "border-gray-200 text-gray-500 bg-gray-50 hover:border-gray-300"
+                }`}
+              >
+                {type === "start" ? "Pick-up date" : "Drop-off date"}
+              </button>
+            );
+          })}
         </div>
 
         {/* Month navigation */}
@@ -166,7 +229,9 @@ export default function DatePickerModal({
         <div className="shrink-0 px-5 py-4 border-t border-gray-100 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-xs font-medium">
             {!canConfirm ? (
-              <span className="text-gray-400">Pick a start &amp; end date</span>
+              <span className="text-gray-400">
+                {isDropoff ? "Pick a drop-off date" : "Pick a start & end date"}
+              </span>
             ) : (
               <>
                 <span className="text-gray-800 font-semibold">
@@ -179,6 +244,7 @@ export default function DatePickerModal({
               </>
             )}
           </div>
+          {/* ✅ Only place onSelect + onClose are called together */}
           <button
             onClick={() => {
               onSelect(range);

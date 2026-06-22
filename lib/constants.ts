@@ -111,30 +111,55 @@ export const BOTTOM_DESTINATIONS = [
 ];
 
 export const HOW_IT_WORKS_STEPS = [
+  // {
+  //   step: 1,
+  //   title: "Find your Ride",
+  //   description:
+  //     "Enter your city, pick-up and drop date & time to choose from available two-wheelers at your desired go-hub.",
+  //   active: true,
+  // },
   {
     step: 1,
-    title: "Find your Ride",
+    title: "Search & Select",
     description:
-      "Enter your city, pick-up and drop date & time to choose from available two-wheelers at your desired go-hub.",
+      "Input your city, pick-up and drop-off dates, and times to browse the best two-wheelers available at our local hubs.",
     active: true,
   },
+  // {
+  //   step: 2,
+  //   title: "Book your Ride",
+  //   description:
+  //     "Select your package and choose from the available payment options. Instant confirmation, no waiting.",
+  // },
   {
     step: 2,
-    title: "Book your Ride",
+    title: "Secure Your Booking",
     description:
-      "Select your package and choose from the available payment options. Instant confirmation, no waiting.",
+      "Pick a rental package that suits your needs, complete your payment securely, and get an immediate confirmation. No waiting required.",
   },
+  // {
+  //   step: 3,
+  //   title: "Get Ready to Ride",
+  //   description:
+  //     "Receive ride details via SMS & email. Reach the pick-up point on time, pay the security deposit (if applicable), and enjoy every moment.",
+  // },
   {
     step: 3,
-    title: "Get Ready to Ride",
+    title: "Pick Up & Go",
     description:
-      "Receive ride details via SMS & email. Reach the pick-up point on time, pay the security deposit (if applicable), and enjoy every moment.",
+      "We'll send your reservation details straight to your phone and inbox. Arrive at the hub, settle any required deposit, and start exploring.",
   },
+  // {
+  //   step: 4,
+  //   title: "End your Ride",
+  //   description:
+  //     "Drop the vehicle at the pick-up point. Security deposit is refunded after checking for damages and challans, if any.",
+  // },
   {
     step: 4,
-    title: "End your Ride",
+    title: "Return & Complete",
     description:
-      "Drop the vehicle at the pick-up point. Security deposit is refunded after checking for damages and challans, if any.",
+      "Bring the bike back to the designated spot. We’ll quickly inspect it for any issues or traffic fines, then promptly process your deposit refund.",
   },
 ];
 

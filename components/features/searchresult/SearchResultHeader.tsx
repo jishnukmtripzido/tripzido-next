@@ -11,6 +11,7 @@ import { useSearchForm } from "@/hooks/useSearchForm";
 import { formatDate, formatTime } from "@/lib/dateUtils";
 import type { City } from "@/types/locations.types";
 import type { ModalType } from "@/types/search.types";
+import type { DateRange } from "@/components/features/search/DatePickerModal";
 
 interface SearchResultHeaderProps {
   cities: City[];
@@ -66,11 +67,15 @@ export default function SearchResultHeader({
     initialDropoffMinute,
   });
 
+  function handleDropoffDateSelect(range: DateRange) {
+    handleDateSelect(range);
+  }
+
   return (
     <>
       <div className="hidden md:block top-0 z-50 md:bg-gray-500 border-b border-gray-300/80">
         <section className="px-4 xl:px-0 py-3 mx-auto xl:mx-[80.5px]">
-          <div className="flex w-full items-center bg-white border-2 border-brand-yellow rounded-md h-[55px] ">
+          <div className="flex w-full items-center bg-white border-2 border-brand-yellow rounded-md h-[55px]">
             {/* City */}
             <SearchCell
               onClick={() => setOpenModal("city")}
@@ -134,17 +139,10 @@ export default function SearchResultHeader({
                 <DatePickerDropdown
                   isOpen
                   onClose={() => toggleDropdown("date")}
-                  onSelect={(r) => {
-                    handleDateSelect(r);
-                    // ✅ Removed redundant toggleDropdown("date") here.
-                    // DatePickerDropdown internally calls onClose() only after
-                    // BOTH dates are selected (end date click). Calling
-                    // toggleDropdown here was closing the dropdown on the
-                    // first date click (pick-up), before the user could
-                    // select the drop-off date.
-                  }}
+                  onSelect={handleDateSelect}
                   onDateChange={handleDateChange}
                   initialRange={dateRange}
+                  mode="range"
                 />
               )}
               {errors.pickup_datetime && (
@@ -169,8 +167,6 @@ export default function SearchResultHeader({
                   onClose={() => toggleDropdown("pickup-time")}
                   onSelect={(h, m) => {
                     setPickupTime({ hour: h, minute: m });
-                    // ✅ Removed redundant toggleDropdown("pickup-time") —
-                    // TimePickerDropdown already calls onClose() on selection.
                   }}
                   selectedHour={pickupTime.hour}
                   selectedMinute={pickupTime.minute}
@@ -179,11 +175,11 @@ export default function SearchResultHeader({
               )}
             </SearchCell>
 
-            {/* Drop-off date */}
+            {/* Drop-off date — own dropdown key + dropoff mode */}
             <SearchCell
-              onClick={() => toggleDropdown("date")}
+              onClick={() => toggleDropdown("date-dropoff")}
               hasError={!!errors.dropoff_datetime}
-              active={openDropdown === "date"}
+              active={openDropdown === "date-dropoff"}
               className="relative flex-1 min-w-[110px] border-r border-gray-300"
             >
               <DateIcon />
@@ -191,6 +187,17 @@ export default function SearchResultHeader({
                 top="Drop-off date"
                 bottom={formatDate(dateRange.end)}
               />
+              {openDropdown === "date-dropoff" && (
+                <DatePickerDropdown
+                  isOpen
+                  onClose={() => toggleDropdown("date-dropoff")}
+                  onSelect={handleDropoffDateSelect}
+                  onDateChange={handleDropoffDateSelect}
+                  initialRange={dateRange}
+                  mode="dropoff"
+                  pickupDate={dateRange.start}
+                />
+              )}
               {errors.dropoff_datetime && (
                 <AbsoluteError message={errors.dropoff_datetime} />
               )}
@@ -213,8 +220,6 @@ export default function SearchResultHeader({
                   onClose={() => toggleDropdown("dropoff-time")}
                   onSelect={(h, m) => {
                     setDropoffTime({ hour: h, minute: m });
-                    // ✅ Removed redundant toggleDropdown("dropoff-time") —
-                    // TimePickerDropdown already calls onClose() on selection.
                   }}
                   selectedHour={dropoffTime.hour}
                   selectedMinute={dropoffTime.minute}
@@ -248,12 +253,26 @@ export default function SearchResultHeader({
         loading={false}
         error={citiesError}
       />
+
+      {/* Pick-up date modal — full range mode */}
       <DatePickerModal
         isOpen={openModal === "date"}
         onClose={() => setOpenModal(null)}
         onSelect={handleDateSelect}
         initialRange={dateRange}
+        mode="range"
       />
+
+      {/* Drop-off date modal — dropoff mode */}
+      <DatePickerModal
+        isOpen={openModal === "date-dropoff"}
+        onClose={() => setOpenModal(null)}
+        onSelect={handleDropoffDateSelect}
+        initialRange={dateRange}
+        mode="dropoff"
+        pickupDate={dateRange.start}
+      />
+
       <TimePickerModal
         isOpen={openModal === "pickup-time" || openModal === "dropoff-time"}
         onClose={() => setOpenModal(null)}
@@ -303,9 +322,7 @@ function SearchCell({
 function CellLabel({ top, bottom }: { top: string; bottom: string }) {
   return (
     <div className="flex flex-col justify-center flex-1 overflow-hidden">
-      <span className="text-[11px]  text-font-dim leading-none mb-1">
-        {top}
-      </span>
+      <span className="text-[11px] text-font-dim leading-none mb-1">{top}</span>
       <span className="text-sm font-normal text-font-main-sub truncate leading-none">
         {bottom}
       </span>

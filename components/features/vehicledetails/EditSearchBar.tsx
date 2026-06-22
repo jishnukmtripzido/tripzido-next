@@ -22,6 +22,7 @@ import {
   toISO,
 } from "@/lib/dateUtils";
 import type { PickupLocationOption } from "@/services/vehicleDetails.service";
+import type { DateRange } from "@/components/features/search/DatePickerModal";
 
 interface EditSearchBarProps {
   onClose: () => void;
@@ -74,9 +75,8 @@ export default function EditSearchBar({
   const [locationOpen, setLocationOpen] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [dateModalOpen, setDateModalOpen] = useState(false);
+  const [dateDropoffModalOpen, setDateDropoffModalOpen] = useState(false);
 
-  // Local to this resolve-and-navigate flow — separate from useSearchForm's
-  // own errors/isLoading, since we're not calling its handleSearch() here.
   const [dateErrors, setDateErrors] = useState<Record<string, string>>({});
   const [resolveError, setResolveError] = useState<string | null>(null);
   const [isResolving, setIsResolving] = useState(false);
@@ -84,6 +84,10 @@ export default function EditSearchBar({
   const selectedLocationName =
     cityLocations.find((l) => String(l.id) === selectedLocationId)
       ?.location_name ?? initialLocationName;
+
+  function handleDropoffDateSelect(range: DateRange) {
+    handleDateSelect(range);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -127,10 +131,6 @@ export default function EditSearchBar({
     setIsResolving(true);
 
     try {
-      // Re-runs the same availability + pricing-package matching used by
-      // the main search, scoped to this one vehicle type, so we can find
-      // out whether the chosen location is bookable for the new dates
-      // before navigating anywhere.
       const results = await searchVehiclesApi({
         city_id: String(cityId),
         vehicle_type_id: String(vehicleTypeId),
@@ -205,7 +205,7 @@ export default function EditSearchBar({
               <div className="flex flex-wrap md:flex-nowrap items-end gap-2">
                 {/* Pick-up location */}
                 <div className="relative w-full md:flex-1 min-w-0">
-                  <label className="block text-xs  text-font-main-sub mb-2 ml-1">
+                  <label className="block text-xs text-font-main-sub mb-2 ml-1">
                     Pick-up location
                   </label>
                   <TriggerButton
@@ -244,7 +244,7 @@ export default function EditSearchBar({
                 <div className="grid grid-cols-2 gap-2 w-full md:contents">
                   {/* Pick-up date */}
                   <div className="relative w-full md:w-[130px] md:shrink-0">
-                    <label className="block text-xs   text-font-main-sub mb-2 ml-1">
+                    <label className="block text-xs text-font-main-sub mb-2 ml-1">
                       Pick-up date
                     </label>
                     <div className="md:hidden">
@@ -273,9 +273,10 @@ export default function EditSearchBar({
                         <DatePickerDropdown
                           isOpen
                           onClose={() => toggleDropdown("date")}
-                          onSelect={(r) => handleDateSelect(r)}
+                          onSelect={handleDateSelect}
                           onDateChange={handleDateChange}
                           initialRange={dateRange}
+                          mode="range"
                         />
                       )}
                     </div>
@@ -284,7 +285,7 @@ export default function EditSearchBar({
 
                   {/* Pick-up time */}
                   <div className="relative w-full md:w-[120px] md:shrink-0">
-                    <label className="block text-xs   text-font-main-sub mb-2 ml-1">
+                    <label className="block text-xs text-font-main-sub mb-2 ml-1">
                       Time
                     </label>
                     <TriggerButton
@@ -312,12 +313,14 @@ export default function EditSearchBar({
 
                   {/* Drop-off date */}
                   <div className="relative w-full md:w-[130px] md:shrink-0">
-                    <label className="block text-xs  text-font-main-sub mb-2 ml-1">
+                    <label className="block text-xs text-font-main-sub mb-2 ml-1">
                       Drop-off date
                     </label>
+
+                    {/* Mobile — opens dropoff modal */}
                     <div className="md:hidden">
                       <TriggerButton
-                        onClick={() => setDateModalOpen(true)}
+                        onClick={() => setDateDropoffModalOpen(true)}
                         hasError={!!dateErrors.dropoff_datetime}
                       >
                         <CalendarIcon />
@@ -326,24 +329,37 @@ export default function EditSearchBar({
                         </span>
                       </TriggerButton>
                     </div>
+
+                    {/* Desktop — opens dropoff dropdown */}
                     <div className="hidden md:block">
                       <TriggerButton
-                        onClick={() => toggleDropdown("date")}
+                        onClick={() => toggleDropdown("date-dropoff")}
                         hasError={!!dateErrors.dropoff_datetime}
-                        active={openDropdown === "date"}
+                        active={openDropdown === "date-dropoff"}
                       >
                         <CalendarIcon />
                         <span className="text-font-man-sub whitespace-nowrap">
                           {formatDate(dateRange.end)}
                         </span>
                       </TriggerButton>
+                      {openDropdown === "date-dropoff" && (
+                        <DatePickerDropdown
+                          isOpen
+                          onClose={() => toggleDropdown("date-dropoff")}
+                          onSelect={handleDropoffDateSelect}
+                          onDateChange={handleDropoffDateSelect}
+                          initialRange={dateRange}
+                          mode="dropoff"
+                          pickupDate={dateRange.start}
+                        />
+                      )}
                     </div>
                     <FieldError message={dateErrors.dropoff_datetime} />
                   </div>
 
                   {/* Drop-off time */}
                   <div className="relative w-full md:w-[120px] md:shrink-0">
-                    <label className="block text-xs   text-font-main-sub mb-2 ml-1">
+                    <label className="block text-xs text-font-main-sub mb-2 ml-1">
                       Time
                     </label>
                     <TriggerButton
@@ -390,14 +406,23 @@ export default function EditSearchBar({
         </div>
       </div>
 
+      {/* Pick-up date modal — full range mode */}
       <DatePickerModal
         isOpen={dateModalOpen}
         onClose={() => setDateModalOpen(false)}
-        onSelect={(r) => {
-          handleDateSelect(r);
-          setDateModalOpen(false);
-        }}
+        onSelect={handleDateSelect}
         initialRange={dateRange}
+        mode="range"
+      />
+
+      {/* Drop-off date modal — dropoff mode */}
+      <DatePickerModal
+        isOpen={dateDropoffModalOpen}
+        onClose={() => setDateDropoffModalOpen(false)}
+        onSelect={handleDropoffDateSelect}
+        initialRange={dateRange}
+        mode="dropoff"
+        pickupDate={dateRange.start}
       />
     </>
   );
