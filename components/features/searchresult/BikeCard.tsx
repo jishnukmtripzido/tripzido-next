@@ -291,8 +291,8 @@ export default function BikeCard({
               </div>
             )}
 
-            {/* <h3 className="text-[16px] font-semibold text-font-main-sub leading-tight tracking-tight truncate"> */}
-            <h3 className="text-[18px] font-semibold text-font-main-sub leading-tight tracking-tight truncate">
+            <h3 className="text-[16px] font-semibold text-font-main-sub leading-tight tracking-tight truncate">
+              {/* <h3 className="text-[18px] font-semibold text-font-main-sub leading-tight tracking-tight truncate"> */}
               {name}
             </h3>
             <p className="text-[12px] text-gray-400 mt-0.5 truncate">

@@ -66,7 +66,7 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
     <div className="min-h-screen md:bg-gray-50">
       <div className="mx-auto flex gap-6 items-start">
         {/* Desktop filter sidebar */}
-        <aside className="hidden lg:block xl:w-80 shrink-0 sticky top-[130px] self-start md:border-r border-gray-100 md:shadow-sm">
+        <aside className="hidden lg:block xl:w-75 shrink-0 sticky top-[130px] self-start md:border-r border-gray-100 md:shadow-sm">
           <FilterSidebar {...filterSidebarProps} />
         </aside>
 

@@ -1,7 +1,3 @@
-
-
-
-
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -11,7 +7,10 @@ import { useModalTransition } from "@/hooks/useModelTransition";
 interface TimePickerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectBoth: (pickup: { hour: number; minute: number }, dropoff: { hour: number; minute: number }) => void;
+  onSelectBoth: (
+    pickup: { hour: number; minute: number },
+    dropoff: { hour: number; minute: number },
+  ) => void;
   initialPickupHour?: number;
   initialPickupMinute?: number;
   initialDropoffHour?: number;
@@ -35,8 +34,20 @@ function formatTime(hour: number, minute: number) {
 }
 
 function formatDate(d: Date) {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   return `${months[d.getMonth()]} ${String(d.getDate()).padStart(2, "0")}`;
 }
 
@@ -72,27 +83,44 @@ export default function TimePickerModal({
   dropoffDate,
 }: TimePickerModalProps) {
   const [mounted, setMounted] = useState(false);
-  const [pickupIdx, setPickupIdx] = useState(toIndex(initialPickupHour, initialPickupMinute));
-  const [dropoffIdx, setDropoffIdx] = useState(toIndex(initialDropoffHour, initialDropoffMinute));
+  const [pickupIdx, setPickupIdx] = useState(
+    toIndex(initialPickupHour, initialPickupMinute),
+  );
+  const [dropoffIdx, setDropoffIdx] = useState(
+    toIndex(initialDropoffHour, initialDropoffMinute),
+  );
   const { visible, entered } = useModalTransition(isOpen);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
       setPickupIdx(toIndex(initialPickupHour, initialPickupMinute));
       setDropoffIdx(toIndex(initialDropoffHour, initialDropoffMinute));
     }
-  }, [isOpen, initialPickupHour, initialPickupMinute, initialDropoffHour, initialDropoffMinute]);
+  }, [
+    isOpen,
+    initialPickupHour,
+    initialPickupMinute,
+    initialDropoffHour,
+    initialDropoffMinute,
+  ]);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
-  const handleKey = useCallback((e: KeyboardEvent) => {
-    if (e.key === "Escape") onClose();
-  }, [onClose]);
+  const handleKey = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    },
+    [onClose],
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", handleKey);
@@ -106,8 +134,10 @@ export default function TimePickerModal({
 
   if (!mounted || !visible) return null;
 
-  const backdropClass = entered ? "modal-backdrop-entered" : "modal-backdrop-enter";
-  const panelClass    = entered ? "modal-panel-entered"    : "modal-panel-enter";
+  const backdropClass = entered
+    ? "modal-backdrop-entered"
+    : "modal-backdrop-enter";
+  const panelClass = entered ? "modal-panel-entered" : "modal-panel-enter";
 
   const pickupTime = fromIndex(pickupIdx);
   const dropoffTime = fromIndex(dropoffIdx);
@@ -119,8 +149,9 @@ export default function TimePickerModal({
         onClick={onClose}
       />
 
-      <div className={`animate-slide-up sm:animate-scale-in relative z-10 w-full bg-white rounded-t-2xl sm:rounded-2xl sm:max-w-sm sm:mx-6 shadow-2xl flex flex-col modal-panel ${panelClass}`}>
-
+      <div
+        className={`animate-slide-up sm:animate-scale-in relative z-10 w-full bg-white rounded-t-2xl sm:rounded-2xl sm:max-w-sm sm:mx-6 shadow-2xl flex flex-col modal-panel ${panelClass}`}
+      >
         {/* Drag handle (mobile) */}
         <div className="flex justify-center pt-3 pb-1 sm:hidden">
           <div className="w-10 h-1 rounded-full bg-gray-300" />
@@ -129,29 +160,45 @@ export default function TimePickerModal({
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-4 pb-4 border-b border-gray-100">
           <div>
-            <h2 className="font-bold text-gray-900 text-base">Select times</h2>
-            <p className="text-xs text-gray-400 mt-0.5">Choose your pick-up and drop-off times</p>
+            <h2 className="font-bold text-font-main-sub text-base">
+              Select times
+            </h2>
+            <p className="text-xs text-font-dim mt-0.5">
+              Choose your pick-up and drop-off times
+            </p>
           </div>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 18L18 6M6 6l12 12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+              />
             </svg>
           </button>
         </div>
 
         {/* Sliders */}
         <div className="px-5 py-6 space-y-8">
-
           {/* Pick-up slider */}
           <div>
             <div className="flex items-baseline justify-between mb-3">
-              <p className="text-sm font-semibold text-black">
-                Pick-up: <span className="font-thin font-sm text-gray-500">{formatDate(pickupDate)}</span>
+              <p className="text-sm font-semibold text-font-main-sub">
+                Pick-up:{" "}
+                <span className="font-thin font-sm text-font-main-sub">
+                  {formatDate(pickupDate)}
+                </span>
               </p>
-              <p className="text-sm font-thin text-black">
+              <p className="text-sm font-thin text-font-main-sub">
                 {formatTime(pickupTime.hour, pickupTime.minute)}
               </p>
             </div>
@@ -168,24 +215,27 @@ export default function TimePickerModal({
                   [&::-webkit-slider-runnable-track]:h-1.5
                   ${sliderThumbClasses}`}
                 style={{
-                  background: `linear-gradient(to right, #ffc107 ${(pickupIdx / 47) * 100}%, #e5e7eb ${(pickupIdx / 47) * 100}%)`
+                  background: `linear-gradient(to right, #ffc107 ${(pickupIdx / 47) * 100}%, #e5e7eb ${(pickupIdx / 47) * 100}%)`,
                 }}
               />
             </div>
             <div className="flex justify-between mt-1.5">
-              <span className="text-[10px] text-gray-400">12:00 AM</span>
-              <span className="text-[10px] text-gray-400">12:00 PM</span>
-              <span className="text-[10px] text-gray-400">11:30 PM</span>
+              <span className="text-[10px] text-font-dim">12:00 AM</span>
+              <span className="text-[10px] text-font-dim">12:00 PM</span>
+              <span className="text-[10px] text-font-dim">11:30 PM</span>
             </div>
           </div>
 
           {/* Drop-off slider */}
           <div>
             <div className="flex items-baseline justify-between mb-3">
-              <p className="text-sm font-semibold text-black">
-                Drop-off: <span className="font-sm font-thin text-gray-500">{formatDate(dropoffDate)}</span>
+              <p className="text-sm font-semibold text-font-main-sub">
+                Drop-off:{" "}
+                <span className="font-sm font-thin text-font-main-sub">
+                  {formatDate(dropoffDate)}
+                </span>
               </p>
-              <p className="text-sm font-thin text-black">
+              <p className="text-sm font-thin text-font-main-sub">
                 {formatTime(dropoffTime.hour, dropoffTime.minute)}
               </p>
             </div>
@@ -202,14 +252,14 @@ export default function TimePickerModal({
                   [&::-webkit-slider-runnable-track]:h-1.5
                   ${sliderThumbClasses}`}
                 style={{
-                  background: `linear-gradient(to right, #ffc107 ${(dropoffIdx / 47) * 100}%, #e5e7eb ${(dropoffIdx / 47) * 100}%)`
+                  background: `linear-gradient(to right, #ffc107 ${(dropoffIdx / 47) * 100}%, #e5e7eb ${(dropoffIdx / 47) * 100}%)`,
                 }}
               />
             </div>
             <div className="flex justify-between mt-1.5">
-              <span className="text-[10px] text-gray-400">12:00 AM</span>
-              <span className="text-[10px] text-gray-400">12:00 PM</span>
-              <span className="text-[10px] text-gray-400">11:30 PM</span>
+              <span className="text-[10px] text-font-dim">12:00 AM</span>
+              <span className="text-[10px] text-font-dim">12:00 PM</span>
+              <span className="text-[10px] text-font-dim">11:30 PM</span>
             </div>
           </div>
         </div>
@@ -225,6 +275,6 @@ export default function TimePickerModal({
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }
