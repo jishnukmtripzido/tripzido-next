@@ -15,6 +15,7 @@ type MobileDrawerProps = {
   userName: string | null;
   isLoggedIn?: boolean;
   onLoginClick?: () => void;
+  onRegisterClick?: () => void; // ← new: opens modal in register mode
   onLogout?: () => void;
   isLoggingOut?: boolean;
 };
@@ -26,12 +27,12 @@ export default function MobileDrawer({
   userName,
   isLoggedIn = false,
   onLoginClick,
+  onRegisterClick,
   onLogout,
   isLoggingOut = false,
 }: MobileDrawerProps) {
   return (
     <>
-      {/* Drawer panel */}
       <div
         className={`fixed top-0 right-0 h-full w-[300px] z-50 bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out md:hidden ${
           isOpen ? "translate-x-0" : "translate-x-full"
@@ -82,7 +83,6 @@ export default function MobileDrawer({
 
         {/* ── AUTH SECTION ── */}
         {isLoggedIn ? (
-          /* Logged-in: account info strip */
           <Link href="/profile" onClick={onClose}>
             <div className="flex items-center gap-3 px-5 py-4 bg-amber-50 border-b border-amber-100 hover:bg-amber-100 transition-colors cursor-pointer">
               <div className="w-10 h-10 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold text-base shrink-0">
@@ -99,21 +99,23 @@ export default function MobileDrawer({
             </div>
           </Link>
         ) : (
-          /* Logged-out: Sign In + Register buttons */
+          /* ── Logged-out: both buttons open the modal ── */
           <div className="flex gap-3 px-5 py-4 border-b border-gray-100">
-            <Link
-              href="/register"
-              onClick={onClose}
-              className="flex-1 cursor-pointer text-center text-sm font-semibold border  py-2.5 rounded-md hover:bg-amber-50 transition-colors"
+            <button
+              onClick={() => {
+                onClose();
+                onRegisterClick?.();
+              }}
+              className="flex-1 cursor-pointer text-center text-sm font-semibold border border-gray-200 py-2.5 rounded-md hover:bg-amber-50 transition-colors"
             >
               Register
-            </Link>
+            </button>
             <button
               onClick={() => {
                 onClose();
                 onLoginClick?.();
               }}
-              className="flex-1 cursor-pointer text-center text-sm font-semibold bg-[#ffc107]  py-2.5 rounded-md hover:bg-[#e6ab00] transition-colors"
+              className="flex-1 cursor-pointer text-center text-sm font-semibold bg-[#ffc107] py-2.5 rounded-md hover:bg-[#e6ab00] transition-colors"
             >
               Sign In
             </button>

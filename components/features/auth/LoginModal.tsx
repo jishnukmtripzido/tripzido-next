@@ -1,28 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { verifyOtpAndLogin } from "@/actions/auth.actions";
-import { sendOtpApi } from "@/services/auth.service";
+import { verifyOtpAndLogin, registerAndLogin } from "@/actions/auth.actions";
+import { sendOtpApi, registerSendOtpApi } from "@/services/auth.service";
 import { useTurnstile } from "@/hooks/useTurnstile";
 import { useOtpInput } from "@/hooks/useOtpInput";
 import { LOGIN_MODAL_CITIES, LOGIN_MODAL_STATS } from "@/lib/constants";
 import { SpinnerIcon, CloseButton } from "@/components/ui/icons";
 import type { LoginModalProps } from "@/types/auth.types";
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+// ── Types ──────────────────────────────────────────────────────────────────
+
+type ModalMode = "login" | "register";
+
+// ── Main component ─────────────────────────────────────────────────────────
+
+export default function LoginModal({
+  isOpen,
+  onClose,
+  initialMode = "login",
+}: LoginModalProps & { initialMode?: ModalMode }) {
   const router = useRouter();
 
+  // shared
+  const [mode, setMode] = useState<ModalMode>(initialMode);
+
+  // Sync mode whenever the caller changes initialMode (e.g. Register button
+  // clicked while modal was already mounted but closed)
+  useEffect(() => {
+    if (isOpen) setMode(initialMode);
+  }, [isOpen, initialMode]);
   const [phone, setPhone] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [otpError, setOtpError] = useState<string | null>(null);
+
+  // register-only fields
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const {
     token: turnstileToken,
     tokenRef,
     reset: resetTurnstile,
   } = useTurnstile(isOpen && !otpSent);
+
   const {
     otp,
     refs: otpRefs,
@@ -31,16 +56,47 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     reset: resetOtp,
   } = useOtpInput(otpSent);
 
-  const handleClose = () => {
-    onClose();
+  // ── Helpers ──────────────────────────────────────────────────────────────
+
+  const fullReset = () => {
     setPhone("");
     setOtpSent(false);
     resetOtp();
     setLoading(false);
     setOtpError(null);
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setFieldErrors({});
   };
 
-  const handleSendOTP = async () => {
+  const handleClose = () => {
+    onClose();
+    fullReset();
+    // keep mode so re-opening feels consistent; reset to login after a delay
+    setTimeout(() => setMode("login"), 300);
+  };
+
+  const switchMode = (next: ModalMode) => {
+    fullReset();
+    setMode(next);
+  };
+
+  // ── Validation (register only) ────────────────────────────────────────────
+
+  const validateRegisterFields = (): boolean => {
+    const errors: Record<string, string> = {};
+    if (!firstName.trim()) errors.firstName = "First name is required.";
+    if (phone.length !== 10) errors.phone = "Enter a valid 10-digit number.";
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      errors.email = "Enter a valid email address.";
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // ── Send OTP: login ───────────────────────────────────────────────────────
+
+  const handleSendLoginOTP = async () => {
     const token = tokenRef.current;
     if (phone.length !== 10 || !token) return;
     setLoading(true);
@@ -56,13 +112,68 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     }
   };
 
-  const handleVerifyOTP = async () => {
+  // ── Send OTP: register ────────────────────────────────────────────────────
+
+  const handleSendRegisterOTP = async () => {
+    if (!validateRegisterFields()) return;
+    const token = tokenRef.current;
+    if (!token) return;
+    setLoading(true);
+    try {
+      const data = await registerSendOtpApi({
+        phone_number: `+91${phone}`, // adjust if you support multi-country
+        first_name: firstName.trim(),
+        last_name: lastName.trim() || undefined,
+        email: email.trim() || undefined,
+        turnstile_token: token,
+      });
+      if (!data.success) {
+        // Surface server-side errors (e.g. phone already registered)
+        setFieldErrors({ phone: data.message || "Could not send OTP." });
+        resetTurnstile();
+        return;
+      }
+      setOtpSent(true);
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? err.message : "Could not send OTP. Try again.";
+      setFieldErrors({ phone: msg });
+      resetTurnstile();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ── Verify OTP: login ─────────────────────────────────────────────────────
+
+  const handleVerifyLoginOTP = async () => {
     const code = otp.join("");
     if (code.length !== 4) return;
     setLoading(true);
     setOtpError(null);
     try {
       const result = await verifyOtpAndLogin(phone, code);
+      if (!result.success) {
+        setOtpError(result.message || "Invalid OTP. Please try again.");
+        resetOtp();
+        return;
+      }
+      handleClose();
+      router.refresh();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ── Verify OTP: register ──────────────────────────────────────────────────
+
+  const handleVerifyRegisterOTP = async () => {
+    const code = otp.join("");
+    if (code.length !== 4) return;
+    setLoading(true);
+    setOtpError(null);
+    try {
+      const result = await registerAndLogin(`+91${phone}`, code);
       if (!result.success) {
         setOtpError(result.message || "Invalid OTP. Please try again.");
         resetOtp();
@@ -83,57 +194,121 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   if (!isOpen) return null;
 
+  // ── Derived ───────────────────────────────────────────────────────────────
+
+  const isRegister = mode === "register";
+  const canSendOtp =
+    phone.length === 10 &&
+    !!turnstileToken &&
+    !loading &&
+    (!isRegister || !!firstName.trim());
+
   return (
     <>
+      {/* Backdrop */}
       <div
         onClick={handleClose}
         className="animate-fade-in fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
         aria-hidden="true"
       />
+
+      {/* Dialog */}
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Sign in to Tripzido"
+        aria-label={isRegister ? "Create your account" : "Sign in to Tripzido"}
         className="fixed z-50 bg-white overflow-hidden animate-slide-up sm:animate-scale-in inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[880px] md:max-h-[90vh] md:rounded-2xl md:shadow-2xl"
       >
         <div className="flex h-full md:h-auto">
-          {/* Left panel */}
+          {/* ── Left decorative panel ── */}
           <div className="hidden md:flex flex-col justify-between w-[340px] bg-[#fffbea] p-8 shrink-0">
             <BrandLogo />
             <CityRing cities={LOGIN_MODAL_CITIES} />
             <StatsGrid stats={LOGIN_MODAL_STATS} />
           </div>
 
-          {/* Right panel */}
-          <div className="flex flex-col flex-1 p-6 md:p-10 relative">
+          {/* ── Right content panel ── */}
+          <div className="flex flex-col flex-1 p-6 md:p-10 relative overflow-y-auto">
             <CloseButton
               onClick={handleClose}
               className="absolute top-4 right-4"
             />
 
+            {/* Mobile logo */}
             <div className="flex items-center space-x-2 mb-8 md:hidden">
               <BrandLogo />
             </div>
 
             <div className="flex flex-col justify-center flex-1 max-w-sm mx-auto w-full">
+              {/* ── Mode tab switcher ── */}
+              {!otpSent && (
+                <div className="flex bg-gray-100 rounded-xl p-1 mb-6 gap-1">
+                  {(["login", "register"] as ModalMode[]).map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => switchMode(m)}
+                      className={`flex-1 py-2 text-sm rounded-lg font-medium transition-all duration-150
+                        ${
+                          mode === m
+                            ? "bg-white text-gray-900 font-semibold shadow-sm"
+                            : "text-gray-400 hover:text-gray-600"
+                        }`}
+                    >
+                      {m === "login" ? "Sign in" : "Register"}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* ── Heading ── */}
               <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">
-                {otpSent ? "Enter OTP" : "Welcome to"}{" "}
-                {!otpSent && <span className="text-[#ffc107]">Tripzido</span>}
+                {otpSent
+                  ? "Enter OTP"
+                  : isRegister
+                    ? "Create account"
+                    : "Welcome to"}{" "}
+                {!otpSent && !isRegister && (
+                  <span className="text-[#ffc107]">Tripzido</span>
+                )}
               </h2>
-              <p className="text-sm text-gray-500 mb-8">
+              <p className="text-sm text-gray-500 mb-6">
                 {otpSent
                   ? `We've sent a 4-digit OTP to +91 ${phone}`
-                  : "Commuting made Easy, Affordable and Quick"}
+                  : isRegister
+                    ? "Join in seconds — first name and mobile required"
+                    : "Commuting made Easy, Affordable and Quick"}
               </p>
 
+              {/* ── Form / OTP ── */}
               {!otpSent ? (
-                <PhoneStep
-                  phone={phone}
-                  setPhone={setPhone}
-                  loading={loading}
-                  turnstileToken={turnstileToken}
-                  onSend={handleSendOTP}
-                />
+                isRegister ? (
+                  <RegisterStep
+                    firstName={firstName}
+                    setFirstName={setFirstName}
+                    lastName={lastName}
+                    setLastName={setLastName}
+                    email={email}
+                    setEmail={setEmail}
+                    phone={phone}
+                    setPhone={setPhone}
+                    fieldErrors={fieldErrors}
+                    setFieldErrors={setFieldErrors}
+                    loading={loading}
+                    turnstileToken={turnstileToken}
+                    canSend={canSendOtp}
+                    onSend={handleSendRegisterOTP}
+                    onSwitchToLogin={() => switchMode("login")}
+                  />
+                ) : (
+                  <PhoneStep
+                    phone={phone}
+                    setPhone={setPhone}
+                    loading={loading}
+                    turnstileToken={turnstileToken}
+                    onSend={handleSendLoginOTP}
+                    onSwitchToRegister={() => switchMode("register")}
+                  />
+                )
               ) : (
                 <OtpStep
                   otp={otp}
@@ -142,13 +317,18 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                   loading={loading}
                   onChange={handleOtpChange}
                   onKeyDown={handleOtpKeyDown}
-                  onVerify={handleVerifyOTP}
+                  onVerify={
+                    isRegister ? handleVerifyRegisterOTP : handleVerifyLoginOTP
+                  }
                   onChangeNumber={() => {
                     setOtpSent(false);
                     resetOtp();
                     setOtpError(null);
                   }}
                   onResend={handleResend}
+                  verifyLabel={
+                    isRegister ? "Verify & Create Account" : "Verify & Sign In"
+                  }
                 />
               )}
             </div>
@@ -159,7 +339,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   );
 }
 
-// ── Sub-components ────────────────────────────────────────────────────
+// ── Sub-components ─────────────────────────────────────────────────────────
 
 function BrandLogo() {
   return (
@@ -262,31 +442,28 @@ function StatsGrid({ stats }: { stats: typeof LOGIN_MODAL_STATS }) {
   );
 }
 
+// ── PhoneStep (login) ──────────────────────────────────────────────────────
+
 function PhoneStep({
   phone,
   setPhone,
   loading,
   turnstileToken,
   onSend,
+  onSwitchToRegister,
 }: {
   phone: string;
   setPhone: (v: string) => void;
   loading: boolean;
   turnstileToken: string | null;
   onSend: () => void;
+  onSwitchToRegister: () => void;
 }) {
   const canSend = phone.length === 10 && !!turnstileToken && !loading;
   return (
     <>
       <div className="flex items-center border-2 border-[#ffc107] rounded-xl overflow-hidden mb-4 focus-within:ring-2 focus-within:ring-[#ffc10740]">
-        <div className="flex items-center space-x-1.5 px-3 py-3 border-r border-gray-200 bg-gray-50 select-none">
-          <div className="w-5 h-3.5 overflow-hidden rounded-sm border border-gray-200 flex-shrink-0">
-            <div className="h-1/3 bg-[#FF9933]" />
-            <div className="h-1/3 bg-white" />
-            <div className="h-1/3 bg-[#138808]" />
-          </div>
-          <span className="text-sm font-semibold text-gray-700">+91</span>
-        </div>
+        <IndiaPrefixBadge />
         <input
           type="tel"
           inputMode="numeric"
@@ -302,24 +479,12 @@ function PhoneStep({
 
       <div id="cf-turnstile-container" className="mb-4" />
 
-      <button
-        onClick={onSend}
-        disabled={!canSend}
-        className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${
-          canSend
-            ? "bg-[#ffc107] text-white hover:bg-[#e6ac00] shadow-md"
-            : "bg-gray-200 text-gray-400 cursor-not-allowed"
-        }`}
-      >
-        {loading ? (
-          <span className="flex items-center justify-center space-x-2">
-            <SpinnerIcon />
-            <span>Sending...</span>
-          </span>
-        ) : (
-          "Send OTP"
-        )}
-      </button>
+      <SendOtpButton
+        loading={loading}
+        canSend={canSend}
+        onSend={onSend}
+        label="Send OTP"
+      />
 
       <p className="text-xs text-black text-center mt-4">
         By continuing, you agree to our{" "}
@@ -334,20 +499,180 @@ function PhoneStep({
           Privacy Policy
         </a>
       </p>
+
       <div className="mt-6 pt-6 border-t border-gray-100 text-center">
         <p className="text-sm text-black">
           Don&apos;t have an account?{" "}
-          <a
-            href="/register"
+          <button
+            onClick={onSwitchToRegister}
             className="font-semibold text-[#ffc107] hover:underline"
           >
             Register now
-          </a>
+          </button>
         </p>
       </div>
     </>
   );
 }
+
+// ── RegisterStep ───────────────────────────────────────────────────────────
+
+function RegisterStep({
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  email,
+  setEmail,
+  phone,
+  setPhone,
+  fieldErrors,
+  setFieldErrors,
+  loading,
+  turnstileToken,
+  canSend,
+  onSend,
+  onSwitchToLogin,
+}: {
+  firstName: string;
+  setFirstName: (v: string) => void;
+  lastName: string;
+  setLastName: (v: string) => void;
+  email: string;
+  setEmail: (v: string) => void;
+  phone: string;
+  setPhone: (v: string) => void;
+  fieldErrors: Record<string, string>;
+  setFieldErrors: (e: Record<string, string>) => void;
+  loading: boolean;
+  turnstileToken: string | null;
+  canSend: boolean;
+  onSend: () => void;
+  onSwitchToLogin: () => void;
+}) {
+  const clearError = (key: string) =>
+    setFieldErrors({ ...fieldErrors, [key]: "" });
+
+  return (
+    <>
+      {/* First name */}
+      <div className="mb-3">
+        <label className="block text-xs font-semibold text-gray-600 mb-1">
+          First name <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          placeholder="First name"
+          value={firstName}
+          onChange={(e) => {
+            setFirstName(e.target.value);
+            clearError("firstName");
+          }}
+          autoComplete="given-name"
+          className={inputCls(!!fieldErrors.firstName)}
+        />
+        <FieldError msg={fieldErrors.firstName} />
+      </div>
+
+      {/* Last name */}
+      <div className="mb-3">
+        <label className="block text-xs font-semibold text-gray-600 mb-1">
+          Last name{" "}
+          <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Last name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          autoComplete="family-name"
+          className={inputCls(false)}
+        />
+      </div>
+
+      {/* Email */}
+      <div className="mb-3">
+        <label className="block text-xs font-semibold text-gray-600 mb-1">
+          Email <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <input
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            clearError("email");
+          }}
+          autoComplete="email"
+          className={inputCls(!!fieldErrors.email)}
+        />
+        <FieldError msg={fieldErrors.email} />
+      </div>
+
+      {/* Phone */}
+      <div className="mb-4">
+        <label className="block text-xs font-semibold text-gray-600 mb-1">
+          Mobile number <span className="text-red-500">*</span>
+        </label>
+        <div
+          className={`flex items-center border-2 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-[#ffc10740] ${fieldErrors.phone ? "border-red-400" : "border-[#ffc107]"}`}
+        >
+          <IndiaPrefixBadge />
+          <input
+            type="tel"
+            inputMode="numeric"
+            maxLength={10}
+            value={phone}
+            onChange={(e) => {
+              setPhone(e.target.value.replace(/\D/g, "").slice(0, 10));
+              clearError("phone");
+            }}
+            placeholder="Phone Number"
+            className="flex-1 px-4 py-3 text-sm outline-none bg-white placeholder-gray-400"
+          />
+        </div>
+        <FieldError msg={fieldErrors.phone} />
+      </div>
+
+      <div id="cf-turnstile-container" className="mb-4" />
+
+      <SendOtpButton
+        loading={loading}
+        canSend={canSend}
+        onSend={onSend}
+        label="Send OTP"
+      />
+
+      <p className="text-xs text-black text-center mt-4">
+        By continuing, you agree to our{" "}
+        <a href="/terms" className="text-[#ffc107] hover:underline font-medium">
+          Terms of Service
+        </a>{" "}
+        &amp;{" "}
+        <a
+          href="/privacy"
+          className="text-[#ffc107] hover:underline font-medium"
+        >
+          Privacy Policy
+        </a>
+      </p>
+
+      <div className="mt-6 pt-6 border-t border-gray-100 text-center">
+        <p className="text-sm text-black">
+          Already have an account?{" "}
+          <button
+            onClick={onSwitchToLogin}
+            className="font-semibold text-[#ffc107] hover:underline"
+          >
+            Sign in
+          </button>
+        </p>
+      </div>
+    </>
+  );
+}
+
+// ── OtpStep ────────────────────────────────────────────────────────────────
 
 function OtpStep({
   otp,
@@ -359,6 +684,7 @@ function OtpStep({
   onVerify,
   onChangeNumber,
   onResend,
+  verifyLabel,
 }: {
   otp: string[];
   otpRefs: React.MutableRefObject<(HTMLInputElement | null)[]>;
@@ -369,6 +695,7 @@ function OtpStep({
   onVerify: () => void;
   onChangeNumber: () => void;
   onResend: () => void;
+  verifyLabel: string;
 }) {
   const canVerify = otp.join("").length === 4 && !loading;
   return (
@@ -437,7 +764,7 @@ function OtpStep({
             <span>Verifying...</span>
           </span>
         ) : (
-          "Verify & Sign In"
+          verifyLabel
         )}
       </button>
 
@@ -459,4 +786,65 @@ function OtpStep({
       </p>
     </>
   );
+}
+
+// ── Shared micro-components ────────────────────────────────────────────────
+
+function IndiaPrefixBadge() {
+  return (
+    <div className="flex items-center space-x-1.5 px-3 py-3 border-r border-gray-200 bg-gray-50 select-none">
+      <div className="w-5 h-3.5 overflow-hidden rounded-sm border border-gray-200 flex-shrink-0">
+        <div className="h-1/3 bg-[#FF9933]" />
+        <div className="h-1/3 bg-white" />
+        <div className="h-1/3 bg-[#138808]" />
+      </div>
+      <span className="text-sm font-semibold text-gray-700">+91</span>
+    </div>
+  );
+}
+
+function SendOtpButton({
+  loading,
+  canSend,
+  onSend,
+  label,
+}: {
+  loading: boolean;
+  canSend: boolean;
+  onSend: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      onClick={onSend}
+      disabled={!canSend}
+      className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${
+        canSend
+          ? "bg-[#ffc107] text-white hover:bg-[#e6ac00] shadow-md"
+          : "bg-gray-200 text-gray-400 cursor-not-allowed"
+      }`}
+    >
+      {loading ? (
+        <span className="flex items-center justify-center space-x-2">
+          <SpinnerIcon />
+          <span>Sending...</span>
+        </span>
+      ) : (
+        label
+      )}
+    </button>
+  );
+}
+
+function FieldError({ msg }: { msg?: string }) {
+  if (!msg) return null;
+  return <p className="text-xs text-red-500 mt-1">{msg}</p>;
+}
+
+function inputCls(hasError: boolean) {
+  return `w-full h-11 border-2 rounded-xl px-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-all ${
+    hasError
+      ? "border-red-400 focus:ring-2 focus:ring-red-200"
+      : "border-gray-200 focus:border-[#ffc107] focus:ring-2 focus:ring-[#ffc10740]"
+  }`;
 }

@@ -1,9 +1,13 @@
+// ── Add these to your existing services/auth.service.ts ───────────────────
+
 import { api } from "@/lib/api";
 import {
   VerifyOtpResponse,
   SendOtpResponse,
   LogoutResponse,
 } from "@/types/auth.types";
+
+// ── existing exports (keep as-is) ─────────────────────────────────────────
 
 export async function sendOtpApi(
   phone_number: string,
@@ -31,4 +35,30 @@ export async function logoutApi(
     { refresh_token: refreshToken },
     { token: accessToken },
   );
+}
+
+// ── NEW: Registration ──────────────────────────────────────────────────────
+
+export interface RegisterSendOtpPayload {
+  phone_number: string;
+  first_name: string;
+  last_name?: string;
+  email?: string;
+  turnstile_token: string;
+}
+
+export async function registerSendOtpApi(
+  payload: RegisterSendOtpPayload,
+): Promise<SendOtpResponse> {
+  return api.post<SendOtpResponse>("/api/users/register/send-otp/", payload);
+}
+
+export async function registerVerifyOtpApi(
+  phone_number: string,
+  otp: string,
+): Promise<VerifyOtpResponse> {
+  return api.post<VerifyOtpResponse>("/api/users/register/verify-otp/", {
+    phone_number,
+    otp,
+  });
 }

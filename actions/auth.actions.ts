@@ -1,9 +1,9 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { VerifyOtpPayload, VerifyOtpResponse } from "@/types/auth.types";
 import { verifyOtpApi, logoutApi } from "@/services/auth.service";
 import type { AuthActionResult } from "@/types/auth.types";
+import { registerVerifyOtpApi } from "@/services/auth.service";
 
 /**
  * verifyOtpAndLogin
@@ -100,5 +100,56 @@ export async function logoutAction(): Promise<AuthActionResult> {
       success: false,
       message: "Could not reach server. You've been signed out locally.",
     };
+  }
+}
+
+/**
+ * registerAndLogin
+ * ----------------
+ * Verifies the registration OTP.  On success, stores JWT tokens in
+ * HTTP-only cookies — identical behaviour to verifyOtpAndLogin — so
+ * the user is immediately authenticated after signing up.
+ *
+ * Parameters:
+ *   phone_number – the number used during registration
+ *   otp          – the 4-digit code the user received
+ *
+ * Returns: Promise<{ success: boolean; message: string }>
+ */
+export async function registerAndLogin(
+  phone_number: string,
+  otp: string,
+): Promise<AuthActionResult> {
+  try {
+    const data = await registerVerifyOtpApi(phone_number, otp);
+
+    if (!data.success || !data.data) {
+      return {
+        success: false,
+        message: data.message || "OTP verification failed",
+      };
+    }
+
+    const cookieStore = await cookies();
+
+    cookieStore.set("access_token", data.data.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    cookieStore.set("refresh_token", data.data.refresh_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+
+    return { success: true, message: "Registration complete. Welcome!" };
+  } catch {
+    return { success: false, message: "Failed to verify OTP" };
   }
 }

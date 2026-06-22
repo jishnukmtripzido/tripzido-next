@@ -71,7 +71,7 @@ function OrderSummarySkeleton() {
 
 function FareDetailsSkeleton() {
   return (
-    <div className="bg-gray-50 md:bg-white border md:border-gray-200 rounded-md p-6 shadow-none animate-pulse">
+    <div className="bg-white border border-gray-200 rounded-md p-6 shadow-none animate-pulse">
       <div className="h-5 w-28 rounded bg-gray-200 mb-4" />
 
       <div className="space-y-4 mb-6">
@@ -115,8 +115,7 @@ function FareDetailsSkeleton() {
         <div className="h-3.5 w-48 rounded bg-gray-100" />
       </div>
 
-      {/* Pay Now button — kept visibly disabled-styled, not a tappable
-          shape, since no real price/quantity data exists yet */}
+      {/* Pay Now button — disabled state only, no real data yet */}
       <div className="w-full py-3.5 rounded-xl bg-gray-200 h-[50px]" />
     </div>
   );
@@ -124,18 +123,23 @@ function FareDetailsSkeleton() {
 
 /**
  * Full skeleton for the checkout page, mirroring CheckoutClient's
- * grid-cols-12 layout exactly (OrderSummary in 8 cols, FareDetails in
- * 4 cols) so the real content swaps in without layout shift.
+ * grid-cols-12 layout exactly so the real content swaps in without
+ * layout shift.
  *
- * The Pay Now button here is intentionally rendered in its disabled
- * gray state only — never the yellow "ready to pay" treatment — since
- * this is a payment flow and no real amount/quantity data exists
- * until CheckoutSummary resolves. It should never look interactive
- * before it is.
+ * NOTE: the real fix for the mobile whitespace issue is in page.tsx.
+ * Change the <main> className from:
+ *   "xl:mx-[80.5px] flex-grow mx-auto px-4 lg:px-0 py-4"
+ * to:
+ *   "xl:mx-[80.5px] flex-grow mx-auto px-4 py-4"
+ *
+ * lg:px-0 was zeroing out padding between lg and xl breakpoints with
+ * no margin to compensate, causing the wide empty gutters on those
+ * screen sizes. This skeleton also adds w-full to its root so it
+ * always fills whatever container it's given.
  */
 export default function CheckoutSkeleton() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       <div className="lg:col-span-8">
         <OrderSummarySkeleton />
       </div>

@@ -30,6 +30,7 @@ export default function HeaderClient({
 }: HeaderClientProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [initialMode, setInitialMode] = useState<"login" | "register">("login");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutError, setLogoutError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -61,6 +62,11 @@ export default function HeaderClient({
 
   const closeMenu = () => setMenuOpen(false);
 
+  const openModal = (mode: "login" | "register") => {
+    setInitialMode(mode);
+    setLoginOpen(true);
+  };
+
   /* ── logout ── */
   const handleLogout = () => {
     setLogoutError(null);
@@ -68,10 +74,9 @@ export default function HeaderClient({
       const result = await logoutAction();
       setDropdownOpen(false);
       if (result.success) {
-        router.refresh(); // re-run server components so isLoggedIn updates
+        router.refresh();
         router.push("/");
       } else {
-        // Show error briefly, then still refresh (cookies were cleared)
         setLogoutError(result.message);
         setTimeout(() => {
           setLogoutError(null);
@@ -195,9 +200,7 @@ export default function HeaderClient({
         }
       >
         <div
-          className={`mx-auto px-4 lg:px-8 py-2 flex items-center justify-between ${
-            headerLgScreenMx || "xl:mx-[121.5px] xl:px-0"
-          }`}
+          className={`mx-auto px-4 lg:px-8 py-2 flex items-center justify-between ${headerLgScreenMx || "xl:mx-[121.5px] xl:px-0"}`}
         >
           {/* Left: Logo + Nav */}
           <div className="flex items-center space-x-12">
@@ -272,7 +275,6 @@ export default function HeaderClient({
 
             {/* ── AUTH ── */}
             {isLoggedIn ? (
-              /* Account avatar + dropdown */
               <div className="relative hidden md:block" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen((prev) => !prev)}
@@ -280,15 +282,12 @@ export default function HeaderClient({
                   aria-expanded={dropdownOpen}
                   aria-haspopup="true"
                 >
-                  <div
-                    className={`w-8 h-8 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold ring-2 ring-transparent group-hover:ring-amber-200 transition-all`}
-                  >
+                  <div className="w-8 h-8 rounded-full bg-[#ffc107] flex items-center justify-center text-white font-bold ring-2 ring-transparent group-hover:ring-amber-200 transition-all">
                     {userName ? userName.charAt(0).toUpperCase() : "U"}
                   </div>
                   <span className="hidden sm:block text-sm font-bold text-gray-700 group-hover:text-black">
                     Your account
                   </span>
-                  {/* chevron */}
                   <svg
                     className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
                     fill="none"
@@ -314,7 +313,6 @@ export default function HeaderClient({
                         : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
                     }`}
                 >
-                  {/* User info */}
                   <div className="px-4 py-3 bg-amber-50 border-b border-amber-100">
                     <p className="text-xs text-gray-500">Signed in as</p>
                     <p className="text-sm font-bold text-gray-800 truncate">
@@ -322,7 +320,6 @@ export default function HeaderClient({
                     </p>
                   </div>
 
-                  {/* Menu items */}
                   <div className="py-1.5">
                     <Link
                       href="/profile"
@@ -366,7 +363,6 @@ export default function HeaderClient({
                     </Link>
                   </div>
 
-                  {/* Divider + Logout */}
                   <div className="border-t border-gray-100 py-1.5">
                     <button
                       onClick={handleLogout}
@@ -419,16 +415,17 @@ export default function HeaderClient({
                 </div>
               </div>
             ) : (
+              /* ── Logged-out auth buttons ── */
               <div className="hidden md:flex items-center space-x-2">
-                <Link
-                  href="/register"
-                  className="px-4 py-2 text-sm font-semibold text-black-900 border-none rounded-lg hover:bg-gray-50 transition-colors"
+                <button
+                  onClick={() => openModal("register")}
+                  className="px-4 py-2 text-sm font-semibold text-gray-900 border-none rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Register
-                </Link>
+                </button>
                 <button
-                  onClick={() => setLoginOpen(true)}
-                  className="px-4 py-2 cursor-pointer text-sm font-semibold  bg-[#ffc107] rounded-lg hover:bg-[#e6ac00] transition-colors"
+                  onClick={() => openModal("login")}
+                  className="px-4 py-2 cursor-pointer text-sm font-semibold bg-[#ffc107] rounded-lg hover:bg-[#e6ac00] transition-colors"
                 >
                   Sign in
                 </button>
@@ -459,7 +456,7 @@ export default function HeaderClient({
         </div>
       </header>
 
-      {/* Mobile drawer backdrop — only mounted when open to avoid stacking context interference */}
+      {/* Mobile drawer backdrop */}
       {menuOpen && (
         <div
           onClick={closeMenu}
@@ -475,17 +472,23 @@ export default function HeaderClient({
         isLoggedIn={isLoggedIn}
         onLoginClick={() => {
           closeMenu();
-          setLoginOpen(true);
+          openModal("login");
+        }}
+        onRegisterClick={() => {
+          closeMenu();
+          openModal("register");
         }}
         onLogout={handleLogout}
         isLoggingOut={isPending}
       />
 
-      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
+      <LoginModal
+        isOpen={loginOpen}
+        onClose={() => setLoginOpen(false)}
+        initialMode={initialMode}
+      />
 
-      {/* Inline keyframe for toast fade-in */}
       <style jsx global>{`
-        /* Toast fade-in — keeps translateX(-50%) because the toast uses left-1/2 -translate-x-1/2 */
         @keyframes toast-fade-in {
           from {
             opacity: 0;
@@ -500,7 +503,6 @@ export default function HeaderClient({
           animation: toast-fade-in 0.2s ease-out both;
         }
 
-        /* Generic backdrop fade-in — NO transform so fixed inset-0 stays full-screen */
         @keyframes fade-in {
           from {
             opacity: 0;
