@@ -17,7 +17,7 @@ function VehicleHeaderSkeleton() {
   return (
     <div className="bg-white pb-6 border-b border-gray-200 mb-4 md:mb-8 animate-pulse">
       {/* ── MOBILE SKELETON ── */}
-      <div className="flex flex-col md:hidden pt-5">
+      <div className="flex flex-col md:hidden pt-7">
         <div className="h-6 w-48 rounded bg-gray-200 mb-2" />
         <div className="h-4 w-24 rounded bg-gray-200 mb-6" />
 

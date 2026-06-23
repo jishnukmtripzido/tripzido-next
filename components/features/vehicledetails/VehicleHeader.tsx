@@ -140,7 +140,7 @@ export default function VehicleHeader({
       <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-3/4 bg-gray-200" />
 
       {/* ── MOBILE LAYOUT ── */}
-      <div className="flex flex-col md:hidden pt-5">
+      <div className="flex flex-col md:hidden pt-7">
         {/* Availability tag */}
         {availableCount > 0 && (
           <div className="flex items-center gap-2 mb-3">
@@ -182,7 +182,7 @@ export default function VehicleHeader({
         </div>
 
         {/* Pickup location */}
-        <div className="mt-4 pt-4 border-t border-gray-100">
+        <div className="mt-4 pt-4 border-t border-gray-100 hidden md:inline-block">
           <h3 className="text-[14px] font-semibold text-font-main-sub">
             {pickupLocationName} Pickup
           </h3>
