@@ -14,7 +14,7 @@ export default function SearchResultLayout({
         logoTextSize="xl"
         linkIconsSize={4}
         headerLgScreenMx=" xl:px-5"
-        headerValues=" w-full  py-2 border-b border-gray-100 text-gray-900"
+        headerValues=" w-full  py-2 border-b border-gray-100 text-gray-900 shadow-sm md:shadow-none"
       />
       {children}
     </>
