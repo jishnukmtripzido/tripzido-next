@@ -965,7 +965,7 @@ export default function HeaderClient({
             ) : (
               <button
                 onClick={() => openModal("login")}
-                className="md:hidden flex items-center justify-center w-8 h-8 rounded-full p-1 border-gray-400 bg-gray-100 transition-colors text-gray-700"
+                className="md:hidden flex items-center justify-center w-8 h-8 rounded-full p-1 border border-black bg-gray-100 transition-colors text-gray-700"
                 aria-label="Sign in"
               >
                 <svg
