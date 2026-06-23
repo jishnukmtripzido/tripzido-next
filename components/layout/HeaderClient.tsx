@@ -957,7 +957,7 @@ export default function HeaderClient({
             {isLoggedIn ? (
               <Link
                 href="/profile"
-                className="md:hidden flex items-center justify-center w-7 h-7 rounded-full bg-brand-yellow text-white font-bold text-sm flex-shrink-0"
+                className="md:hidden flex items-center justify-center w-8 h-8 rounded-full bg-brand-yellow text-white font-bold text-sm flex-shrink-0"
                 aria-label="Go to profile"
               >
                 {userName ? userName.charAt(0).toUpperCase() : "U"}
@@ -965,7 +965,7 @@ export default function HeaderClient({
             ) : (
               <button
                 onClick={() => openModal("login")}
-                className="md:hidden flex items-center justify-center w-7 h-7 rounded-full p-1 border-gray-400 bg-gray-100 transition-colors text-gray-700"
+                className="md:hidden flex items-center justify-center w-8 h-8 rounded-full p-1 border-gray-400 bg-gray-100 transition-colors text-gray-700"
                 aria-label="Sign in"
               >
                 <svg
