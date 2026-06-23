@@ -72,7 +72,7 @@ export default function VehicleFeatures({
           </div>
         ))}
       </div>
-      <div className="flex items-center gap-2 mt-4 text-sm text-font-main-sub">
+      <div className="flex items-center gap-2 mt-4 text-base md:text-sm text-font-main-sub">
         <MapIcon className="w-5 h-5 flex-shrink-0" />
         {distanceLimitDisplay}
       </div>
