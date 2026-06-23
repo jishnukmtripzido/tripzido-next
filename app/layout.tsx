@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning>
         {/* <Header /> */}
-        <main className="bg-white text-[#1a1a1a] font-sans min-h-screen">
+        <main className="bg-white text-font-main-sub font-sans min-h-screen">
           {children}
         </main>
         <Footer />

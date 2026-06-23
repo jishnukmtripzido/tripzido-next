@@ -15,7 +15,8 @@ export default async function HomePage() {
 
   return (
     <>
-      <Header />
+      <Header headerValues="w-full px-0 py-2 border-b border-gray-100 relative z-30 shadow-header" />
+
       <HeroSection />
       <SearchWidget cities={cities} citiesError={error} />
       <OffersSection />
