@@ -10,8 +10,8 @@ export default function PickupLocation({ location }: Props) {
   return (
     <div>
       <h2 className="text-lg font-bold text-gray-900 mb-4">Pickup Location</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-        <div className="md:col-span-1">
+      <div className="grid grid-cols-1  gap-6 items-start">
+        <div className="">
           <p className="font-semibold text-font-main-sub text-base">
             {location.location_name}
           </p>
@@ -22,13 +22,7 @@ export default function PickupLocation({ location }: Props) {
             </p>
           )}
         </div>
-        <div className="md:col-span-2 bg-gray-200 rounded-xl h-48 flex items-center justify-center overflow-hidden relative">
-          {/* <img
-             src="https://developers.google.com/static/maps/images/landing/hero_maps_static_api.png"
-         
-            alt={`Map showing ${location.location_name}`}
-            className="w-full h-full object-cover opacity-70"
-          /> */}
+        <div className=" bg-gray-200 rounded-xl h-48 flex items-center justify-center overflow-hidden relative">
           <img
             src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.latitude},${location.longitude}&zoom=14&size=800x400&markers=color:red%7C${location.latitude},${location.longitude}&key=${apiKey}`}
             alt={`Map showing ${location.location_name}`}

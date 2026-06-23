@@ -137,8 +137,6 @@ export default function VehicleHeader({
 
   return (
     <div className="bg-white pb-6 border-b border-gray-200 mb-4 md:mb-8 relative">
-      <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-3/4 bg-gray-200" />
-
       {/* ── MOBILE LAYOUT ── */}
       <div className="flex flex-col md:hidden pt-7">
         {/* Availability tag */}
