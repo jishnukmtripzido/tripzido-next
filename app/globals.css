@@ -5,7 +5,7 @@
 
 /* ── Brand theme (Tailwind v4 config lives here, not in tailwind.config.ts) ── */
 @theme {
-  /* --color-brand-yellow: #ffc107; */
+  --color-brand-yellow-lg: #ffc107;
   --color-brand-yellow: #fed250;
   --color-font-main-sub: #1a1a1a;
   --color-font-dim: #595959;

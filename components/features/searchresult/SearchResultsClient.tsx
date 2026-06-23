@@ -207,7 +207,7 @@ function TabButton({
   return (
     <button
       onClick={onClick}
-      className={`pb-2.5 px-4 text-sm font-medium border-b-2 -mb-px transition-colors cursor-pointer flex items-center gap-1.5
+      className={`pb-1.5 pr-4   text-[14.5px] font-medium border-b-2 -mb-px transition-colors cursor-pointer flex items-center gap-1.5
         ${active ? activeColor : "border-transparent font-extralight text-gray-500 hover:text-gray-700"}`}
     >
       {icon}
