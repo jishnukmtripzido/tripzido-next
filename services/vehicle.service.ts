@@ -2,6 +2,7 @@
 
 import { api } from "@/lib/api";
 import type { VehicleSearchResult } from "@/types/vehicles.types";
+import type { Offer, PopularRental } from "@/types/search.types";
 
 export type VehicleSearchParams = {
   city_id: string;
@@ -25,5 +26,26 @@ export async function searchVehiclesApi(
     { cache: "no-store" },
   );
 
+  return data.data;
+}
+
+export async function getOffersApi(): Promise<Offer[]> {
+  const data = await api.get<{ data: Offer[] }>(
+    "/api/administrations/offers/",
+    {
+      // Offers rarely change — revalidate every 10 minutes
+      revalidate: 600,
+    },
+  );
+  return data.data;
+}
+
+export async function getPopularRentalsApi(
+  cityId: number,
+): Promise<PopularRental[]> {
+  const data = await api.get<{ data: PopularRental[] }>(
+    `/api/administrations/popular-rentals/?city_id=${cityId}`,
+    { revalidate: 600 },
+  );
   return data.data;
 }
