@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { CalendarIcon, ClockIcon, LocationIcon } from "@/components/ui/icons";
 import TriggerButton from "@/components/ui/TriggerButton";
 import { FieldError } from "@/components/ui/FieldError";
-import DatePickerDropdown from "@/components/features/search/DatePickerDropdown";
-import DatePickerModal from "@/components/features/search/DatePickerModal";
-import TimePickerDropdown from "@/components/features/search/TimePickerDropdown";
+import DatePickerDropdown from "@/components/ui/DatePickerDropdown";
+import DatePickerModal from "@/components/ui/DatePickerModal";
+import TimePickerDropdown from "@/components/ui/TimePickerDropdown";
 import LocationPickerDropdown from "@/components/features/vehicledetails/LocationPickerDropdown";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import { searchVehiclesApi } from "@/services/vehicle.service";
@@ -22,7 +22,7 @@ import {
   toISO,
 } from "@/lib/dateUtils";
 import type { PickupLocationOption } from "@/services/vehicleDetails.service";
-import type { DateRange } from "@/components/features/search/DatePickerModal";
+import type { DateRange } from "@/components/ui/DatePickerModal";
 
 interface EditSearchBarProps {
   onClose: () => void;

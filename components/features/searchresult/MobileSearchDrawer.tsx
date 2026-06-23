@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import CityPickerModal from "@/components/features/search/CityPickerModal";
-import DatePickerModal from "@/components/features/search/DatePickerModal";
-import TimePickerModal from "@/components/features/search/TimePickerModal";
+import CityPickerModal from "@/components/ui/CityPickerModal";
+import DatePickerModal from "@/components/ui/DatePickerModal";
+import TimePickerModal from "@/components/ui/TimePickerModal";
 import { FieldError } from "@/components/ui/FieldError";
 import { CloseButton } from "@/components/ui/icons";
 import { useSearchForm } from "@/hooks/useSearchForm";

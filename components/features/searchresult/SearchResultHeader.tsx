@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import CityPickerModal from "@/components/features/search/CityPickerModal";
-import DatePickerModal from "@/components/features/search/DatePickerModal";
-import TimePickerModal from "@/components/features/search/TimePickerModal";
-import DatePickerDropdown from "@/components/features/search/DatePickerDropdown";
-import TimePickerDropdown from "@/components/features/search/TimePickerDropdown";
+import CityPickerModal from "@/components/ui/CityPickerModal";
+import DatePickerModal from "@/components/ui/DatePickerModal";
+import TimePickerModal from "@/components/ui/TimePickerModal";
+import DatePickerDropdown from "@/components/ui/DatePickerDropdown";
+import TimePickerDropdown from "@/components/ui/TimePickerDropdown";
 import { FieldError } from "@/components/ui/FieldError";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import { formatDate, formatTime } from "@/lib/dateUtils";
 import type { City } from "@/types/locations.types";
 import type { ModalType } from "@/types/search.types";
-import type { DateRange } from "@/components/features/search/DatePickerModal";
+import type { DateRange } from "@/components/ui/DatePickerModal";
 
 interface SearchResultHeaderProps {
   cities: City[];
