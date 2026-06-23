@@ -2,13 +2,16 @@ export default function HeroSection() {
   return (
     <section className="relative w-full overflow-hidden h-[55vw] min-h-[200px] max-h-[420px] md:h-[42vh] md:min-h-[270px] md:max-h-none">
       {/* Background Image + Gradient */}
+
       <div className="absolute inset-0 z-0">
-        <img
-          alt="Motorcycle in scenic location"
-          className="w-full h-full object-cover object-center bg-black/80"
-          // src="https://media.publit.io/file/ChatGPT-Image-May-1-2026-11-35-56-AM.png"
-          src="chatgpt.png"
-        />
+        <picture>
+          <source media="(min-width: 768px)" srcSet="hero-lg.png" />
+          <img
+            alt="Motorcycle in scenic location"
+            className="w-full h-full object-cover object-center bg-black/80"
+            src="hero-mob.png"
+          />
+        </picture>
         {/* <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.85)_35%,rgba(255,255,255,0)_72%)] md:bg-[linear-gradient(90deg,rgba(255,255,255,0.75)_25%,rgba(255,255,255,0)_65%)]" /> */}
       </div>
 
