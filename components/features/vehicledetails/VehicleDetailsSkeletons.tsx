@@ -87,11 +87,27 @@ function VehicleHeaderSkeleton() {
   );
 }
 
+// function ThingsToRememberSkeleton() {
+//   return (
+//     <div className="mb-8 animate-pulse">
+//       <div className="h-5 w-44 rounded bg-gray-200 mb-5" />
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 bg-white border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
+//         {Array.from({ length: 5 }).map((_, i) => (
+//           <div key={i} className="flex items-center gap-3">
+//             <div className="w-5 h-5 rounded bg-gray-200 shrink-0" />
+//             <div className="h-3.5 w-36 rounded bg-gray-200" />
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
 function ThingsToRememberSkeleton() {
   return (
     <div className="mb-8 animate-pulse">
       <div className="h-5 w-44 rounded bg-gray-200 mb-5" />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 bg-white border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
+      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-y-4 md:gap-x-8 bg-white border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex items-center gap-3">
             <div className="w-5 h-5 rounded bg-gray-200 shrink-0" />
