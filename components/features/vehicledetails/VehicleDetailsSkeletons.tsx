@@ -16,10 +16,40 @@ function BreadcrumbsSkeleton() {
 function VehicleHeaderSkeleton() {
   return (
     <div className="bg-white pb-6 border-b border-gray-200 mb-4 md:mb-8 animate-pulse">
-      <div className="flex flex-col md:flex-row gap-8">
+      {/* ── MOBILE SKELETON ── */}
+      <div className="flex flex-col md:hidden pt-5">
+        <div className="h-6 w-48 rounded bg-gray-200 mb-2" />
+        <div className="h-4 w-24 rounded bg-gray-200 mb-6" />
+
+        <div className="grid grid-cols-[1fr_150px] gap-4 items-start">
+          <div className="space-y-4 mt-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded bg-gray-200 shrink-0" />
+                <div className="h-3.5 w-24 rounded bg-gray-200" />
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="w-full h-24 rounded bg-gray-200" />
+            <div className="flex gap-2">
+              <div className="w-10 h-8 rounded bg-gray-200 shrink-0" />
+              <div className="w-10 h-8 rounded bg-gray-200 shrink-0" />
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 pt-4 border-t border-gray-100">
+          <div className="h-4 w-32 rounded bg-gray-200 mb-2" />
+          <div className="h-3 w-48 rounded bg-gray-100" />
+        </div>
+      </div>
+
+      {/* ── DESKTOP SKELETON (Unchanged) ── */}
+      <div className="hidden md:flex flex-row gap-8">
         {/* Image gallery */}
-        <div className="w-full md:w-5/12">
-          <div className="md:bg-gray-50 md:rounded-md flex items-center justify-center p-6 md:border border-gray-100 h-64 md:h-72">
+        <div className="w-6/12">
+          <div className="md:bg-gray-50 md:rounded-md flex items-center justify-center p-6 md:border border-gray-100 h-72">
             <div className="w-full h-full rounded bg-gray-200" />
           </div>
           <div className="flex gap-3 mt-4">
@@ -33,7 +63,7 @@ function VehicleHeaderSkeleton() {
         </div>
 
         {/* Right side: title, specs */}
-        <div className="w-full md:w-7/12 flex flex-col justify-start">
+        <div className="w-7/12 flex flex-col justify-start">
           <div className="h-5 w-32 rounded bg-gray-200 mb-3" />
           <div className="h-7 w-2/3 rounded bg-gray-200 mb-2" />
           <div className="h-3.5 w-28 rounded bg-gray-200 mb-6" />
@@ -47,7 +77,7 @@ function VehicleHeaderSkeleton() {
             ))}
           </div>
 
-          <div className="mt-8 pt-4 hidden md:block border-t border-gray-100">
+          <div className="mt-8 pt-4 border-t border-gray-100">
             <div className="h-4 w-40 rounded bg-gray-200 mb-2" />
             <div className="h-3 w-56 rounded bg-gray-100" />
           </div>

@@ -172,12 +172,12 @@ export default function OffersSection() {
           </div>
         </div>
 
-        {/* Prev — hidden until needed, mirrors original style="visibility:hidden" */}
+        {/* Prev */}
         <button
           onClick={prev}
           disabled={!canPrev}
           style={{ visibility: canPrev ? "visible" : "hidden" }}
-          className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 w-10 h-10 bg-white shadow-lg border border-gray-100 rounded-full items-center justify-center text-gray-400 hover:text-black z-30 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 w-10 h-10 bg-white shadow-lg border border-gray-100 rounded-full items-center justify-center text-gray-400 hover:text-black z-10 disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <svg
             className="w-6 h-6"
@@ -198,7 +198,7 @@ export default function OffersSection() {
         <button
           onClick={next}
           disabled={!canNext}
-          className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 w-10 h-10 bg-white shadow-lg border border-gray-100 rounded-full items-center justify-center text-gray-400 hover:text-black z-30 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 w-10 h-10 bg-white shadow-lg border border-gray-100 rounded-full items-center justify-center text-gray-400 hover:text-black z-10 disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <svg
             className="w-6 h-6"

@@ -19,6 +19,7 @@ interface CalendarMonthProps {
   selecting?: "start" | "end";
   onDayClick: (d: Date) => void;
   onDayHover: (d: Date | null) => void;
+  hideHeader?: boolean;
 }
 
 export default function CalendarMonth({
@@ -29,6 +30,7 @@ export default function CalendarMonth({
   hasSelection = false,
   onDayClick,
   onDayHover,
+  hideHeader,
 }: CalendarMonthProps) {
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
@@ -56,9 +58,11 @@ export default function CalendarMonth({
 
   return (
     <div className="flex-1 min-w-0">
-      <p className="text-center font-bold text-gray-900 mb-4 text-sm tracking-wide">
-        {MONTHS_FULL[month]} {year}
-      </p>
+      {!hideHeader && (
+        <p className="text-center font-bold text-gray-900 mb-4 text-sm tracking-wide">
+          {MONTHS_FULL[month]} {year}
+        </p>
+      )}
       <div className="grid grid-cols-7 mb-1">
         {DAYS.map((d) => (
           <div

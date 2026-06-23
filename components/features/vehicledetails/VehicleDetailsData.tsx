@@ -91,7 +91,7 @@ export default async function VehicleDetailsData({ id, searchParams }: Props) {
         >
           <main className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 pb-4 md:py-4 xl:py-5 grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Left Column */}
-            <div className="lg:col-span-8 space-y-5 order-1 lg:order-none">
+            <div className="lg:col-span-8 space-y-5 order-1 lg:order-none lg:border-r lg:border-gray-200">
               <Breadcrumbs
                 locationName={location_name!}
                 vehicleName={vehicle.name}
