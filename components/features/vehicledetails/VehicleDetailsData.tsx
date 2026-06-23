@@ -118,16 +118,16 @@ export default async function VehicleDetailsData({ id, searchParams }: Props) {
               </div>
 
               <ThingsToRemember policies={vehicle.policies} />
-              <div className="lg:border-t lg:border-gray-200" />
+              <div className="border-t border-gray-200" />
               <TermsAndConditions terms={vehicle.terms_and_conditions} />
-              <div className="lg:border-t lg:border-gray-200" />
+              <div className="border-t border-gray-200" />
 
               {/* Cancellation policy — streams in independently */}
               <Suspense fallback={<CancellationPolicySkeleton />}>
                 <CancellationPolicy vehicleId={Number(id)} />
               </Suspense>
 
-              <div className="lg:border-t lg:border-gray-200" />
+              <div className="border-t border-gray-200" />
               <PickupLocation location={vehicle.pickup_location} />
 
               {/* Reviews — streams in independently */}

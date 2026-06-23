@@ -44,7 +44,7 @@ export default async function CancellationPolicy({ vehicleId }: Props) {
       <h2 className="text-lg font-bold text-gray-900 mb-4">
         Cancellation Policy
       </h2>
-      <div className="border border-gray-200 lg:border-none rounded-md p-6 lg:p-0 space-y-3 bg-white">
+      <div className=" space-y-3 bg-white">
         {policy.rules.map((rule, idx) => (
           <div key={idx} className="flex items-start gap-3">
             <div

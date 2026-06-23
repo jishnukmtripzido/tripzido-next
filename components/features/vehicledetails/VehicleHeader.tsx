@@ -155,7 +155,7 @@ export default function VehicleHeader({
           <h1 className="text-[20px] font-bold text-font-main-sub leading-snug">
             {name}
           </h1>
-          <p className="text-font-main-sub text-[13px] mt-0.5">
+          <p className="text-font-main-sub text-[13px] mt-1">
             Make Year: {makeYear}
           </p>
         </div>

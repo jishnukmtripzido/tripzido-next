@@ -8,7 +8,7 @@ export default function TermsAndConditions({ terms }: Props) {
       <h2 className="text-lg font-bold text-gray-900 mb-4">
         Terms &amp; Conditions
       </h2>
-      <div className="bg-white border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
+      <div className="bg-white  ">
         <ul className="space-y-3 text-sm text-main-sub">
           {terms.map((term, idx) => (
             <li key={idx} className="flex items-start gap-3">
