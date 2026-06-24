@@ -1,6 +1,6 @@
 export default function OfferBanner() {
   return (
-    <div className="hidden md:block bg-[#fed250] px-6 py-2.5">
+    <div className="hidden md:block bg-brand-yellow px-6 py-2.5">
       <div className="text-center ">
         <p className="text-[10px] md:text-sm font-normal text-black">
           Limited time offer — Get{" "}
