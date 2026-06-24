@@ -1,4 +1,5 @@
 // components/layout/Header.tsx
+import { redirect } from "next/navigation";
 import { getIsLoggedIn } from "@/lib/auth";
 import { getProfile } from "@/actions/profile.actions";
 import HeaderClient from "./HeaderClient";
@@ -22,18 +23,25 @@ export default async function Header({
 }: HeaderProps) {
   const isLoggedIn = await getIsLoggedIn();
 
-  // Fetch user profile if logged in to get the actual username
   let userName: string | null = null;
+
   if (isLoggedIn) {
-    const profile = await getProfile();
-    if (profile) {
-      // Only set userName if there are actual name values
-      const fullName = [profile.first_name, profile.last_name]
-        .filter(Boolean)
-        .join(" ")
-        .trim();
-      userName = fullName || null;
+    let profile = null;
+    try {
+      profile = await getProfile();
+    } catch {
+      // token expired / invalid — redirect to route handler which clears cookies
     }
+
+    if (!profile) {
+      redirect("/api/auth/clear-session");
+    }
+
+    const fullName = [profile.first_name, profile.last_name]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
+    userName = fullName || null;
   }
 
   return (

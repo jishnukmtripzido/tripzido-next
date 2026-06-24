@@ -153,3 +153,9 @@ export async function registerAndLogin(
     return { success: false, message: "Failed to verify OTP" };
   }
 }
+
+export async function clearTokensAction(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.delete("access_token");
+  cookieStore.delete("refresh_token");
+}

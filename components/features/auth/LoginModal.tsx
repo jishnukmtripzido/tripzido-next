@@ -10,11 +10,7 @@ import { LOGIN_MODAL_CITIES, LOGIN_MODAL_STATS } from "@/lib/constants";
 import { SpinnerIcon, CloseButton } from "@/components/ui/icons";
 import type { LoginModalProps } from "@/types/auth.types";
 
-// ── Types ──────────────────────────────────────────────────────────────────
-
 type ModalMode = "login" | "register";
-
-// ── Main component ─────────────────────────────────────────────────────────
 
 export default function LoginModal({
   isOpen,
@@ -23,20 +19,17 @@ export default function LoginModal({
 }: LoginModalProps & { initialMode?: ModalMode }) {
   const router = useRouter();
 
-  // shared
   const [mode, setMode] = useState<ModalMode>(initialMode);
 
-  // Sync mode whenever the caller changes initialMode (e.g. Register button
-  // clicked while modal was already mounted but closed)
   useEffect(() => {
     if (isOpen) setMode(initialMode);
   }, [isOpen, initialMode]);
+
   const [phone, setPhone] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [otpError, setOtpError] = useState<string | null>(null);
 
-  // register-only fields
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -56,8 +49,6 @@ export default function LoginModal({
     reset: resetOtp,
   } = useOtpInput(otpSent);
 
-  // ── Helpers ──────────────────────────────────────────────────────────────
-
   const fullReset = () => {
     setPhone("");
     setOtpSent(false);
@@ -73,7 +64,6 @@ export default function LoginModal({
   const handleClose = () => {
     onClose();
     fullReset();
-    // keep mode so re-opening feels consistent; reset to login after a delay
     setTimeout(() => setMode("login"), 300);
   };
 
@@ -81,8 +71,6 @@ export default function LoginModal({
     fullReset();
     setMode(next);
   };
-
-  // ── Validation (register only) ────────────────────────────────────────────
 
   const validateRegisterFields = (): boolean => {
     const errors: Record<string, string> = {};
@@ -93,8 +81,6 @@ export default function LoginModal({
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
-  // ── Send OTP: login ───────────────────────────────────────────────────────
 
   const handleSendLoginOTP = async () => {
     const token = tokenRef.current;
@@ -112,8 +98,6 @@ export default function LoginModal({
     }
   };
 
-  // ── Send OTP: register ────────────────────────────────────────────────────
-
   const handleSendRegisterOTP = async () => {
     if (!validateRegisterFields()) return;
     const token = tokenRef.current;
@@ -121,14 +105,13 @@ export default function LoginModal({
     setLoading(true);
     try {
       const data = await registerSendOtpApi({
-        phone_number: `+91${phone}`, // adjust if you support multi-country
+        phone_number: `+91${phone}`,
         first_name: firstName.trim(),
         last_name: lastName.trim() || undefined,
         email: email.trim() || undefined,
         turnstile_token: token,
       });
       if (!data.success) {
-        // Surface server-side errors (e.g. phone already registered)
         setFieldErrors({ phone: data.message || "Could not send OTP." });
         resetTurnstile();
         return;
@@ -143,8 +126,6 @@ export default function LoginModal({
       setLoading(false);
     }
   };
-
-  // ── Verify OTP: login ─────────────────────────────────────────────────────
 
   const handleVerifyLoginOTP = async () => {
     const code = otp.join("");
@@ -164,8 +145,6 @@ export default function LoginModal({
       setLoading(false);
     }
   };
-
-  // ── Verify OTP: register ──────────────────────────────────────────────────
 
   const handleVerifyRegisterOTP = async () => {
     const code = otp.join("");
@@ -194,8 +173,6 @@ export default function LoginModal({
 
   if (!isOpen) return null;
 
-  // ── Derived ───────────────────────────────────────────────────────────────
-
   const isRegister = mode === "register";
   const canSendOtp =
     phone.length === 10 &&
@@ -205,19 +182,17 @@ export default function LoginModal({
 
   return (
     <>
-      {/* Backdrop */}
       <div
         onClick={handleClose}
         className="animate-fade-in fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
         aria-hidden="true"
       />
 
-      {/* Dialog */}
       <div
         role="dialog"
         aria-modal="true"
         aria-label={isRegister ? "Create your account" : "Sign in to Tripzido"}
-        className="fixed z-50 bg-white overflow-hidden animate-slide-up sm:animate-scale-in inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[880px] md:max-h-[90vh] md:rounded-2xl md:shadow-2xl"
+        className="fixed z-50 bg-white overflow-hidden animate-slide-up sm:animate-scale-in inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[880px] md:max-h-[90vh] md:overflow-y-auto md:rounded-2xl md:shadow-2xl"
       >
         <div className="flex h-full md:h-auto">
           {/* ── Left decorative panel ── */}
@@ -234,25 +209,22 @@ export default function LoginModal({
               className="absolute top-4 right-4"
             />
 
-            {/* Mobile logo */}
             <div className="flex items-center space-x-2 mb-8 md:hidden">
               <BrandLogo />
             </div>
 
             <div className="flex flex-col justify-center flex-1 max-w-sm mx-auto w-full">
-              {/* ── Mode tab switcher ── */}
               {!otpSent && (
                 <div className="flex bg-gray-100 rounded-xl p-1 mb-6 gap-1">
                   {(["login", "register"] as ModalMode[]).map((m) => (
                     <button
                       key={m}
                       onClick={() => switchMode(m)}
-                      className={`flex-1 py-2 text-sm rounded-lg font-medium transition-all duration-150
-                        ${
-                          mode === m
-                            ? "bg-white text-gray-900 font-semibold shadow-sm"
-                            : "text-gray-400 hover:text-gray-600"
-                        }`}
+                      className={`flex-1 py-2 text-sm rounded-lg font-medium transition-all duration-150 ${
+                        mode === m
+                          ? "bg-white text-gray-900 font-semibold shadow-sm"
+                          : "text-gray-400 hover:text-gray-600"
+                      }`}
                     >
                       {m === "login" ? "Sign in" : "Register"}
                     </button>
@@ -260,7 +232,6 @@ export default function LoginModal({
                 </div>
               )}
 
-              {/* ── Heading ── */}
               <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">
                 {otpSent
                   ? "Enter OTP"
@@ -279,7 +250,6 @@ export default function LoginModal({
                     : "Commuting made Easy, Affordable and Quick"}
               </p>
 
-              {/* ── Form / OTP ── */}
               {!otpSent ? (
                 isRegister ? (
                   <RegisterStep
@@ -558,39 +528,40 @@ function RegisterStep({
 
   return (
     <>
-      {/* First name */}
-      <div className="mb-3">
-        <label className="block text-xs font-semibold text-gray-600 mb-1">
-          First name <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          placeholder="First name"
-          value={firstName}
-          onChange={(e) => {
-            setFirstName(e.target.value);
-            clearError("firstName");
-          }}
-          autoComplete="given-name"
-          className={inputCls(!!fieldErrors.firstName)}
-        />
-        <FieldError msg={fieldErrors.firstName} />
-      </div>
+      {/* First name + Last name: stacked on mobile, side-by-side on md+ */}
+      <div className="md:grid md:grid-cols-2 md:gap-3">
+        <div className="mb-3">
+          <label className="block text-xs font-semibold text-gray-600 mb-1">
+            First name <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            placeholder="First name"
+            value={firstName}
+            onChange={(e) => {
+              setFirstName(e.target.value);
+              clearError("firstName");
+            }}
+            autoComplete="given-name"
+            className={inputCls(!!fieldErrors.firstName)}
+          />
+          <FieldError msg={fieldErrors.firstName} />
+        </div>
 
-      {/* Last name */}
-      <div className="mb-3">
-        <label className="block text-xs font-semibold text-gray-600 mb-1">
-          Last name{" "}
-          <span className="text-gray-400 font-normal">(optional)</span>
-        </label>
-        <input
-          type="text"
-          placeholder="Last name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          autoComplete="family-name"
-          className={inputCls(false)}
-        />
+        <div className="mb-3">
+          <label className="block text-xs font-semibold text-gray-600 mb-1">
+            Last name{" "}
+            <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            autoComplete="family-name"
+            className={inputCls(false)}
+          />
+        </div>
       </div>
 
       {/* Email */}
@@ -618,7 +589,9 @@ function RegisterStep({
           Mobile number <span className="text-red-500">*</span>
         </label>
         <div
-          className={`flex items-center border-2 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-[#ffc10740] ${fieldErrors.phone ? "border-red-400" : "border-brand-yellow"}`}
+          className={`flex items-center border-2 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-[#ffc10740] ${
+            fieldErrors.phone ? "border-red-400" : "border-brand-yellow"
+          }`}
         >
           <IndiaPrefixBadge />
           <input

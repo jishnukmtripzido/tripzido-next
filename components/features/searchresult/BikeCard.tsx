@@ -122,7 +122,7 @@ export default function BikeCard({
     return (
       <Link href={buildDetailsUrl()}>
         <button
-          className={`bg-brand-yellow hover:bg-yellow-500 text-black font-semibold rounded-lg transition-colors cursor-pointer ${
+          className={`bg-brand-yellow hover:bg-yellow-500 text-font-main-sub  font-semibold rounded-lg transition-colors cursor-pointer ${
             size === "md"
               ? "text-[13px] px-5 py-2 rounded-md"
               : "text-[14px] px-6 py-2.5"
@@ -243,8 +243,8 @@ export default function BikeCard({
           location+price+CTA. No flip interaction — nothing here needs
           to be hidden behind a click, so the card just shows everything
           at once. Calmer border + shadow, tighter type scale. */}
-      <div className="hidden sm:block min-w-0">
-        <div className="relative w-full min-w-0 bg-white border border-gray-200/80 rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col">
+      <div className="hidden sm:block min-w-0 ">
+        <div className="relative  w-full min-w-0 bg-white border border-gray-200/80  rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col">
           {/* Image */}
           <div className="relative h-[150px] flex items-center justify-center bg-gray-50 m-3 mb-0 rounded-lg shrink-0">
             <img
