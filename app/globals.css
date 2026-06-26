@@ -9,6 +9,11 @@
   --color-brand-yellow: #fed250;
   --color-font-main-sub: #1a1a1a;
   --color-font-dim: #595959;
+
+  /* --color-banner-from: #e8234a;
+  --color-banner-to: #c0176e; */
+  --color-banner-from: #fed250;
+  --color-banner-to: #ffc107;
   /* --font-sans: "Open Sans", sans-serif; */
   --font-sans:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,

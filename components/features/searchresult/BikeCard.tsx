@@ -301,8 +301,8 @@ export default function BikeCard({
 
             <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 mt-3">
               {[
-                { icon: "seat", label: seatsLabel },
-                { icon: "fuel", label: `${fuelTypeLabel} · ${engine}` },
+                // { icon: "seat", label: seatsLabel },
+                // { icon: "fuel", label: `${fuelTypeLabel} · ${engine}` },
                 {
                   icon: "map",
                   label: kmLimit ? kmLimit : "Unlimited Km",
