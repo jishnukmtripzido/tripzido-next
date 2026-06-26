@@ -92,7 +92,7 @@ export default function BikeCard({
         </>
       ) : price !== null ? (
         <div className="flex flex-col items-start gap-0.5">
-          <span className="text-[20px] font-bold text-black leading-none">
+          <span className="text-lg font-bold text-black leading-none">
             ₹{price.toLocaleString()}
           </span>
           <span className="text-[14px] text-font-main-sub">({kmLimit})</span>
