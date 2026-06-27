@@ -3,7 +3,8 @@
 
 import { useState, useEffect, useRef } from "react";
 
-export function useTurnstile(isActive: boolean) {
+export function useTurnstile(isActive: boolean, mountKey?: string) {
+  // 👈 add mountKey param
   const [token, setToken] = useState<string | null>(null);
   const tokenRef = useRef<string | null>(null);
   const widgetId = useRef<string | null>(null);
@@ -16,6 +17,8 @@ export function useTurnstile(isActive: boolean) {
   // mount when active
   useEffect(() => {
     if (!isActive) return;
+
+    widgetId.current = null; // 👈 reset stale widget ID so the guard below doesn't bail out
 
     const mount = () => {
       const container = document.getElementById("cf-turnstile-container");
@@ -34,9 +37,9 @@ export function useTurnstile(isActive: boolean) {
 
     const timer = setTimeout(mount, 300);
     return () => clearTimeout(timer);
-  }, [isActive]);
+  }, [isActive, mountKey]); // 👈 add mountKey to deps
 
-  // cleanup when inactive
+  // cleanup when inactive — unchanged
   useEffect(() => {
     if (!isActive) {
       if (widgetId.current && window.turnstile) {

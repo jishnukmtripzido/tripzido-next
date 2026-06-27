@@ -53,11 +53,12 @@ export async function verifyOtpAndLogin(
     });
 
     return { success: true, message: "Logged in successfully" };
-  } catch {
-    return { success: false, message: "Failed to verify OTP" };
+  } catch (err) {
+    // Surface the real Django error message instead of hiding it
+    const message = err instanceof Error ? err.message : "Failed to verify OTP";
+    return { success: false, message };
   }
 }
-
 // Action for logout functionality. Clears tokens from cookies and calls backend to invalidate refresh token. Handles various edge cases for missing tokens and network errors gracefully.
 /**
  * logoutAction

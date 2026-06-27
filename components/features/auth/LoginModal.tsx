@@ -30,6 +30,9 @@ export default function LoginModal({
   const [loading, setLoading] = useState(false);
   const [otpError, setOtpError] = useState<string | null>(null);
 
+  // Surfaces send-OTP errors (wrong phone, account not found, server errors, etc.)
+  const [sendError, setSendError] = useState<string | null>(null);
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -39,7 +42,7 @@ export default function LoginModal({
     token: turnstileToken,
     tokenRef,
     reset: resetTurnstile,
-  } = useTurnstile(isOpen && !otpSent);
+  } = useTurnstile(isOpen && !otpSent, mode);
 
   const {
     otp,
@@ -55,6 +58,7 @@ export default function LoginModal({
     resetOtp();
     setLoading(false);
     setOtpError(null);
+    setSendError(null);
     setFirstName("");
     setLastName("");
     setEmail("");
@@ -83,15 +87,24 @@ export default function LoginModal({
   };
 
   const handleSendLoginOTP = async () => {
+    setSendError(null);
     const token = tokenRef.current;
     if (phone.length !== 10 || !token) return;
     setLoading(true);
     try {
-      const data = await sendOtpApi(phone, token);
-      if (!data.success) throw new Error(data.message || "Failed to send OTP");
+      const data = await sendOtpApi(`+91${phone}`, token);
+      if (!data.success) {
+        setSendError(data.message || "Failed to send OTP. Please try again.");
+        resetTurnstile();
+        return;
+      }
       setOtpSent(true);
     } catch (err) {
-      console.error(err);
+      setSendError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
       resetTurnstile();
     } finally {
       setLoading(false);
@@ -99,6 +112,7 @@ export default function LoginModal({
   };
 
   const handleSendRegisterOTP = async () => {
+    setSendError(null);
     if (!validateRegisterFields()) return;
     const token = tokenRef.current;
     if (!token) return;
@@ -112,15 +126,17 @@ export default function LoginModal({
         turnstile_token: token,
       });
       if (!data.success) {
-        setFieldErrors({ phone: data.message || "Could not send OTP." });
+        setSendError(data.message || "Could not send OTP. Please try again.");
         resetTurnstile();
         return;
       }
       setOtpSent(true);
     } catch (err: unknown) {
-      const msg =
-        err instanceof Error ? err.message : "Could not send OTP. Try again.";
-      setFieldErrors({ phone: msg });
+      setSendError(
+        err instanceof Error
+          ? err.message
+          : "Could not send OTP. Please try again.",
+      );
       resetTurnstile();
     } finally {
       setLoading(false);
@@ -169,6 +185,7 @@ export default function LoginModal({
     setOtpSent(false);
     resetOtp();
     setOtpError(null);
+    setSendError(null);
   };
 
   if (!isOpen) return null;
@@ -250,6 +267,26 @@ export default function LoginModal({
                     : "Commuting made Easy, Affordable and Quick"}
               </p>
 
+              {/* ── Send-OTP error banner ── */}
+              {!otpSent && sendError && (
+                <div className="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5 text-sm text-red-700">
+                  <svg
+                    className="w-4 h-4 mt-0.5 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                    />
+                  </svg>
+                  <span>{sendError}</span>
+                </div>
+              )}
+
               {!otpSent ? (
                 isRegister ? (
                   <RegisterStep
@@ -294,6 +331,7 @@ export default function LoginModal({
                     setOtpSent(false);
                     resetOtp();
                     setOtpError(null);
+                    setSendError(null);
                   }}
                   onResend={handleResend}
                   verifyLabel={
