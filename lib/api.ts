@@ -1,9 +1,12 @@
+// lib/api.ts
+
 type RequestOptions = {
   method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
   body?: unknown;
   token?: string;
   cache?: RequestCache;
   revalidate?: number;
+  timeout?: number;
 };
 
 async function request<T>(
@@ -16,42 +19,55 @@ async function request<T>(
     token,
     cache = "no-store",
     revalidate,
+    timeout = 15000, // 15s default — safe for all calls including search
   } = options;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
 
-  // attach token only if passed
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + endpoint, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-    cache: revalidate ? "force-cache" : cache,
-    next: revalidate ? { revalidate } : undefined,
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
 
-  if (!res.ok) {
-    let message = `API error: ${res.status} ${res.statusText}`;
-    try {
-      const errorBody = await res.json();
-      if (errorBody?.message) {
-        message = errorBody.message;
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + endpoint, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+      cache: revalidate ? "force-cache" : cache,
+      next: revalidate ? { revalidate } : undefined,
+      signal: controller.signal,
+    });
+
+    if (!res.ok) {
+      let message = `API error: ${res.status} ${res.statusText}`;
+      try {
+        const errorBody = await res.json();
+        if (errorBody?.message) message = errorBody.message;
+      } catch {
+        // response wasn't JSON — fall back to the generic message above
       }
-    } catch {
-      // response wasn't JSON — fall back to the generic message above
+      throw new Error(message);
     }
-    throw new Error(message);
-  }
 
-  return res.json() as Promise<T>;
+    return res.json() as Promise<T>;
+  } catch (err) {
+    // Give a clear error message when the timeout fires
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new Error(
+        `Request timed out after ${timeout / 1000}s — ${endpoint}`,
+      );
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
-// clean helpers so you just call api.get(), api.post() etc
 export const api = {
   get: <T>(
     endpoint: string,

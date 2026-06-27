@@ -32,10 +32,7 @@ export async function searchVehiclesApi(
 export async function getOffersApi(): Promise<Offer[]> {
   const data = await api.get<{ data: Offer[] }>(
     "/api/administrations/offers/",
-    {
-      // Offers rarely change — revalidate every 10 minutes
-      revalidate: 600,
-    },
+    { revalidate: 600, timeout: 8000 },
   );
   return data.data;
 }
@@ -45,7 +42,7 @@ export async function getPopularRentalsApi(
 ): Promise<PopularRental[]> {
   const data = await api.get<{ data: PopularRental[] }>(
     `/api/administrations/popular-rentals/?city_id=${cityId}`,
-    { revalidate: 600 },
+    { revalidate: 600, timeout: 8000 },
   );
   return data.data;
 }
