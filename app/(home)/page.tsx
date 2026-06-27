@@ -12,8 +12,6 @@ import PopularRentalsData from "@/components/features/search/PopularRentalsData"
 import OffersSectionSkeleton from "@/components/features/search/OffersSectionSkeleton";
 import PopularRentalsSkeleton from "@/components/features/search/PopularRentalsSkeleton";
 
-export const dynamic = "force-dynamic";
-
 export default async function HomePage() {
   const { cities, error } = await getCitiesCached();
 
