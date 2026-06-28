@@ -14,5 +14,5 @@ export const getCitiesCached = unstable_cache(
     }
   },
   ["cities-list"],
-  { revalidate: 36000 },
+  { revalidate: 1209600, tags: ["cities-list"] },
 );
