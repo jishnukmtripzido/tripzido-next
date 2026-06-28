@@ -29,8 +29,6 @@ export default function LoginModal({
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [otpError, setOtpError] = useState<string | null>(null);
-
-  // Surfaces send-OTP errors (wrong phone, account not found, server errors, etc.)
   const [sendError, setSendError] = useState<string | null>(null);
 
   const [firstName, setFirstName] = useState("");
@@ -209,137 +207,126 @@ export default function LoginModal({
         role="dialog"
         aria-modal="true"
         aria-label={isRegister ? "Create your account" : "Sign in to Tripzido"}
-        className="fixed z-50 bg-white overflow-hidden animate-slide-up sm:animate-scale-in inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[880px] md:max-h-[90vh] md:overflow-y-auto md:rounded-2xl md:shadow-2xl"
+        className="fixed z-50 bg-white overflow-hidden animate-slide-up sm:animate-scale-in inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[600px] md:max-h-[90vh] md:overflow-y-auto md:rounded-2xl md:shadow-2xl [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200"
       >
-        <div className="flex h-full md:h-auto">
-          {/* ── Left decorative panel ── */}
-          <div className="hidden md:flex flex-col justify-between w-[340px] bg-[#fffbea] p-8 shrink-0">
+        <div className="flex flex-col p-6 md:p-10 relative">
+          <CloseButton
+            onClick={handleClose}
+            className="absolute top-4 right-4"
+          />
+
+          <div className="flex items-center space-x-2 mb-8">
             <BrandLogo />
-            <CityRing cities={LOGIN_MODAL_CITIES} />
-            <StatsGrid stats={LOGIN_MODAL_STATS} />
           </div>
 
-          {/* ── Right content panel ── */}
-          <div className="flex flex-col flex-1 p-6 md:p-10 relative overflow-y-auto">
-            <CloseButton
-              onClick={handleClose}
-              className="absolute top-4 right-4"
-            />
-
-            <div className="flex items-center space-x-2 mb-8 md:hidden">
-              <BrandLogo />
-            </div>
-
-            <div className="flex flex-col justify-center flex-1 max-w-sm mx-auto w-full">
-              {!otpSent && (
-                <div className="flex bg-gray-100 rounded-xl p-1 mb-6 gap-1">
-                  {(["login", "register"] as ModalMode[]).map((m) => (
-                    <button
-                      key={m}
-                      onClick={() => switchMode(m)}
-                      className={`flex-1 py-2 text-sm rounded-lg font-medium transition-all duration-150 ${
-                        mode === m
-                          ? "bg-white text-gray-900 font-semibold shadow-sm"
-                          : "text-gray-400 hover:text-gray-600"
-                      }`}
-                    >
-                      {m === "login" ? "Sign in" : "Register"}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">
-                {otpSent
-                  ? "Enter OTP"
-                  : isRegister
-                    ? "Create account"
-                    : "Welcome to"}{" "}
-                {!otpSent && !isRegister && (
-                  <span className="text-brand-yellow">Tripzido</span>
-                )}
-              </h2>
-              <p className="text-sm text-gray-500 mb-6">
-                {otpSent
-                  ? `We've sent a 4-digit OTP to +91 ${phone}`
-                  : isRegister
-                    ? "Join in seconds — name and mobile number required"
-                    : "Commuting made Easy, Affordable and Quick"}
-              </p>
-
-              {/* ── Send-OTP error banner ── */}
-              {!otpSent && sendError && (
-                <div className="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5 text-sm text-red-700">
-                  <svg
-                    className="w-4 h-4 mt-0.5 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+          <div className="w-full">
+            {!otpSent && (
+              <div className="flex bg-gray-100 rounded-xl p-1 mb-6 gap-1">
+                {(["login", "register"] as ModalMode[]).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => switchMode(m)}
+                    className={`flex-1 py-2 text-sm rounded-lg font-medium transition-all duration-150 ${
+                      mode === m
+                        ? "bg-white text-gray-900 font-semibold shadow-sm"
+                        : "text-gray-400 hover:text-gray-600"
+                    }`}
                   >
-                    <path
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                    />
-                  </svg>
-                  <span>{sendError}</span>
-                </div>
-              )}
+                    {m === "login" ? "Sign in" : "Register"}
+                  </button>
+                ))}
+              </div>
+            )}
 
-              {!otpSent ? (
-                isRegister ? (
-                  <RegisterStep
-                    firstName={firstName}
-                    setFirstName={setFirstName}
-                    lastName={lastName}
-                    setLastName={setLastName}
-                    email={email}
-                    setEmail={setEmail}
-                    phone={phone}
-                    setPhone={setPhone}
-                    fieldErrors={fieldErrors}
-                    setFieldErrors={setFieldErrors}
-                    loading={loading}
-                    turnstileToken={turnstileToken}
-                    canSend={canSendOtp}
-                    onSend={handleSendRegisterOTP}
-                    onSwitchToLogin={() => switchMode("login")}
-                  />
-                ) : (
-                  <PhoneStep
-                    phone={phone}
-                    setPhone={setPhone}
-                    loading={loading}
-                    turnstileToken={turnstileToken}
-                    onSend={handleSendLoginOTP}
-                    onSwitchToRegister={() => switchMode("register")}
-                  />
-                )
-              ) : (
-                <OtpStep
-                  otp={otp}
-                  otpRefs={otpRefs}
-                  otpError={otpError}
-                  loading={loading}
-                  onChange={handleOtpChange}
-                  onKeyDown={handleOtpKeyDown}
-                  onVerify={
-                    isRegister ? handleVerifyRegisterOTP : handleVerifyLoginOTP
-                  }
-                  onChangeNumber={() => {
-                    setOtpSent(false);
-                    resetOtp();
-                    setOtpError(null);
-                    setSendError(null);
-                  }}
-                  onResend={handleResend}
-                  verifyLabel={
-                    isRegister ? "Verify & Create Account" : "Verify & Sign In"
-                  }
-                />
+            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">
+              {otpSent
+                ? "Enter OTP"
+                : isRegister
+                  ? "Create account"
+                  : "Welcome to"}{" "}
+              {!otpSent && !isRegister && (
+                <span className="text-brand-yellow">Tripzido</span>
               )}
-            </div>
+            </h2>
+            <p className="text-sm text-gray-500 mb-6">
+              {otpSent
+                ? `We've sent a 4-digit OTP to +91 ${phone}`
+                : isRegister
+                  ? "Join in seconds — name and mobile number required"
+                  : "Commuting made Easy, Affordable and Quick"}
+            </p>
+
+            {!otpSent && sendError && (
+              <div className="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5 text-sm text-red-700">
+                <svg
+                  className="w-4 h-4 mt-0.5 shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                  />
+                </svg>
+                <span>{sendError}</span>
+              </div>
+            )}
+
+            {!otpSent ? (
+              isRegister ? (
+                <RegisterStep
+                  firstName={firstName}
+                  setFirstName={setFirstName}
+                  lastName={lastName}
+                  setLastName={setLastName}
+                  email={email}
+                  setEmail={setEmail}
+                  phone={phone}
+                  setPhone={setPhone}
+                  fieldErrors={fieldErrors}
+                  setFieldErrors={setFieldErrors}
+                  loading={loading}
+                  turnstileToken={turnstileToken}
+                  canSend={canSendOtp}
+                  onSend={handleSendRegisterOTP}
+                  onSwitchToLogin={() => switchMode("login")}
+                />
+              ) : (
+                <PhoneStep
+                  phone={phone}
+                  setPhone={setPhone}
+                  loading={loading}
+                  turnstileToken={turnstileToken}
+                  onSend={handleSendLoginOTP}
+                  onSwitchToRegister={() => switchMode("register")}
+                />
+              )
+            ) : (
+              <OtpStep
+                otp={otp}
+                otpRefs={otpRefs}
+                otpError={otpError}
+                loading={loading}
+                onChange={handleOtpChange}
+                onKeyDown={handleOtpKeyDown}
+                onVerify={
+                  isRegister ? handleVerifyRegisterOTP : handleVerifyLoginOTP
+                }
+                onChangeNumber={() => {
+                  setOtpSent(false);
+                  resetOtp();
+                  setOtpError(null);
+                  setSendError(null);
+                }}
+                onResend={handleResend}
+                verifyLabel={
+                  isRegister ? "Verify & Create Account" : "Verify & Sign In"
+                }
+              />
+            )}
           </div>
         </div>
       </div>
@@ -368,84 +355,6 @@ function BrandLogo() {
         </svg>
       </div>
       <span className="text-xl font-extrabold tracking-tight">tripzido</span>
-    </div>
-  );
-}
-
-function CityRing({ cities }: { cities: typeof LOGIN_MODAL_CITIES }) {
-  return (
-    <div className="relative w-56 h-56 mx-auto my-6">
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 224 224">
-        <circle
-          cx="112"
-          cy="112"
-          r="100"
-          fill="none"
-          stroke="#ffc10730"
-          strokeWidth="1.5"
-          strokeDasharray="4 4"
-        />
-        <circle
-          cx="112"
-          cy="112"
-          r="72"
-          fill="none"
-          stroke="#ffc10740"
-          strokeWidth="1.5"
-          strokeDasharray="4 4"
-        />
-        <circle
-          cx="112"
-          cy="112"
-          r="44"
-          fill="none"
-          stroke="#ffc10750"
-          strokeWidth="1.5"
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-16 h-16 rounded-full bg-brand-yellow flex items-center justify-center shadow-lg">
-          <svg
-            className="w-8 h-8 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-            />
-          </svg>
-        </div>
-      </div>
-      {cities.map((city, i) => (
-        <div
-          key={i}
-          className="absolute -translate-x-1/2 -translate-y-1/2"
-          style={{ top: city.top, left: city.left }}
-        >
-          <div className="w-8 h-8 rounded-full bg-white border-2 border-brand-yellow flex items-center justify-center shadow-sm">
-            <span className="text-[7px] font-bold text-gray-700 text-center leading-tight px-0.5">
-              {city.name}
-            </span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function StatsGrid({ stats }: { stats: typeof LOGIN_MODAL_STATS }) {
-  return (
-    <div className="grid grid-cols-2 gap-3 mt-2">
-      {stats.map((s) => (
-        <div key={s.label} className="text-center">
-          <div className="text-sm font-extrabold text-gray-900">{s.value}</div>
-          <div className="text-[10px] text-gray-500 mt-0.5">{s.label}</div>
-        </div>
-      ))}
     </div>
   );
 }
@@ -485,7 +394,7 @@ function PhoneStep({
         />
       </div>
 
-      <div id="cf-turnstile-container" className="mb-4" />
+      <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
 
       <SendOtpButton
         loading={loading}
@@ -566,7 +475,6 @@ function RegisterStep({
 
   return (
     <>
-      {/* First name + Last name: stacked on mobile, side-by-side on md+ */}
       <div className="md:grid md:grid-cols-2 md:gap-3">
         <div className="mb-3">
           <label className="block text-xs font-semibold text-gray-600 mb-1">
@@ -602,7 +510,6 @@ function RegisterStep({
         </div>
       </div>
 
-      {/* Email */}
       <div className="mb-3">
         <label className="block text-xs font-semibold text-gray-600 mb-1">
           Email <span className="text-gray-400 font-normal">(optional)</span>
@@ -621,7 +528,6 @@ function RegisterStep({
         <FieldError msg={fieldErrors.email} />
       </div>
 
-      {/* Phone */}
       <div className="mb-4">
         <label className="block text-xs font-semibold text-gray-600 mb-1">
           Mobile number <span className="text-red-500">*</span>
@@ -648,7 +554,7 @@ function RegisterStep({
         <FieldError msg={fieldErrors.phone} />
       </div>
 
-      <div id="cf-turnstile-container" className="mb-4" />
+      <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
 
       <SendOtpButton
         loading={loading}
@@ -790,7 +696,7 @@ function OtpStep({
         onClick={onChangeNumber}
         className="w-full mt-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
       >
-        ← Change number
+        &larr; Change number
       </button>
 
       <p className="text-xs text-gray-400 text-center mt-4">

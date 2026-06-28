@@ -8,15 +8,10 @@ import DatePickerDropdown from "@/components/ui/DatePickerDropdown";
 import TimePickerDropdown from "@/components/ui/TimePickerDropdown";
 import TriggerButton from "@/components/ui/TriggerButton";
 import { FieldError } from "@/components/ui/FieldError";
-import {
-  CalendarIcon,
-  ClockIcon,
-  LocationIcon,
-  SpinnerIcon,
-} from "@/components/ui/icons";
+import { CalendarIcon, ClockIcon, LocationIcon } from "@/components/ui/icons";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import { getDefaultDatetimes, formatDate, formatTime } from "@/lib/dateUtils";
-import { LOGIN_MODAL_CITIES, LOGIN_MODAL_STATS } from "@/lib/constants";
+import { useCityContext } from "@/contexts/CityContext";
 import type { City } from "@/types/locations.types";
 import type { ModalType } from "@/types/search.types";
 import type { DateRange } from "@/components/ui/DatePickerModal";
@@ -32,6 +27,7 @@ export default function SearchWidget({
 }: SearchWidgetProps) {
   const defaults = getDefaultDatetimes();
   const [openModal, setOpenModal] = useState<ModalType>(null);
+  const { setSelectedCity: setGlobalCity } = useCityContext();
 
   const {
     selectedCity,
@@ -57,7 +53,6 @@ export default function SearchWidget({
     initialDropoffHour: defaults.dropoff.getHours(),
   });
 
-  // Dropoff-mode handler — same as handleDateSelect, both start+end update
   function handleDropoffDateSelect(range: DateRange) {
     handleDateSelect(range);
   }
@@ -188,8 +183,6 @@ export default function SearchWidget({
                   <label className="block text-xs font-medium text-gray-700 mb-1 ml-1">
                     Drop-off date
                   </label>
-
-                  {/* Mobile — opens dropoff modal */}
                   <div className="md:hidden">
                     <TriggerButton
                       onClick={() => setOpenModal("date-dropoff")}
@@ -201,8 +194,6 @@ export default function SearchWidget({
                       </span>
                     </TriggerButton>
                   </div>
-
-                  {/* Desktop — opens dropoff dropdown */}
                   <div className="hidden md:block">
                     <TriggerButton
                       onClick={() => toggleDropdown("date-dropoff")}
@@ -294,6 +285,7 @@ export default function SearchWidget({
         onSelect={(city) => {
           setSelectedCity({ id: city.id, name: city.name });
           clearCityError();
+          setGlobalCity(city);
         }}
         selectedCityId={selectedCity?.id ?? null}
         cities={cities}
@@ -301,7 +293,6 @@ export default function SearchWidget({
         error={citiesError}
       />
 
-      {/* Pick-up date modal — full range mode, unchanged */}
       <DatePickerModal
         isOpen={openModal === "date"}
         onClose={() => setOpenModal(null)}
@@ -310,7 +301,6 @@ export default function SearchWidget({
         mode="range"
       />
 
-      {/* Drop-off date modal — dropoff mode */}
       <DatePickerModal
         isOpen={openModal === "date-dropoff"}
         onClose={() => setOpenModal(null)}

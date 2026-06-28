@@ -31,16 +31,14 @@ export default function SearchModifyBar({
   const mobileRange = `${pickupDate} – ${dropoffDate}`;
 
   async function handleEditClick() {
-    console.log("handle clicking...");
     if (locations.length === 0) {
       setLocationsLoading(true);
       try {
-        console.log("below is api calling");
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/locations/pickup-locations/by-city/${cityId}/`,
         );
         const json = await res.json();
-        console.log("locations -  ", json);
+
         setLocations(json.data ?? []);
       } catch {
         setLocations([]);

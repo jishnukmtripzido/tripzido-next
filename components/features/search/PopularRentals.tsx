@@ -1,26 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useCarousel } from "@/hooks/useCarousel";
+import { useCityContext } from "@/contexts/CityContext";
+import { getPopularRentalsApi } from "@/services/vehicle.service";
+import { FALLBACK_POPULAR_RENTALS } from "@/lib/constants";
 import type { PopularRental } from "@/types/search.types";
 
 interface Props {
-  rentals: PopularRental[];
-  cityName: string;
+  initialRentals: PopularRental[];
 }
 
-export default function PopularRentals({ rentals, cityName }: Props) {
+export default function PopularRentals({ initialRentals }: Props) {
+  const { selectedCityId, selectedCityName } = useCityContext();
+  const [rentals, setRentals] = useState<PopularRental[]>(initialRentals);
+  const [loading, setLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
   const { trackRef, viewportRef, canPrev, canNext, prev, next } = useCarousel({
     visibleCards: 4,
     gap: 20,
   });
 
+  useEffect(() => {
+    if (!isMounted) {
+      setIsMounted(true);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function fetchRentals() {
+      setLoading(true);
+      try {
+        const data = await getPopularRentalsApi(selectedCityId);
+        if (!cancelled && data && data.length > 0) setRentals(data);
+      } catch {
+        // keep current rentals on error
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    fetchRentals();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedCityId]);
+
   return (
     <section className="pt-12 px-4 lg:px-8 mx-auto xl:mx-[121.5px] xl:px-0">
       <div className="mb-7">
         <h2 className="text-[1.37rem] md:text-2xl font-bold text-gray-900">
-          Popular rentals in {cityName}
+          Popular rentals in {selectedCityName}
         </h2>
         <p className="text-sm text-gray-700 mt-1">
           Explore the misty hills and forest trails on two wheels
@@ -34,7 +67,9 @@ export default function PopularRentals({ rentals, cityName }: Props) {
         >
           <div
             ref={trackRef}
-            className="flex gap-5 md:[transition:transform_300ms_ease-in-out]"
+            className={`flex gap-5 md:[transition:transform_300ms_ease-in-out] transition-opacity duration-200 ${
+              loading ? "opacity-40 pointer-events-none" : "opacity-100"
+            }`}
           >
             {rentals.map((rental) => (
               <PopularRentalCard key={rental.id} rental={rental} />
@@ -97,20 +132,34 @@ function PopularRentalCard({ rental }: { rental: PopularRental }) {
         <h3 className="font-medium text-gray-900 text-[15px]">{rental.name}</h3>
         <p className="text-xs text-gray-700 mt-0.5">{specs}</p>
 
-        <div className="flex items-end justify-between mt-3 pt-3 border-t border-gray-100">
-          <div>
-            <span className="text-[11px] text-gray-700">Starting from</span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-xl font-medium text-gray-900">
-                ₹
-                {rental.display_price
-                  ? Number(rental.display_price).toLocaleString("en-IN")
-                  : "—"}
-              </span>
-              <span className="text-xs text-gray-700 font-medium">/ day</span>
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+          {rental.pickup_location_name ? (
+            <div className="flex items-center gap-1 text-xs text-gray-500 truncate mr-2">
+              <svg
+                className="w-3.5 h-3.5 shrink-0 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              <span className="truncate">{rental.pickup_location_name}</span>
             </div>
-          </div>
-          <button className="bg-brand-yellow hover:bg-yellow-500 text-black text-sm font-medium px-5 py-2 rounded-md transition-colors">
+          ) : (
+            <div />
+          )}
+          <button className="bg-brand-yellow cursor-pointer hover:bg-yellow-500 text-black text-sm font-medium px-5 py-2 rounded-md transition-colors shrink-0">
             Book now
           </button>
         </div>

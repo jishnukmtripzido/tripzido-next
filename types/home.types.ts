@@ -18,6 +18,7 @@ export interface Bike {
   tags: string[];
   rating?: number;
   reviewCount?: number;
+  pickupLocationName: string | null;
 }
 
 export interface FAQItem {

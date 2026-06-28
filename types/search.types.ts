@@ -51,4 +51,6 @@ export type PopularRental = {
   image_url: string | null;
   tag: string;
   sort_order: number;
+  pickup_location_id: number | null;
+  pickup_location_name: string | null;
 };

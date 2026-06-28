@@ -26,10 +26,10 @@ export default function LoginBanner() {
         </div>
         <div>
           <p className="m-0 text-[14px] sm:text-[15px] font-bold text-white">
-            Log-in and get exclusive discounts!
+            Sign-in and get exclusive discounts!
           </p>
           <p className="m-0 text-[12px] sm:text-[13px] text-white/70 font-medium">
-            Log in and unlock all the exclusive offers and use wallet etc
+            Sign in and unlock all the exclusive offers
           </p>
         </div>
       </div>

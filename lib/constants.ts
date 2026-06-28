@@ -353,6 +353,8 @@ export const FALLBACK_POPULAR_RENTALS: PopularRental[] = [
     image_url: null,
     tag: "",
     sort_order: 0,
+    pickup_location_id: 1,
+    pickup_location_name: "Mananthavadi",
   },
   {
     id: 2,
@@ -369,6 +371,8 @@ export const FALLBACK_POPULAR_RENTALS: PopularRental[] = [
     image_url: null,
     tag: "",
     sort_order: 1,
+    pickup_location_id: 1,
+    pickup_location_name: "Mananthavadi",
   },
   {
     id: 3,
@@ -385,6 +389,8 @@ export const FALLBACK_POPULAR_RENTALS: PopularRental[] = [
     image_url: null,
     tag: "",
     sort_order: 2,
+    pickup_location_id: 1,
+    pickup_location_name: "Mananthavadi",
   },
   {
     id: 4,
@@ -401,5 +407,7 @@ export const FALLBACK_POPULAR_RENTALS: PopularRental[] = [
     image_url: null,
     tag: "",
     sort_order: 3,
+    pickup_location_id: 1,
+    pickup_location_name: "Mananthavadi",
   },
 ];

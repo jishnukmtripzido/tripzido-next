@@ -118,8 +118,6 @@ export default function CityPickerModal({
   const searchRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  console.log(cities[0]?.city_image);
-
   /* ── Memoized filtered array ── */
   const filtered = useMemo(
     () =>
