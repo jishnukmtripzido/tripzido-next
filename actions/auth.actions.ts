@@ -150,8 +150,10 @@ export async function registerAndLogin(
     });
 
     return { success: true, message: "Registration complete. Welcome!" };
-  } catch {
-    return { success: false, message: "Failed to verify OTP" };
+  } catch (err) {
+    // Surface the real Django error message instead of hiding it
+    const message = err instanceof Error ? err.message : "Failed to verify OTP";
+    return { success: false, message };
   }
 }
 

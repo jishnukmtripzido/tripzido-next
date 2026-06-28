@@ -263,7 +263,7 @@ export default function LoginModal({
                 {otpSent
                   ? `We've sent a 4-digit OTP to +91 ${phone}`
                   : isRegister
-                    ? "Join in seconds — first name and mobile required"
+                    ? "Join in seconds — name and mobile number required"
                     : "Commuting made Easy, Affordable and Quick"}
               </p>
 
@@ -717,9 +717,10 @@ function OtpStep({
   const canVerify = otp.join("").length === 4 && !loading;
   return (
     <>
-      <label className="block text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">
+      <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
         Enter 4-digit OTP
       </label>
+      <p className="text-xs text-gray-400 mb-3">OTP is valid for 5 minutes</p>
 
       <div className="flex gap-2 mb-2">
         {otp.map((digit, i) => (
