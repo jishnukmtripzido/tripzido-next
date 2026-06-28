@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { getLocationPrice } from "@/lib/vehicleUtils";
 import getMapThumbnailUrl from "../../ui/mapThumbnail";
@@ -13,7 +14,6 @@ interface BikeCardProps extends VehicleSearchResult {
   onDropdownOpenChange?: (open: boolean) => void;
   tags?: { label: string; variant: "default" | "highlight" | "info" }[];
   rentalDays?: number;
-  /** ISO datetime strings forwarded from the search result URL */
   pickup?: string;
   dropoff?: string;
 }
@@ -40,7 +40,6 @@ export default function BikeCard({
     locations[0],
   );
 
-  // Derived values
   const transmission = transmission_type
     .split("_")
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
@@ -54,9 +53,6 @@ export default function BikeCard({
   const totalPrice = price;
   const mapLat = (selectedLocation as any).latitude ?? 11.6;
   const mapLng = (selectedLocation as any).longitude ?? 76.2;
-  // Sold out is per-location, so it follows whichever location is
-  // currently selected — switching locations in the dropdown can flip
-  // this back and forth.
   const isSoldOut = selectedLocation.available_count <= 0;
 
   function tagClass(variant: string) {
@@ -65,7 +61,6 @@ export default function BikeCard({
     return "bg-gray-100 text-gray-600 border border-gray-200";
   }
 
-  /** Build the vehicle details URL with all booking context */
   function buildDetailsUrl() {
     const params = new URLSearchParams();
     params.set("location_id", String(selectedLocation.location_id));
@@ -96,7 +91,6 @@ export default function BikeCard({
             ₹{price.toLocaleString()}
           </span>
           <span className="text-[14px] text-font-main-sub">({kmLimit})</span>
-          {/* <span className="text-[12px] text-black">/day</span> */}
         </div>
       ) : (
         <span className="text-[13px] text-gray-400">Contact for price</span>
@@ -122,7 +116,7 @@ export default function BikeCard({
     return (
       <Link href={buildDetailsUrl()}>
         <button
-          className={`bg-brand-yellow hover:bg-yellow-500 text-font-main-sub  font-semibold rounded-lg transition-colors cursor-pointer ${
+          className={`bg-brand-yellow hover:bg-yellow-500 text-font-main-sub font-semibold rounded-lg transition-colors cursor-pointer ${
             size === "md"
               ? "text-[13px] px-5 py-2 rounded-md"
               : "text-[14px] px-6 py-2.5"
@@ -139,10 +133,7 @@ export default function BikeCard({
       {[
         { icon: "user", label: seatsLabel },
         { icon: "gear", label: transmission },
-        {
-          icon: "map",
-          label: kmLimit ? `${kmLimit}` : "Unlimited Km",
-        },
+        { icon: "map", label: kmLimit ? `${kmLimit}` : "Unlimited Km" },
         { icon: "fuel", label: `${fuelTypeLabel} · ${engine}` },
       ].map(({ icon, label }) => (
         <li
@@ -185,29 +176,28 @@ export default function BikeCard({
 
   return (
     <div className="group relative w-full max-w-sm sm:max-w-none bg-transparent">
-      {/* ── MOBILE (unchanged) ── */}
+      {/* ── MOBILE ── */}
       <div className="sm:hidden">
         {!isFlipped ? (
-          <div className="bg-white  rounded-md shadow-[0px_1px_2px_0px_rgba(60,64,67,0.3),0px_2px_6px_2px_rgba(60,64,67,0.15)]  overflow-visible">
+          <div className="bg-white rounded-md shadow-[0px_1px_2px_0px_rgba(60,64,67,0.3),0px_2px_6px_2px_rgba(60,64,67,0.15)] overflow-visible">
             <div className="p-4 pb-0">
               <Badges />
               <h3 className="text-[20px] font-bold text-black leading-snug mb-5">
                 {name}
-                {/* <span className="text-sm text-gray-700 ps-1">or similar</span> */}
               </h3>
               <div className="grid grid-cols-[1fr_160px] gap-2.5 items-start mb-6">
                 <div className="min-w-0">
                   <SpecsList />
                 </div>
+                {/* Mobile bike image */}
                 <div className="flex justify-end">
-                  <img
+                  <BikeImage
                     src={primary_image}
                     alt={name}
+                    width={160}
+                    height={130}
+                    sizes="160px"
                     className="w-[160px] h-[130px] object-contain mt-[-50px]"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        `https://placehold.co/160x130/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
-                    }}
                   />
                 </div>
               </div>
@@ -238,26 +228,20 @@ export default function BikeCard({
         )}
       </div>
 
-      {/* ── DESKTOP (redesigned) ──────────────────────────────────────
-          Flat single-surface card, horizontal layout: image / specs /
-          location+price+CTA. No flip interaction — nothing here needs
-          to be hidden behind a click, so the card just shows everything
-          at once. Calmer border + shadow, tighter type scale. */}
-      <div className="hidden sm:block min-w-0 ">
-        <div className="relative  w-full min-w-0 bg-white border border-gray-200/80  rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col">
-          {/* Image */}
-          <div className="relative h-[150px] flex items-center justify-center bg-gray-50 m-3 mb-0 rounded-lg shrink-0">
-            <img
+      {/* ── DESKTOP ── */}
+      <div className="hidden sm:block min-w-0">
+        <div className="relative w-full min-w-0 bg-white border border-gray-200/80 rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-[0_4px_16px_-4px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col">
+          {/* Desktop bike image */}
+          <div className="relative h-[150px] flex items-center justify-center bg-gray-50 m-3 mb-0 rounded-lg shrink-0 overflow-hidden">
+            <BikeImage
               src={primary_image}
               alt={name}
-              className="h-[100%] w-[82%] object-contain"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  `https://placehold.co/300x160/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
-              }}
+              fill
+              sizes="(max-width: 1024px) 33vw, 25vw"
+              className="object-contain p-3"
             />
             {isSoldOut && (
-              <div className="absolute inset-0 rounded-lg bg-white/55 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-lg bg-white/55 flex items-center justify-center z-10">
                 <span className="text-[11px] font-semibold tracking-wide text-gray-500 bg-white px-2.5 py-1 rounded-full border border-gray-200">
                   Sold out
                 </span>
@@ -292,21 +276,12 @@ export default function BikeCard({
             )}
 
             <h3 className="text-base font-semibold text-font-main-sub leading-tight tracking-tight truncate">
-              {/* <h3 className="text-[18px] font-semibold text-font-main-sub leading-tight tracking-tight truncate"> */}
               {name}
             </h3>
-            {/* <p className="text-[12px] text-gray-400 mt-0.5 truncate">
-              {make_year} · {transmission}
-            </p> */}
 
             <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 mt-3">
               {[
-                // { icon: "seat", label: seatsLabel },
-                // { icon: "fuel", label: `${fuelTypeLabel} · ${engine}` },
-                {
-                  icon: "map",
-                  label: kmLimit ? kmLimit : "Unlimited Km",
-                },
+                { icon: "map", label: kmLimit ? kmLimit : "Unlimited Km" },
                 { icon: "transmission", label: `${mileage}` },
               ].map(({ icon, label }) => (
                 <div
@@ -346,25 +321,84 @@ export default function BikeCard({
   );
 }
 
+// ── BikeImage helper ──────────────────────────────────────────────────
+// Shared between mobile, desktop, and SpecsBack. Handles fallback
+// gracefully without needing placehold.co as an external domain.
+
+type BikeImageProps =
+  | {
+      src: string;
+      alt: string;
+      fill: true;
+      sizes: string;
+      className?: string;
+      width?: never;
+      height?: never;
+    }
+  | {
+      src: string;
+      alt: string;
+      fill?: never;
+      sizes: string;
+      width: number;
+      height: number;
+      className?: string;
+    };
+
+function BikeImage({
+  src,
+  alt,
+  fill,
+  sizes,
+  width,
+  height,
+  className,
+}: BikeImageProps) {
+  const [imgSrc, setImgSrc] = useState<string | null>(src);
+
+  if (!imgSrc) {
+    return (
+      <div
+        className={`flex items-center justify-center bg-gray-50 ${className ?? ""}`}
+        style={!fill ? { width, height } : undefined}
+      >
+        <span className="text-gray-400 text-xs font-medium text-center px-2">
+          {alt}
+        </span>
+      </div>
+    );
+  }
+
+  if (fill) {
+    return (
+      <Image
+        src={imgSrc}
+        alt={alt}
+        fill
+        sizes={sizes}
+        quality={75}
+        className={className}
+        onError={() => setImgSrc(null)}
+      />
+    );
+  }
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      width={width!}
+      height={height!}
+      sizes={sizes}
+      quality={75}
+      className={className}
+      onError={() => setImgSrc(null)}
+    />
+  );
+}
+
 // ── Sub-components ────────────────────────────────────────────────────
 
-/**
- * Standalone location dropdown. Each instance owns its own open/dropUp
- * state and its own refs. This is mounted twice per card (once in the
- * mobile layout, once in the desktop layout) and only one of those is
- * ever visible at a given viewport width — but both stay in the DOM at
- * the same time because the mobile/desktop split is done with CSS
- * (`sm:hidden` / `hidden sm:block`), not by unmounting. Previously this
- * was a closure defined inside BikeCard that referenced a single shared
- * dropdownRef/triggerRef, so whichever instance rendered last (desktop)
- * "won" the ref, and the mobile instance's outside-click handler closed
- * the dropdown before the select click could register — selecting a
- * location on mobile never worked. Giving each instance its own
- * useRef/useState fixes that.
- *
- * `compact` trims padding/sizing for the redesigned desktop row layout
- * without touching the mobile rendering (mobile never passes it).
- */
 function LocationDropdown({
   locations,
   selectedLocation,
@@ -511,23 +545,6 @@ function LocationDropdown({
   );
 }
 
-/**
- * Desktop location picker. Replaces the old floating/absolute dropdown
- * for the redesigned card: that version opened a `position: absolute`
- * panel that got visually clipped by the card's `overflow-hidden`
- * (needed elsewhere to stop the card itself from overflowing its grid
- * column — see BikeCard layout notes). Rather than fight z-index/clip
- * boundaries across an unknown number of sibling cards in a grid, this
- * expands inline: the option list pushes the card taller instead of
- * floating over it, so there is no boundary it can ever be clipped by.
- *
- * Single-location listings skip the interactive trigger entirely and
- * just show a plain static row — there's nothing to choose, so a
- * dropdown-styled control would be misleading affordance.
- *
- * Same onSelect/onOpenChange contract as the original, so nothing
- * calling this needs to change.
- */
 function InlineLocationPicker({
   locations,
   selectedLocation,
@@ -652,13 +669,25 @@ function ChevronIcon({ open }: { open: boolean }) {
 }
 
 function MapThumbnail({ lat, lng }: { lat: number; lng: number }) {
+  const [imgSrc, setImgSrc] = useState<string | null>(
+    getMapThumbnailUrl(lat, lng),
+  );
+
   return (
     <div className="relative w-8 h-8 mr-1 rounded-md self-stretch shrink-0 overflow-hidden">
-      <img
-        src={getMapThumbnailUrl(lat, lng)}
-        alt=""
-        className="w-full h-full object-cover"
-      />
+      {imgSrc ? (
+        <Image
+          src={imgSrc}
+          alt=""
+          fill
+          sizes="32px"
+          quality={60}
+          className="object-cover"
+          onError={() => setImgSrc(null)}
+        />
+      ) : (
+        <div className="w-full h-full bg-gray-100" />
+      )}
       <div className="absolute inset-0 bg-black/10" />
       <div className="absolute inset-0 flex items-center justify-center">
         <svg
@@ -698,9 +727,6 @@ function SpecsBack({
   onBack: () => void;
   desktop?: boolean;
 }) {
-  // Desktop no longer uses the flip-card back face (see BikeCard above),
-  // but this component is kept as-is for the mobile flip view, which is
-  // intentionally unchanged.
   return (
     <>
       {!desktop && (
@@ -714,14 +740,13 @@ function SpecsBack({
               &larr; Back
             </button>
           </div>
-          <img
+          <BikeImage
             src={imageUrl}
             alt={name}
+            width={300}
+            height={112}
+            sizes="(max-width: 640px) 100vw, 300px"
             className="w-full h-28 object-contain"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src =
-                `https://placehold.co/300x112/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
-            }}
           />
         </div>
       )}
@@ -730,15 +755,13 @@ function SpecsBack({
           <h3 className="font-medium text-black text-[16px] leading-none text-center px-4 tracking-tight">
             {name}
           </h3>
-          <div className="relative h-36 flex items-center justify-center mt-2 p-3">
-            <img
+          <div className="relative h-36 flex items-center justify-center mt-2 p-3 overflow-hidden">
+            <BikeImage
               src={imageUrl}
               alt={name}
-              className="h-full w-full object-contain opacity-90 drop-shadow-sm"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  `https://placehold.co/300x160/f3f4f6/9ca3af?text=${encodeURIComponent(name)}`;
-              }}
+              fill
+              sizes="(max-width: 1024px) 33vw, 25vw"
+              className="object-contain opacity-90 drop-shadow-sm p-3"
             />
           </div>
           <div className="relative flex items-center justify-center px-4 mt-1 mb-3 z-10">
@@ -809,7 +832,6 @@ function PinIcon() {
 }
 
 function SpecIcon({ type }: { type: string }) {
-  // ── Seat (desktop row) ──────────────────────────────────────────────
   if (type === "seat") {
     return (
       <svg
@@ -823,7 +845,6 @@ function SpecIcon({ type }: { type: string }) {
     );
   }
 
-  // ── Transmission (desktop row) ──────────────────────────────────────
   if (type === "transmission") {
     return (
       <svg
@@ -837,7 +858,6 @@ function SpecIcon({ type }: { type: string }) {
     );
   }
 
-  // ── Fuel (desktop row + mobile SpecsList fallback) ──────────────────
   if (type === "fuel") {
     return (
       <svg
@@ -856,7 +876,6 @@ function SpecIcon({ type }: { type: string }) {
     );
   }
 
-  // ── Legacy keys used by mobile SpecsList ────────────────────────────
   const paths: Record<string, string> = {
     user: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
     gear: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z",

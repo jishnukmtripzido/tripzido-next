@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback, useMemo, memo } from "react";
+import Image from "next/image";
 import { City } from "@/types/locations.types";
 
 /* ── Memoized City Card Component ── */
@@ -21,6 +22,8 @@ const CityCard = memo(function CityCard({
   onMouseEnter,
   onMouseLeave,
 }: CityCardProps) {
+  const [imgSrc, setImgSrc] = useState<string | null>(city.city_image);
+
   return (
     <button
       onClick={() => onSelect(city)}
@@ -34,21 +37,21 @@ const CityCard = memo(function CityCard({
       `}
       aria-pressed={isSelected}
     >
-      {/* City image from API — blur until load completes */}
-      <img
-        src={city.city_image}
-        alt={city.name}
-        className="w-full h-full object-cover blur-sm transition-all duration-300"
-        loading="lazy"
-        onError={(e) => {
-          (e.target as HTMLImageElement).src =
-            `https://placehold.co/400x300/f3f4f6/9ca3af?text=${encodeURIComponent(city.name)}`;
-          (e.target as HTMLImageElement).classList.remove("blur-sm");
-        }}
-        onLoad={(e) => {
-          (e.target as HTMLImageElement).classList.remove("blur-sm");
-        }}
-      />
+      {imgSrc ? (
+        <Image
+          src={imgSrc}
+          alt={city.name}
+          fill
+          sizes="(max-width: 640px) 50vw, 25vw"
+          quality={70}
+          className="object-cover"
+          onError={() => setImgSrc(null)}
+        />
+      ) : (
+        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+          <span className="text-gray-400 text-xs font-medium">{city.name}</span>
+        </div>
+      )}
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
@@ -94,7 +97,6 @@ const CityCard = memo(function CityCard({
 interface CityPickerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  /** Returns the full City object (id + name) so the parent can store id for the form */
   onSelect: (city: City) => void;
   selectedCityId: number | null;
   cities: City[];
@@ -115,6 +117,8 @@ export default function CityPickerModal({
   const [highlighted, setHighlighted] = useState<number | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  console.log(cities[0]?.city_image);
 
   /* ── Memoized filtered array ── */
   const filtered = useMemo(
@@ -154,7 +158,7 @@ export default function CityPickerModal({
 
   return (
     <>
-      {/* ── Backdrop — fixed full-viewport, always rendered when modal is open ── */}
+      {/* ── Backdrop ── */}
       <div
         className="animate-fade-in fixed inset-0 z-50 bg-black/50 backdrop-blur-[2px]"
         onClick={onClose}
@@ -321,21 +325,17 @@ export default function CityPickerModal({
             {/* City cards */}
             {!loading && !error && filtered.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {filtered.map((city) => {
-                  const isSelected = selectedCityId === city.id;
-                  const isHighlighted = highlighted === city.id;
-                  return (
-                    <CityCard
-                      key={city.id}
-                      city={city}
-                      isSelected={isSelected}
-                      isHighlighted={isHighlighted}
-                      onSelect={handleSelect}
-                      onMouseEnter={setHighlighted}
-                      onMouseLeave={() => setHighlighted(null)}
-                    />
-                  );
-                })}
+                {filtered.map((city) => (
+                  <CityCard
+                    key={city.id}
+                    city={city}
+                    isSelected={selectedCityId === city.id}
+                    isHighlighted={highlighted === city.id}
+                    onSelect={handleSelect}
+                    onMouseEnter={setHighlighted}
+                    onMouseLeave={() => setHighlighted(null)}
+                  />
+                ))}
               </div>
             )}
           </div>

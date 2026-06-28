@@ -1,3 +1,5 @@
+import type { StaticImageData } from "next/image";
+
 export interface Offer {
   id: string;
   title: string;
@@ -25,7 +27,7 @@ export interface FAQItem {
 
 export interface Destination {
   name: string;
-  imageUrl: string;
+  imageUrl: StaticImageData;
   flag: string;
 }
 

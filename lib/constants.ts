@@ -1,4 +1,10 @@
 import type { Offer, PopularRental } from "@/types/search.types";
+import alappuzha from "@/public/destinations/alappuzha.jpg";
+import kochi from "@/public/destinations/kochi.jpg";
+import munnar from "@/public/destinations/munnar.jpg";
+import varkala from "@/public/destinations/varkala.jpg";
+import wayanad from "@/public/destinations/wayanad.jpg";
+import type { StaticImageData } from "next/image";
 
 // ── Auth ─────────────────────────────────────────────────────────────
 export const COUNTRY_CODES = [
@@ -76,39 +82,40 @@ export const OFFERS = [
   },
 ];
 
+export interface Destination {
+  name: string;
+  flag: string;
+  imageUrl: StaticImageData;
+}
+
 export const TOP_DESTINATIONS = [
   {
-    name: "New Delhi",
-    imageUrl:
-      "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&q=80",
-    flag: "🇮🇳",
+    name: "Wayanad",
+    imageUrl: wayanad,
+    flag: "KL",
   },
   {
-    name: "Bangalore",
-    imageUrl:
-      "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=800&q=80",
-    flag: "🇮🇳",
+    name: "Varkala",
+    imageUrl: varkala,
+    flag: "KL",
   },
 ];
 
 export const BOTTOM_DESTINATIONS = [
   {
-    name: "Mumbai",
-    imageUrl:
-      "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?w=600&q=80",
-    flag: "🇮🇳",
+    name: "Alleppey",
+    imageUrl: alappuzha,
+    flag: "KL",
   },
   {
-    name: "Chennai",
-    imageUrl:
-      "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=600&q=80",
-    flag: "🇮🇳",
+    name: "Kochi",
+    imageUrl: kochi,
+    flag: "KL",
   },
   {
-    name: "Varanasi",
-    imageUrl:
-      "https://images.unsplash.com/photo-1561361058-c24cecae35ca?w=600&q=80",
-    flag: "🇮🇳",
+    name: "Munnar",
+    imageUrl: munnar,
+    flag: "KL",
   },
 ];
 

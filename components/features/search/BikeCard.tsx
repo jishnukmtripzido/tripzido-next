@@ -1,25 +1,36 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import { Bike } from "@/types/home.types";
 
 export default function BikeCard({ bike }: { bike: Bike }) {
+  const [imgSrc, setImgSrc] = useState<string | null>(bike.imageUrl);
+
   return (
     <div className="border border-gray-200 rounded-md overflow-hidden flex-shrink-0 min-w-[240px] md:min-w-0">
       <div className="relative h-48 bg-white overflow-hidden flex items-center justify-center p-3">
-        <img
-          src={bike.imageUrl}
-          alt={bike.name}
-          className="w-full h-full object-contain transition-transform duration-300 p-4"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src =
-              `https://placehold.co/400x200/f3f4f6/9ca3af?text=${encodeURIComponent(
-                bike.name,
-              )}`;
-          }}
-        />
+        {imgSrc ? (
+          <Image
+            src={imgSrc}
+            alt={bike.name}
+            fill
+            sizes="(max-width: 768px) 240px, (max-width: 1024px) 33vw, 25vw"
+            quality={75}
+            className="object-contain p-4"
+            onError={() => setImgSrc(null)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-50">
+            <span className="text-gray-400 text-xs font-medium text-center px-2">
+              {bike.name}
+            </span>
+          </div>
+        )}
+
         {bike.badge && (
           <span
-            className={`absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide ${
+            className={`absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide z-10 ${
               bike.badge.variant === "yellow"
                 ? "bg-brand-yellow text-black"
                 : "bg-green-500 text-white"
@@ -29,6 +40,7 @@ export default function BikeCard({ bike }: { bike: Bike }) {
           </span>
         )}
       </div>
+
       <div className="p-4">
         <div className="flex items-start justify-between mb-1">
           <div>
@@ -55,6 +67,7 @@ export default function BikeCard({ bike }: { bike: Bike }) {
             </div>
           )}
         </div>
+
         <div className="flex flex-wrap gap-1.5 my-3">
           {bike.tags.map((tag) => (
             <span
@@ -65,6 +78,7 @@ export default function BikeCard({ bike }: { bike: Bike }) {
             </span>
           ))}
         </div>
+
         <div className="flex items-end justify-between mt-3 pt-3 border-t border-gray-100">
           <div>
             <span className="text-[11px] text-gray-700">Starting from</span>

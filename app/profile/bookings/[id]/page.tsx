@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getBookingDetail } from "@/actions/bookings.actions";
 import CancelBookingButton from "@/components/features/profile/CancelBookingButton";
+import BookingVehicleImage from "@/components/features/profile/BookingVehicleImage";
 
 function formatDateTime(iso: string): string {
   return new Date(iso).toLocaleString("en-IN", {
@@ -144,17 +145,18 @@ export default async function BookingDetailPage({
         {/* Vehicle + trip info */}
         <div className="lg:col-span-2 space-y-8">
           <div className="flex gap-6">
-            <div className="w-40 h-28 bg-gray-50 rounded-lg flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
+            {/* Vehicle Image */}
+            <div className="relative w-40 h-28 bg-gray-50 rounded-lg flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
               {booking.vehicle_image ? (
-                <img
+                <BookingVehicleImage
                   src={booking.vehicle_image}
                   alt={booking.vehicle_name}
-                  className="object-contain h-full w-full p-2 mix-blend-multiply"
                 />
               ) : (
                 <span className="text-xs text-gray-400">No image</span>
               )}
             </div>
+
             <div>
               <h2 className="text-xl font-bold text-gray-900">
                 {booking.vehicle_name}

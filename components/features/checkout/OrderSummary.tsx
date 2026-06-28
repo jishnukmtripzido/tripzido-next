@@ -1,3 +1,5 @@
+import { useState } from "react";
+import Image from "next/image";
 import {
   formatTimeFromISO,
   formatDayNumber,
@@ -25,6 +27,9 @@ export default function OrderSummary({
   onDecrement,
 }: Props) {
   const { things_to_remember: ttr } = summary;
+  const [imgSrc, setImgSrc] = useState<string | null>(
+    summary.primary_image ?? null,
+  );
 
   return (
     <div className="bg-white border border-gray-200 rounded-md p-6 shadow-none">
@@ -32,12 +37,16 @@ export default function OrderSummary({
       <div>
         <h1 className="text-lg font-bold text-gray-900 mb-4">Summary</h1>
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 pb-6 border-b border-gray-100">
-          <div className="w-full md:w-48 shrink-0 bg-gray-50 rounded-xl p-4 flex items-center justify-center">
-            {summary.primary_image ? (
-              <img
-                src={summary.primary_image}
+          <div className="relative w-full md:w-48 shrink-0 bg-gray-50 rounded-xl p-4 flex items-center justify-center min-h-[120px]">
+            {imgSrc ? (
+              <Image
+                src={imgSrc}
                 alt={summary.vehicle_name}
-                className="w-full h-auto object-contain mix-blend-multiply"
+                fill
+                sizes="(max-width: 768px) 100vw, 192px"
+                quality={75}
+                className="object-contain mix-blend-multiply p-4"
+                onError={() => setImgSrc(null)}
               />
             ) : (
               <div className="w-full h-24 flex items-center justify-center text-gray-400 text-sm">
@@ -45,6 +54,7 @@ export default function OrderSummary({
               </div>
             )}
           </div>
+
           <div className="flex-grow w-full">
             <h2 className="text-xl font-bold text-font-main-sub">
               {summary.vehicle_name}
@@ -117,7 +127,7 @@ export default function OrderSummary({
             </div>
           </div>
 
-          <div className="flex-grow mx-8 flex items-center justify-center relative hidden md:flex">
+          <div className="flex-grow mx-8 items-center justify-center relative hidden md:flex">
             <div className="w-full border-t border-dashed border-gray-300"></div>
             <span className="absolute bg-white px-2 text-xs font-medium text-font-main-sub">
               {summary.duration_label}

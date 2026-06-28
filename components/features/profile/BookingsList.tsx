@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { getCustomerBookings } from "@/actions/bookings.actions";
 import type { BookingListItem, BookingTabFilter } from "@/types/booking.types";
@@ -24,6 +25,30 @@ function formatDateTime(iso: string): string {
     hour12: true,
   });
 }
+
+// ── Booking image with fallback ───────────────────────────────────────
+
+function BookingImage({ src, alt }: { src: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState<string | null>(src);
+
+  if (!imgSrc) {
+    return <span className="text-xs text-gray-400">No image</span>;
+  }
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      fill
+      sizes="(max-width: 1280px) 100vw, 192px"
+      quality={75}
+      className="object-contain p-2 mix-blend-multiply"
+      onError={() => setImgSrc(null)}
+    />
+  );
+}
+
+// ── Main component ────────────────────────────────────────────────────
 
 export default function BookingsList() {
   const [currentTab, setCurrentTab] = useState<BookingTabFilter>("pending");
@@ -101,13 +126,9 @@ export default function BookingsList() {
                 className="flex flex-col xl:flex-row gap-6 p-6 rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-200"
               >
                 {/* Vehicle Image */}
-                <div className="w-full xl:w-48 h-32 bg-gray-50 rounded-lg flex items-center justify-center shrink-0 overflow-hidden relative border border-gray-100">
+                <div className="relative w-full xl:w-48 h-32 bg-gray-50 rounded-lg flex items-center justify-center shrink-0 overflow-hidden border border-gray-100">
                   {booking.image ? (
-                    <img
-                      src={booking.image}
-                      alt={booking.vehicle}
-                      className="object-contain h-full w-full p-2 mix-blend-multiply"
-                    />
+                    <BookingImage src={booking.image} alt={booking.vehicle} />
                   ) : (
                     <span className="text-xs text-gray-400">No image</span>
                   )}

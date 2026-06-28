@@ -7,7 +7,10 @@ import MobileSearchDrawer from "./MobileSearchDrawer";
 import SearchResultHeader from "./SearchResultHeader";
 import SearchResultsLoading from "./SearchResultsLoading";
 import OfferBanner from "../../ui/OfferBanner";
-import { DrawerModeProvider, type DrawerMode } from "./DrawerModeContext";
+import {
+  DrawerModeProvider,
+  type DrawerMode,
+} from "../../../contexts/DrawerModeContext";
 import { useScrollTracking } from "@/hooks/useScrollTracking";
 import {
   parseHour,

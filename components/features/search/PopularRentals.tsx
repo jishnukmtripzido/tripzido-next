@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import { useCarousel } from "@/hooks/useCarousel";
 import type { PopularRental } from "@/types/search.types";
 
@@ -50,6 +52,8 @@ export default function PopularRentals({ rentals, cityName }: Props) {
 // ── Card ──────────────────────────────────────────────────────────────
 
 function PopularRentalCard({ rental }: { rental: PopularRental }) {
+  const [imgSrc, setImgSrc] = useState<string | null>(rental.image_url ?? null);
+
   const specs = [
     rental.vehicle_type_category === "SCOOTER"
       ? "Scooter"
@@ -61,28 +65,34 @@ function PopularRentalCard({ rental }: { rental: PopularRental }) {
     .filter(Boolean)
     .join(" · ");
 
-  const imageUrl =
-    rental.image_url ??
-    `https://placehold.co/400x200/f3f4f6/9ca3af?text=${encodeURIComponent(rental.name)}`;
-
   return (
     <div className="border border-gray-200 rounded-md overflow-hidden flex-shrink-0 min-w-[240px] md:min-w-0">
       <div className="relative h-48 bg-white flex items-center justify-center p-3">
-        <img
-          src={imageUrl}
-          alt={rental.name}
-          className="w-full h-full object-contain transition-transform duration-300 p-4"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src =
-              `https://placehold.co/400x200/f3f4f6/9ca3af?text=${encodeURIComponent(rental.name)}`;
-          }}
-        />
+        {imgSrc ? (
+          <Image
+            src={imgSrc}
+            alt={rental.name}
+            fill
+            sizes="(max-width: 640px) 240px, (max-width: 1280px) 25vw, 300px"
+            quality={75}
+            className="object-contain p-4 transition-transform duration-300"
+            onError={() => setImgSrc(null)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-50">
+            <span className="text-gray-400 text-xs font-medium text-center px-2">
+              {rental.name}
+            </span>
+          </div>
+        )}
+
         {rental.tag && (
-          <span className="absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide bg-brand-yellow text-black">
+          <span className="absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide bg-brand-yellow text-black z-10">
             {rental.tag}
           </span>
         )}
       </div>
+
       <div className="p-4">
         <h3 className="font-medium text-gray-900 text-[15px]">{rental.name}</h3>
         <p className="text-xs text-gray-700 mt-0.5">{specs}</p>

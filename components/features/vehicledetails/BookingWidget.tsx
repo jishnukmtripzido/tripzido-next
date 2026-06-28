@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import type { FareDetails } from "@/types/vehicleDetails.types";
 import { useSelectedPackage } from "@/contexts/PackageSelectionContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Props {
   fareDetails: FareDetails;
@@ -29,11 +30,11 @@ export default function BookingWidget({
   const { packages, selectedPackageId, setSelectedPackageId, selectedPackage } =
     useSelectedPackage();
 
+  const { isLoggedIn, openLoginModal } = useAuth();
+
   const [packageOpen, setPackageOpen] = useState(false);
   const [paymentMode, setPaymentMode] = useState<"partial" | "full">("partial");
 
-  // Tracks whether the real "Book Now" button (below) is currently on screen.
-  // The fixed mobile bar shows only when this is false.
   const [realButtonVisible, setRealButtonVisible] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -85,9 +86,7 @@ export default function BookingWidget({
     }
   }, [packageOpen]);
 
-  // Observe the real Book Now button — only relevant on small screens, but
-  // cheap enough to just always run. When it's visible in the viewport, hide
-  // the fixed mobile bar; when it scrolls out of view, show the bar again.
+  // Observe the real Book Now button visibility
   useEffect(() => {
     const target = bookNowAnchorRef.current;
     if (!target) return;
@@ -97,7 +96,6 @@ export default function BookingWidget({
         setRealButtonVisible(entry.isIntersecting);
       },
       {
-        // small bottom margin so the bar doesn't flicker right at the edge
         rootMargin: "0px 0px -8px 0px",
         threshold: 0,
       },
@@ -125,7 +123,22 @@ export default function BookingWidget({
     return `/checkout?${params.toString()}`;
   }
 
+  /**
+   * Called by both the inline and the fixed mobile "Book Now" buttons.
+   * If the user isn't logged in, open the login modal instead of navigating.
+   */
+  function handleBookNowClick(e: React.MouseEvent) {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      openLoginModal("login");
+    }
+    // If logged in, the Link's default navigation takes over — nothing to do.
+  }
+
   const showMobileBar = !realButtonVisible;
+
+  // Shared button content
+  const bookNowUrl = buildCheckoutUrl();
 
   return (
     <div className="bg-white border-b border-gray-200 md:border-none pb-6">
@@ -228,7 +241,7 @@ export default function BookingWidget({
         )}
       </div>
 
-      {/* Partial payment toggle — only when backend says this package supports it */}
+      {/* Partial payment toggle */}
       {canPayPartially && (
         <div className="mb-6">
           <h3 className="font-bold text-font-main-sub mb-3">Payment Option</h3>
@@ -314,13 +327,12 @@ export default function BookingWidget({
         paid at pickup)
       </div>
 
-      {/* ── Real Book Now — disabled when unavailable ────────────────
-          Wrapped in a div with a ref so we can observe its visibility
-          and toggle the fixed mobile bar accordingly. */}
+      {/* ── Real Book Now ─────────────────────────────────────────── */}
       <div ref={bookNowAnchorRef}>
         {isAvailable && selectedPackage ? (
           <Link
-            href={buildCheckoutUrl()}
+            href={bookNowUrl}
+            onClick={handleBookNowClick}
             className="w-full inline-block text-center bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-4 rounded-xl transition duration-200"
           >
             Book Now
@@ -341,9 +353,7 @@ export default function BookingWidget({
         </a>
       </div>
 
-      {/* ── Fixed mobile bottom bar ────────────────────────────────
-          Shown only on small screens, only while the real Book Now
-          button above is scrolled out of view. */}
+      {/* ── Fixed mobile bottom bar ─────────────────────────────── */}
       <div
         className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.06)]
           px-4 py-3 flex items-center justify-between gap-4
@@ -365,7 +375,8 @@ export default function BookingWidget({
 
         {isAvailable && selectedPackage ? (
           <Link
-            href={buildCheckoutUrl()}
+            href={bookNowUrl}
+            onClick={handleBookNowClick}
             className="shrink-0 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-xl transition duration-200 text-center"
             tabIndex={showMobileBar ? 0 : -1}
           >

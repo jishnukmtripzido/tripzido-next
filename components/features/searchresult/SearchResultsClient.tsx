@@ -5,11 +5,12 @@ import BikeCard from "./BikeCard";
 import FilterSidebar from "./FilterSidebar";
 import MobileFilterDrawer from "./MobileFilterDrawer";
 import VehicleDisclaimer from "./VehicleDisclaimer";
-import { useDrawerMode } from "./DrawerModeContext";
+import { useDrawerMode } from "../../../contexts/DrawerModeContext";
 import { useVehicleFilters } from "@/hooks/useVehicleFilters";
 import { SORT_OPTIONS } from "@/lib/constants";
 import type { VehicleSearchResult } from "@/types/vehicles.types";
 import LoginBanner from "@/components/ui/LoginBanner";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Props {
   bikes: VehicleSearchResult[];
@@ -21,7 +22,7 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
   const { drawerMode, setDrawerMode } = useDrawerMode();
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"all" | "electric">("all");
-
+  const { isLoggedIn } = useAuth();
   const {
     filters,
     options,
@@ -132,7 +133,7 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 items-start px-5 py-5 md:px-0 md:py-0 md:pt-1 md:pr-5">
               {firstChunk.map(renderCard)}
-              {showBanner && (
+              {showBanner && !isLoggedIn && (
                 <div className="col-span-full">
                   <LoginBanner />
                 </div>

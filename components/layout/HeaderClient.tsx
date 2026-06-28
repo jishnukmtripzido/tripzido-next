@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useState, useEffect, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import MobileDrawer from "./MobileDrawer";
-import LoginModal from "@/components/features/auth/LoginModal";
 import { logoutAction } from "@/actions/auth.actions";
+import { useAuth } from "@/contexts/AuthContext";
 
 type HeaderClientProps = {
   logoWidth?: number;
@@ -28,9 +28,10 @@ export default function HeaderClient({
   isLoggedIn = false,
   userName,
 }: HeaderClientProps) {
+  // AuthContext provides openLoginModal — the modal itself lives in AuthProvider.
+  const { openLoginModal } = useAuth();
+
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [initialMode, setInitialMode] = useState<"login" | "register">("login");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logoutError, setLogoutError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -61,11 +62,6 @@ export default function HeaderClient({
   }, [dropdownOpen]);
 
   const closeMenu = () => setMenuOpen(false);
-
-  const openModal = (mode: "login" | "register") => {
-    setInitialMode(mode);
-    setLoginOpen(true);
-  };
 
   /* ── logout ── */
   const handleLogout = () => {
@@ -418,13 +414,13 @@ export default function HeaderClient({
               /* ── Logged-out auth buttons (desktop only) ── */
               <div className="hidden md:flex items-center space-x-2">
                 <button
-                  onClick={() => openModal("register")}
+                  onClick={() => openLoginModal("register")}
                   className="px-4 py-2 text-sm cursor-pointer font-semibold text-gray-900 border-none rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Register
                 </button>
                 <button
-                  onClick={() => openModal("login")}
+                  onClick={() => openLoginModal("login")}
                   className="px-4 py-2 cursor-pointer text-sm font-semibold bg-brand-yellow rounded-lg hover:bg-[#e6ac00] transition-colors"
                 >
                   Sign in
@@ -443,7 +439,7 @@ export default function HeaderClient({
               </Link>
             ) : (
               <button
-                onClick={() => openModal("login")}
+                onClick={() => openLoginModal("login")}
                 className="md:hidden flex items-center justify-center w-8 h-8 rounded-full p-1 border border-gray-700 bg-gray-100 transition-colors text-gray-700"
                 aria-label="Sign in"
               >
@@ -503,21 +499,17 @@ export default function HeaderClient({
         isLoggedIn={isLoggedIn}
         onLoginClick={() => {
           closeMenu();
-          openModal("login");
+          openLoginModal("login");
         }}
         onRegisterClick={() => {
           closeMenu();
-          openModal("register");
+          openLoginModal("register");
         }}
         onLogout={handleLogout}
         isLoggingOut={isPending}
       />
 
-      <LoginModal
-        isOpen={loginOpen}
-        onClose={() => setLoginOpen(false)}
-        initialMode={initialMode}
-      />
+      {/* LoginModal is now rendered by AuthProvider — no duplicate here */}
 
       <style jsx global>{`
         @keyframes toast-fade-in {
