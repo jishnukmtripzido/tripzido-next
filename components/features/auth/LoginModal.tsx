@@ -510,7 +510,7 @@ function RegisterStep({
         </div>
       </div>
 
-      <div className="mb-3">
+      <div className="mb-3 hidden">
         <label className="block text-xs font-semibold text-gray-600 mb-1">
           Email <span className="text-gray-400 font-normal">(optional)</span>
         </label>
