@@ -1,19 +1,13 @@
 "use client";
 
-/**
- * useCarousel — mirrors the original HTML's double-rAF pattern.
- *
- * The original HTML did:
- *   requestAnimationFrame(() => requestAnimationFrame(setCardWidths))
- * which waits 2 paint cycles so offsetWidth is reliable.
- *
- * Here we do the same via useLayoutEffect + double rAF so it fires
- * on every render/navigation, not just full page refreshes.
- */
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-
-// SSR-safe: useLayoutEffect on client, useEffect on server
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -35,10 +29,9 @@ export function useCarousel({
 
   const isMobile = useCallback(
     () => typeof window !== "undefined" && window.innerWidth < 768,
-    []
+    [],
   );
 
-  /** Exact same logic as the original HTML's setCardWidths + updateCarousel */
   const init = useCallback(
     (currentIndex = 0) => {
       if (isMobile() || !trackRef.current || !viewportRef.current) return;
@@ -53,16 +46,14 @@ export function useCarousel({
       });
 
       const total = trackRef.current.children.length;
-      const max = total - visibleCards;
+      const max = Math.max(0, total - visibleCards);
       setMaxIndex(max);
 
-      // Apply transform
       trackRef.current.style.transform = `translateX(-${currentIndex * (cardW + gap)}px)`;
     },
-    [gap, visibleCards, isMobile]
+    [gap, visibleCards, isMobile],
   );
 
-  /** Double rAF — identical to the HTML original */
   const scheduleInit = useCallback(
     (currentIndex = 0) => {
       cancelAnimationFrame(raf1.current);
@@ -71,10 +62,9 @@ export function useCarousel({
         raf2.current = requestAnimationFrame(() => init(currentIndex));
       });
     },
-    [init]
+    [init],
   );
 
-  // Run on mount AND every re-render (catches client-side navigation)
   useIsomorphicLayoutEffect(() => {
     setIndex(0);
     scheduleInit(0);
@@ -121,5 +111,6 @@ export function useCarousel({
     next,
     canPrev: index > 0,
     canNext: index < maxIndex,
+    reinit: scheduleInit,
   };
 }

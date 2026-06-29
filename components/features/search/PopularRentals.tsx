@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useCarousel } from "@/hooks/useCarousel";
 import { useCityContext } from "@/contexts/CityContext";
 import { getPopularRentalsApi } from "@/services/vehicle.service";
-import { FALLBACK_POPULAR_RENTALS } from "@/lib/constants";
 import type { PopularRental } from "@/types/search.types";
 
 interface Props {
@@ -18,10 +17,11 @@ export default function PopularRentals({ initialRentals }: Props) {
   const [loading, setLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
-  const { trackRef, viewportRef, canPrev, canNext, prev, next } = useCarousel({
-    visibleCards: 4,
-    gap: 20,
-  });
+  const { trackRef, viewportRef, canPrev, canNext, prev, next, reinit } =
+    useCarousel({
+      visibleCards: 4,
+      gap: 20,
+    });
 
   useEffect(() => {
     if (!isMounted) {
@@ -35,7 +35,11 @@ export default function PopularRentals({ initialRentals }: Props) {
       setLoading(true);
       try {
         const data = await getPopularRentalsApi(selectedCityId);
-        if (!cancelled && data && data.length > 0) setRentals(data);
+        if (!cancelled && data && data.length > 0) {
+          setRentals(data);
+          // Defer until React commits new cards to the DOM, then reinit widths
+          setTimeout(() => reinit(0), 0);
+        }
       } catch {
         // keep current rentals on error
       } finally {
@@ -47,7 +51,7 @@ export default function PopularRentals({ initialRentals }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [selectedCityId]);
+  }, [selectedCityId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <section className="pt-12 px-4 lg:px-8 mx-auto xl:mx-[121.5px] xl:px-0">
