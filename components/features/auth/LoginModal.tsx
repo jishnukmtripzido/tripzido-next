@@ -207,7 +207,7 @@ export default function LoginModal({
         role="dialog"
         aria-modal="true"
         aria-label={isRegister ? "Create your account" : "Sign in to Tripzido"}
-        className="fixed z-50 bg-white overflow-hidden animate-slide-up sm:animate-scale-in inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[600px] md:max-h-[90vh] md:overflow-y-auto md:rounded-2xl md:shadow-2xl [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200"
+        className="fixed z-50 bg-white overflow-hidden animate-slide-up sm:animate-scale-in inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[600px] md:px-10 md:max-h-[90vh] md:overflow-y-auto md:rounded-2xl md:shadow-2xl [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200"
       >
         <div className="flex flex-col p-6 md:p-10 relative">
           <CloseButton

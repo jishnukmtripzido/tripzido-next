@@ -89,20 +89,17 @@ export default function PopularRentals({ initialRentals }: Props) {
 function PopularRentalCard({ rental }: { rental: PopularRental }) {
   const [imgSrc, setImgSrc] = useState<string | null>(rental.image_url ?? null);
 
-  const specs = [
-    rental.vehicle_type_category === "SCOOTER"
-      ? "Scooter"
-      : rental.vehicle_type_category === "BIKE"
-        ? "Bike"
-        : rental.vehicle_type_category,
-    rental.transmission_type === "AUTOMATIC" ? "Automatic" : "Manual",
-  ]
-    .filter(Boolean)
-    .join(" · ");
-
   return (
-    <div className="border border-gray-200 rounded-md overflow-hidden flex-shrink-0 min-w-[240px] md:min-w-0">
-      <div className="relative h-48 bg-white flex items-center justify-center p-3">
+    <div className="border border-gray-200 bg-[#f7fafc] shadow-md rounded-md overflow-hidden flex-shrink-0 min-w-[240px] md:min-w-0 flex flex-col">
+      {/* Name on top */}
+      <div className="px-4 pt-4 pb-2 text-center">
+        <h3 className="font-semibold text-gray-900 text-[15px] leading-snug">
+          {rental.name}
+        </h3>
+      </div>
+
+      {/* Vehicle image */}
+      <div className="relative h-40 bg-white flex items-center justify-center px-3">
         {imgSrc ? (
           <Image
             src={imgSrc}
@@ -110,7 +107,7 @@ function PopularRentalCard({ rental }: { rental: PopularRental }) {
             fill
             sizes="(max-width: 640px) 240px, (max-width: 1280px) 25vw, 300px"
             quality={75}
-            className="object-contain p-4 transition-transform duration-300"
+            className="object-contain p-4 transition-transform duration-300 bg-[#f7fafc]"
             onError={() => setImgSrc(null)}
           />
         ) : (
@@ -128,41 +125,39 @@ function PopularRentalCard({ rental }: { rental: PopularRental }) {
         )}
       </div>
 
-      <div className="p-4">
-        <h3 className="font-medium text-gray-900 text-[15px]">{rental.name}</h3>
-        <p className="text-xs text-gray-700 mt-0.5">{specs}</p>
+      {/* Pickup location + Book Now */}
+      <div className="px-4 pt-3 pb-4 mt-auto border-t border-gray-100 flex flex-col gap-3">
+        {rental.pickup_location_name && (
+          <div className="flex items-center justify-center gap-1 text-xs text-gray-700">
+            <svg
+              className="w-3.5 h-3.5 shrink-0 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            <span className="truncate">{rental.pickup_location_name}</span>
+          </div>
+        )}
 
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-          {rental.pickup_location_name ? (
-            <div className="flex items-center gap-1 text-xs text-gray-500 truncate mr-2">
-              <svg
-                className="w-3.5 h-3.5 shrink-0 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-              <span className="truncate">{rental.pickup_location_name}</span>
-            </div>
-          ) : (
-            <div />
-          )}
-          <button className="bg-brand-yellow cursor-pointer hover:bg-yellow-500 text-black text-sm font-medium px-5 py-2 rounded-md transition-colors shrink-0">
-            Book now
-          </button>
-        </div>
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="w-full bg-brand-yellow cursor-pointer hover:bg-yellow-500 text-black text-sm font-bold py-2.5 rounded-md transition-colors tracking-wide uppercase"
+        >
+          Book Now
+        </button>
       </div>
     </div>
   );
