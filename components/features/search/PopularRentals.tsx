@@ -103,7 +103,7 @@ function PopularRentalCard({ rental }: { rental: PopularRental }) {
       </div>
 
       {/* Vehicle image */}
-      <div className="relative h-40 bg-white flex items-center justify-center px-3">
+      <div className="relative h-40 bg-white flex items-center justify-center px-3 bg-[#f7fafc]">
         {imgSrc ? (
           <Image
             src={imgSrc}
