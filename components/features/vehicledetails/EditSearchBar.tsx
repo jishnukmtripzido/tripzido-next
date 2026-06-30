@@ -23,6 +23,7 @@ import {
 } from "@/lib/dateUtils";
 import type { PickupLocationOption } from "@/services/vehicleDetails.service";
 import type { DateRange } from "@/components/ui/DatePickerModal";
+import RentalHint from "@/components/ui/RentalHint";
 
 interface EditSearchBarProps {
   onClose: () => void;
@@ -57,6 +58,8 @@ export default function EditSearchBar({
     toggleDropdown,
     handleDateSelect,
     handleDateChange,
+    rentalHint,
+    dismissRentalHint,
   } = useSearchForm({
     initialPickupDate: parseDate(initialPickup),
     initialDropoffDate: parseDate(initialDropoff),
@@ -397,7 +400,7 @@ export default function EditSearchBar({
                   </button>
                 </div>
               </div>
-
+              <RentalHint message={rentalHint} onDismiss={dismissRentalHint} />
               {resolveError && (
                 <p className="text-xs text-red-500 mt-2 ml-1">{resolveError}</p>
               )}

@@ -11,6 +11,7 @@ import { useSearchForm } from "@/hooks/useSearchForm";
 import { formatDate, formatTime } from "@/lib/dateUtils";
 import type { City } from "@/types/locations.types";
 import type { ModalType } from "@/types/search.types";
+import RentalHint from "@/components/ui/RentalHint";
 
 interface Props {
   isOpen: boolean;
@@ -56,6 +57,8 @@ export default function MobileSearchDrawer({
     handleDateSelect,
     handleSearch,
     clearCityError,
+    rentalHint,
+    dismissRentalHint,
   } = useSearchForm({
     initialCityId,
     initialCityName,
@@ -166,7 +169,7 @@ export default function MobileSearchDrawer({
                 </span>
               </DateTimeField>
             </div>
-
+            <RentalHint message={rentalHint} onDismiss={dismissRentalHint} />
             <button
               onClick={handleSearch}
               className="w-full bg-brand-yellow hover:bg-yellow-500 text-black font-semibold py-4 rounded-xl text-base transition-colors cursor-pointer mt-1"

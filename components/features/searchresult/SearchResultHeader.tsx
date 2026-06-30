@@ -12,6 +12,7 @@ import { formatDate, formatTime } from "@/lib/dateUtils";
 import type { City } from "@/types/locations.types";
 import type { ModalType } from "@/types/search.types";
 import type { DateRange } from "@/components/ui/DatePickerModal";
+import RentalHint from "@/components/ui/RentalHint";
 
 interface SearchResultHeaderProps {
   cities: City[];
@@ -56,6 +57,8 @@ export default function SearchResultHeader({
     handleDateChange,
     handleSearch,
     clearCityError,
+    rentalHint,
+    dismissRentalHint,
   } = useSearchForm({
     initialCityId,
     initialCityName,
@@ -237,6 +240,7 @@ export default function SearchResultHeader({
               {isLoading ? "Searching..." : "Search"}
             </button>
           </div>
+          <RentalHint message={rentalHint} onDismiss={dismissRentalHint} />
         </section>
       </div>
 

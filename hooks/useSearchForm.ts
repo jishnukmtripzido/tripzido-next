@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { searchSchema } from "@/validations/searchSchema.validations";
 import { searchVehiclesAction } from "@/actions/vehicles.actions";
 import { buildDatetime, toISO } from "@/lib/dateUtils";
+import { getRentalDurationHint } from "@/lib/rentalUtils";
 import type { DateRange } from "@/components/ui/DatePickerModal";
 import type {
   DropdownType,
@@ -48,6 +49,44 @@ export function useSearchForm(opts: UseSearchFormOptions = {}) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [hintDismissed, setHintDismissed] = useState(false);
+
+  const rentalHint = useMemo(() => {
+    const pickup_datetime = buildDatetime(
+      dateRange.start,
+      pickupTime.hour,
+      pickupTime.minute,
+    );
+    const dropoff_datetime = buildDatetime(
+      dateRange.end,
+      dropoffTime.hour,
+      dropoffTime.minute,
+    );
+    return getRentalDurationHint(pickup_datetime, dropoff_datetime);
+  }, [
+    dateRange.start,
+    dateRange.end,
+    pickupTime.hour,
+    pickupTime.minute,
+    dropoffTime.hour,
+    dropoffTime.minute,
+  ]);
+
+  // Re-show the hint if the user changes dates/times again after dismissing
+  useEffect(() => {
+    setHintDismissed(false);
+  }, [
+    dateRange.start,
+    dateRange.end,
+    pickupTime.hour,
+    pickupTime.minute,
+    dropoffTime.hour,
+    dropoffTime.minute,
+  ]);
+
+  function dismissRentalHint() {
+    setHintDismissed(true);
+  }
 
   function handleDateSelect(range: DateRange) {
     setDateRange(
@@ -74,63 +113,6 @@ export function useSearchForm(opts: UseSearchFormOptions = {}) {
   function clearCityError() {
     setErrors((e) => ({ ...e, city_id: "" }));
   }
-
-  // async function handleSearch() {
-  //   setServerError(null);
-  //   setOpenDropdown(null);
-
-  //   const pickup_datetime = buildDatetime(
-  //     dateRange.start,
-  //     pickupTime.hour,
-  //     pickupTime.minute,
-  //   );
-  //   const dropoff_datetime = buildDatetime(
-  //     dateRange.end,
-  //     dropoffTime.hour,
-  //     dropoffTime.minute,
-  //   );
-
-  //   const result = searchSchema.safeParse({
-  //     city_id: selectedCity?.id,
-  //     city_name: selectedCity?.name,
-  //     pickup_datetime,
-  //     dropoff_datetime,
-  //   });
-
-  //   if (!result.success) {
-  //     const fieldErrors: Record<string, string> = {};
-  //     for (const issue of result.error.issues) {
-  //       fieldErrors[issue.path[0] as string] = issue.message;
-  //     }
-  //     setErrors(fieldErrors);
-  //     return;
-  //   }
-
-  //   setErrors({});
-  //   setIsLoading(true);
-
-  //   try {
-  //     const response = await searchVehiclesAction({
-  //       city_id: selectedCity!.id,
-  //       city_name: selectedCity!.name,
-  //       pickup_datetime,
-  //       dropoff_datetime,
-  //     });
-
-  //     if (!response.success) {
-  //       if (response.errors) setErrors(response.errors);
-  //       if (response.message) setServerError(response.message);
-  //       return;
-  //     }
-
-  //     opts.onSuccess?.();
-  //     router.push(
-  //       `/searchresult?city_id=${selectedCity!.id}&city_name=${encodeURIComponent(selectedCity!.name)}&pickup=${toISO(pickup_datetime)}&dropoff=${toISO(dropoff_datetime)}`,
-  //     );
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // }
 
   async function handleSearch() {
     setServerError(null);
@@ -199,5 +181,7 @@ export function useSearchForm(opts: UseSearchFormOptions = {}) {
     handleDateChange,
     handleSearch,
     clearCityError,
+    rentalHint: hintDismissed ? null : rentalHint,
+    dismissRentalHint,
   };
 }

@@ -11,6 +11,8 @@ import { FieldError } from "@/components/ui/FieldError";
 import { CalendarIcon, ClockIcon, LocationIcon } from "@/components/ui/icons";
 import { useSearchForm } from "@/hooks/useSearchForm";
 import { getDefaultDatetimes, formatDate, formatTime } from "@/lib/dateUtils";
+import { getRentalDurationHint } from "@/lib/rentalUtils";
+import RentalHint from "@/components/ui/RentalHint";
 import { useCityContext } from "@/contexts/CityContext";
 import type { City } from "@/types/locations.types";
 import type { ModalType } from "@/types/search.types";
@@ -46,6 +48,8 @@ export default function SearchWidget({
     handleDateChange,
     handleSearch,
     clearCityError,
+    rentalHint,
+    dismissRentalHint,
   } = useSearchForm({
     initialPickupDate: defaults.pickup,
     initialDropoffDate: defaults.dropoff,
@@ -274,6 +278,7 @@ export default function SearchWidget({
             {serverError && (
               <p className="text-xs text-red-500 mt-2 ml-1">{serverError}</p>
             )}
+            <RentalHint message={rentalHint} onDismiss={dismissRentalHint} />
           </div>
         </form>
       </section>
