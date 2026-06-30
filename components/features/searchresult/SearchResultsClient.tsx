@@ -57,6 +57,13 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
   const firstChunk = tabFilteredBikes.slice(0, BANNER_AFTER);
   const restChunk = tabFilteredBikes.slice(BANNER_AFTER);
   const showBanner = tabFilteredBikes.length > 0;
+  const rentalDays =
+    pickup && dropoff
+      ? Math.ceil(
+          (new Date(dropoff).getTime() - new Date(pickup).getTime()) /
+            (1000 * 60 * 60 * 24),
+        )
+      : undefined;
 
   function renderCard(bike: VehicleSearchResult) {
     const vendorId = bike.locations[0]?.vendor_id ?? 0;
@@ -79,6 +86,7 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
           {...bike}
           pickup={pickup}
           dropoff={dropoff}
+          rentalDays={rentalDays}
           onDropdownOpenChange={(open) =>
             setActiveCardId(open ? cardKey : null)
           }
@@ -180,7 +188,7 @@ function TabBar({
       <TabButton
         active={activeTab === "all"}
         onClick={() => onTabChange("all")}
-        activeClass="bg-yellow-50 border-yellow-400 text-gray-900"
+        activeClass="bg-yellow-50 border-yellow-50 text-gray-900"
         activeBadgeClass="bg-yellow-200 text-yellow-900"
         label="All models"
         count={allCount}
@@ -188,7 +196,7 @@ function TabBar({
       <TabButton
         active={activeTab === "electric"}
         onClick={() => onTabChange("electric")}
-        activeClass="bg-green-50 border-green-500 text-green-800"
+        activeClass="bg-green-50 border-green-50 text-green-800"
         activeBadgeClass="bg-green-200 text-green-800"
         label="Electric"
         count={electricCount}

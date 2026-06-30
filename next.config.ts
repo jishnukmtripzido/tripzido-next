@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "tripzido-django.onrender.com",
+        pathname: "/media/**",
       },
       {
         protocol: "https",

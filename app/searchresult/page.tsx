@@ -11,6 +11,7 @@ interface Props {
     dropoff?: string;
   }>;
 }
+export const dynamic = "force-dynamic";
 
 export default async function SearchResultPage({ searchParams }: Props) {
   const { city_id, city_name, pickup, dropoff } = await searchParams;

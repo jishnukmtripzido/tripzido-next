@@ -61,9 +61,7 @@ export default function HowItWorks() {
           <div
             key={s.step}
             className={`relative flex flex-col items-start px-6 pb-8 lg:pb-0 group ${
-              i > 0
-                ? "border-t border-gray-100 lg:border-t-0 lg:border-l lg:border-gray-100"
-                : ""
+              i > 0 ? "lg:border-l lg:border-gray-100" : ""
             }`}
           >
             <div
