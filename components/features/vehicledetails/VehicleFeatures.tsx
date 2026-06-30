@@ -65,7 +65,7 @@ export default function VehicleFeatures({
             className={`${hideOnMobile ? "hidden md:flex" : "flex"} items-center gap-3 text-font-main-sub`}
           >
             <Icon className="w-5 h-5 flex-shrink-0" />
-            <div className="flex flex-row items-baseline gap-1">
+            <div className="flex flex-row items-baseline gap-1 mb-1">
               <span className="text-sm md:text-sm">{value}</span>
               <span className="text-xs text-font-dim">• {label}</span>
             </div>
