@@ -25,7 +25,9 @@ export default function RentalHint({ message, onDismiss }: RentalHintProps) {
       </svg>
       <div className="flex-1">
         <p className="font-semibold">{message.title}</p>
-        <p className="mt-1 text-orange-700">{message.subtitle}</p>
+        <p className="hidden md:block mt-1 text-orange-700">
+          {message.subtitle}
+        </p>
       </div>
       {onDismiss && (
         <button
