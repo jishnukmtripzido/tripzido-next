@@ -186,7 +186,7 @@ export default function BikeCard({
           <div className="bg-white rounded-md shadow-[0px_1px_2px_0px_rgba(60,64,67,0.3),0px_2px_6px_2px_rgba(60,64,67,0.15)] overflow-visible">
             <div className="p-4 pb-0">
               <Badges />
-              <h3 className="text-[20px] font-bold text-black leading-snug mb-5">
+              <h3 className="text-[20px] font-bold text-black leading-snug mb-4">
                 {name}
               </h3>
               <div className="grid grid-cols-[1fr_160px] gap-2.5 items-start mb-6">
