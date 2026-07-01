@@ -17,7 +17,7 @@ function BikeCardSkeleton() {
             <div className="h-4 w-20 rounded-full bg-gray-200" />
           </div>
           {/* title */}
-          <div className="h-5 w-3/4 rounded bg-gray-200 mb-5" />
+          <div className="h-5 w-1/2 rounded bg-gray-200 mb-5" />
           {/* specs + image row */}
           <div className="grid grid-cols-[1fr_160px] gap-2.5 items-start mb-6">
             <div className="space-y-3">
