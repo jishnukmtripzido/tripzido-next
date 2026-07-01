@@ -81,10 +81,10 @@ export default function BikeCard({
       {rentalDays && totalPrice !== null ? (
         <>
           <div className="flex flex-col items-start gap-0.5">
-            <span className="text-xs mb-1 font-thin text-font-dim">
+            <span className="text-xs  font-thin text-font-dim">
               Price for {rentalDays} day{rentalDays > 1 ? "s" : ""} :
             </span>
-            <span className="text-xl md:text-lg font-bold text-black leading-none">
+            <span className="text-xl mt-1.5 md:mt-1 md:text-lg font-bold text-black leading-none">
               ₹{totalPrice!.toLocaleString()}
             </span>
           </div>
