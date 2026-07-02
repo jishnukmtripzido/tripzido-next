@@ -1,6 +1,5 @@
 import { Suspense } from "react";
-import { getCitiesCached } from "@/lib/cache";
-import { getPopularRentalsApi } from "@/services/vehicle.service";
+import { getCitiesCached, getPopularRentalsCached } from "@/lib/cache";
 import { FALLBACK_POPULAR_RENTALS } from "@/lib/constants";
 import { CityProvider } from "@/contexts/CityContext";
 import Header from "@/components/layout/Header";
@@ -14,18 +13,25 @@ import TrendingDestinations from "@/components/features/search/TrendingDestinati
 import OffersSectionData from "@/components/features/search/OffersSectionData";
 import OffersSectionSkeleton from "@/components/features/search/OffersSectionSkeleton";
 import PopularRentalsSkeleton from "@/components/features/search/PopularRentalsSkeleton";
+import type { City } from "@/types/locations.types";
+import type { PopularRental } from "@/types/search.types";
 
 export default async function HomePage() {
-  const { cities, error } = await getCitiesCached();
-  console.log("cities", cities, "city error", error);
+  let cities: City[] = [];
+  let citiesError: string | null = null;
+  try {
+    cities = await getCitiesCached();
+  } catch {
+    citiesError = "Could not load cities. Please try again.";
+  }
 
   const initialCityId = cities[0]?.id ?? 1;
   const initialCityName = cities[0]?.name ?? "your city";
 
-  let initialRentals = FALLBACK_POPULAR_RENTALS; //
+  let initialRentals: PopularRental[] = FALLBACK_POPULAR_RENTALS;
   try {
-    const data = await getPopularRentalsApi(initialCityId);
-    if (data && data.length > 0) initialRentals = data;
+    const rentals = await getPopularRentalsCached(initialCityId);
+    if (rentals.length > 0) initialRentals = rentals;
   } catch {
     // use fallback
   }
@@ -36,9 +42,8 @@ export default async function HomePage() {
       initialCityName={initialCityName}
     >
       <Header headerValues="w-full px-0 py-2 border-b border-gray-100 relative z-30 shadow-header" />
-
       <HeroSection />
-      <SearchWidget cities={cities} citiesError={error} />
+      <SearchWidget cities={cities} citiesError={citiesError} />
 
       <Suspense fallback={<OffersSectionSkeleton />}>
         <OffersSectionData />

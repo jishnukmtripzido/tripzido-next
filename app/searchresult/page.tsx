@@ -2,6 +2,7 @@
 import { getCitiesCached } from "@/lib/cache";
 import SearchResultsShell from "@/components/features/searchresult/SearchResultsShell";
 import SearchResultsData from "@/components/features/searchresult/SearchResultsData";
+import type { City } from "@/types/locations.types";
 
 interface Props {
   searchParams: Promise<{
@@ -16,8 +17,13 @@ export const dynamic = "force-dynamic";
 export default async function SearchResultPage({ searchParams }: Props) {
   const { city_id, city_name, pickup, dropoff } = await searchParams;
 
-  // Cities are cached/fast — safe to await directly, doesn't block streaming.
-  const { cities, error: citiesError } = await getCitiesCached();
+  let cities: City[] = [];
+  let citiesError: string | null = null;
+  try {
+    cities = await getCitiesCached();
+  } catch {
+    citiesError = "Could not load cities. Please try again.";
+  }
 
   return (
     <SearchResultsShell
@@ -28,15 +34,6 @@ export default async function SearchResultPage({ searchParams }: Props) {
       cities={cities}
       citiesError={citiesError}
     >
-      {/*
-        SearchResultsData is a Server Component that awaits
-        searchVehiclesApi. Passed as children into the client
-        SearchResultsShell, its slow await stays on the server and
-        streams in under the <Suspense> boundary that
-        SearchResultsShell wraps around {children} — the shell itself
-        (header, search bar, filter/sort buttons) renders instantly,
-        not blocked by this fetch.
-      */}
       <SearchResultsData cityId={city_id} pickup={pickup} dropoff={dropoff} />
     </SearchResultsShell>
   );
