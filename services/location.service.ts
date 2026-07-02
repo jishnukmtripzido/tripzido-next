@@ -8,7 +8,7 @@ type CityListResponse = {
 
 export async function getCitiesApi(): Promise<City[]> {
   const data = await api.get<CityListResponse>("/api/locations/cities/", {
-    timeout: 8000,
+    timeout: 30000,
   });
 
   return data.data.results;

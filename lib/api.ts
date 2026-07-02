@@ -19,7 +19,7 @@ async function request<T>(
     token,
     cache = "no-store",
     revalidate,
-    timeout = 15000, // 15s default — safe for all calls including search
+    timeout = 30000, // 15s default — safe for all calls including search
   } = options;
 
   const headers: Record<string, string> = {
