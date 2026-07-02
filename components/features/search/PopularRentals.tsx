@@ -75,7 +75,7 @@ export default function PopularRentals({ initialRentals }: Props) {
               loading ? "opacity-40 pointer-events-none" : "opacity-100"
             }`}
           >
-            {rentals.map((rental) => (
+            {rentals.map((rental, index) => (
               <PopularRentalCard
                 key={rental.id}
                 rental={rental}
