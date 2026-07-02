@@ -11,9 +11,9 @@ export default async function AnnouncementBannerData({ page }: Props) {
   try {
     banner = await getAnnouncementBannerCached(page);
   } catch {
-    // no banner — render nothing
+    return null; // ← return null explicitly on error
   }
 
-  if (!banner) return null;
+  if (!banner?.content) return null; // ← guard against null banner or empty content
   return <AnnouncementBanner content={banner.content} />;
 }

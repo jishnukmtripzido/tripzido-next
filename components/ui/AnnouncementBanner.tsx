@@ -1,10 +1,12 @@
 interface Props {
-  content: string;
+  content: string | null | undefined; // ← accept null/undefined
 }
 
 export default function AnnouncementBanner({ content }: Props) {
+  if (!content) return null; // ← guard here, never pass null to __html
+
   return (
-    <div className="bg-brand-yellow px-6 py-2.5 w-full">
+    <div className="hidden md:block bg-brand-yellow px-6 py-2.5 w-full">
       <div
         suppressHydrationWarning
         className="text-center text-[10px] md:text-sm font-normal text-black
