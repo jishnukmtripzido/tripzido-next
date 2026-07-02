@@ -22,7 +22,7 @@ export default async function HomePage() {
   const initialCityId = cities[0]?.id ?? 1;
   const initialCityName = cities[0]?.name ?? "your city";
 
-  let initialRentals = FALLBACK_POPULAR_RENTALS;
+  let initialRentals = FALLBACK_POPULAR_RENTALS; //
   try {
     const data = await getPopularRentalsApi(initialCityId);
     if (data && data.length > 0) initialRentals = data;
