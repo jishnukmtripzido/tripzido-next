@@ -76,7 +76,11 @@ export default function PopularRentals({ initialRentals }: Props) {
             }`}
           >
             {rentals.map((rental) => (
-              <PopularRentalCard key={rental.id} rental={rental} />
+              <PopularRentalCard
+                key={rental.id}
+                rental={rental}
+                priority={index === 0}
+              />
             ))}
           </div>
         </div>
@@ -90,7 +94,13 @@ export default function PopularRentals({ initialRentals }: Props) {
 
 // ── Card ──────────────────────────────────────────────────────────────
 
-function PopularRentalCard({ rental }: { rental: PopularRental }) {
+function PopularRentalCard({
+  rental,
+  priority = false,
+}: {
+  rental: PopularRental;
+  priority: boolean;
+}) {
   const [imgSrc, setImgSrc] = useState<string | null>(rental.image_url ?? null);
 
   return (
@@ -111,6 +121,8 @@ function PopularRentalCard({ rental }: { rental: PopularRental }) {
             fill
             sizes="(max-width: 640px) 240px, (max-width: 1280px) 25vw, 300px"
             quality={75}
+            loading={priority ? "eager" : "lazy"} // ← add this
+            priority={priority}
             className="object-contain p-4 transition-transform duration-300 bg-[#f7fafc]"
             onError={() => setImgSrc(null)}
           />
