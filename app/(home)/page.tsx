@@ -17,6 +17,7 @@ import PopularRentalsSkeleton from "@/components/features/search/PopularRentalsS
 
 export default async function HomePage() {
   const { cities, error } = await getCitiesCached();
+  console.log("cities", cities, "city error", error);
 
   const initialCityId = cities[0]?.id ?? 1;
   const initialCityName = cities[0]?.name ?? "your city";
