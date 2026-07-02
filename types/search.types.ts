@@ -13,6 +13,7 @@ export type DropdownType =
   | "pickup-time"
   | "dropoff-time"
   | null;
+
 export type SelectedCity = { id: number; name: string };
 export type TimeState = { hour: number; minute: number };
 
@@ -53,4 +54,16 @@ export type PopularRental = {
   sort_order: number;
   pickup_location_id: number | null;
   pickup_location_name: string | null;
+};
+
+export type AnnouncementBannerPage =
+  | "search_result"
+  | "vehicle_detail"
+  | "home";
+
+export type AnnouncementBanner = {
+  id: number;
+  content: string; // raw HTML from rich text editor
+  page: AnnouncementBannerPage;
+  is_current: boolean;
 };

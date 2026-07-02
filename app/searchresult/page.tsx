@@ -1,7 +1,7 @@
-// app/searchresult/page.tsx
 import { getCitiesCached } from "@/lib/cache";
 import SearchResultsShell from "@/components/features/searchresult/SearchResultsShell";
 import SearchResultsData from "@/components/features/searchresult/SearchResultsData";
+import AnnouncementBannerData from "@/components/features/searchresult/AnnouncementBannerData";
 import type { City } from "@/types/locations.types";
 
 interface Props {
@@ -12,6 +12,7 @@ interface Props {
     dropoff?: string;
   }>;
 }
+
 export const dynamic = "force-dynamic";
 
 export default async function SearchResultPage({ searchParams }: Props) {
@@ -33,6 +34,7 @@ export default async function SearchResultPage({ searchParams }: Props) {
       dropoff={dropoff ?? ""}
       cities={cities}
       citiesError={citiesError}
+      banner={<AnnouncementBannerData page="search_result" />}
     >
       <SearchResultsData cityId={city_id} pickup={pickup} dropoff={dropoff} />
     </SearchResultsShell>

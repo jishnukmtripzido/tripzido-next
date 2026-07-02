@@ -6,7 +6,7 @@ import MobileSearchBar from "./MobileSearchBar";
 import MobileSearchDrawer from "./MobileSearchDrawer";
 import SearchResultHeader from "./SearchResultHeader";
 import SearchResultsLoading from "./SearchResultsLoading";
-import OfferBanner from "../../ui/OfferBanner";
+import AnnouncementBannerSkeleton from "@/components/ui/AnnouncementBannerSkeleton";
 import {
   DrawerModeProvider,
   type DrawerMode,
@@ -28,27 +28,10 @@ interface Props {
   dropoff: string;
   cities: City[];
   citiesError: string | null;
-  /** The async, data-dependent subtree (sidebar + tabs/sort + grid) */
+  banner?: React.ReactNode; // ← server-rendered banner passed from page.tsx
   children: React.ReactNode;
 }
 
-/**
- * Static shell: everything rendered directly here is fast (cities are
- * cached, no vehicle fetch) and appears immediately, independent of
- * the slow vehicle search. Owns scroll-tracking state so
- * MobileSearchBar/FilterSortBar can respond to scroll right away,
- * before vehicle data has arrived.
- *
- * `children` is the Suspense boundary's content — a Server Component
- * (SearchResultsData) that awaits searchVehiclesApi and renders the
- * trimmed SearchResultsClient. Passing it as `children` from page.tsx
- * keeps the slow await on the server while this shell stays a client
- * component for scroll/drawer interactivity.
- *
- * drawerMode is shared with SearchResultsClient (which renders the
- * actual MobileFilterDrawer, since that needs filters/options derived
- * from resolved bikes) via DrawerModeProvider — see DrawerModeContext.
- */
 export default function SearchResultsShell({
   city,
   cityId,
@@ -56,11 +39,11 @@ export default function SearchResultsShell({
   dropoff,
   cities,
   citiesError,
+  banner,
   children,
 }: Props) {
   const [searchDrawerOpen, setSearchDrawerOpen] = useState(false);
   const [drawerMode, setDrawerMode] = useState<DrawerMode>(null);
-
   const scrolled = useScrollTracking(10);
 
   return (
@@ -94,7 +77,8 @@ export default function SearchResultsShell({
         scrolled={scrolled}
       />
 
-      <OfferBanner />
+      {/* Dynamic banner — streamed in from server, falls back to skeleton */}
+      <Suspense fallback={<AnnouncementBannerSkeleton />}>{banner}</Suspense>
 
       <Suspense fallback={<SearchResultsLoading />}>{children}</Suspense>
 

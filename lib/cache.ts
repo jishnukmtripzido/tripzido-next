@@ -1,8 +1,17 @@
 import { unstable_cache } from "next/cache";
 import { getCitiesApi } from "@/services/location.service";
-import { getOffersApi, getPopularRentalsApi } from "@/services/vehicle.service";
+import {
+  getOffersApi,
+  getPopularRentalsApi,
+  getAnnouncementBannerApi,
+} from "@/services/vehicle.service";
 import type { City } from "@/types/locations.types";
-import type { Offer, PopularRental } from "@/types/search.types";
+import type {
+  Offer,
+  PopularRental,
+  AnnouncementBanner,
+  AnnouncementBannerPage,
+} from "@/types/search.types";
 
 export const getCitiesCached = unstable_cache(
   async (): Promise<City[]> => {
@@ -26,4 +35,12 @@ export const getPopularRentalsCached = unstable_cache(
   },
   ["popular-rentals"],
   { revalidate: 1209600, tags: ["popular-rentals"] },
+);
+
+export const getAnnouncementBannerCached = unstable_cache(
+  async (page: AnnouncementBannerPage): Promise<AnnouncementBanner | null> => {
+    return await getAnnouncementBannerApi(page);
+  },
+  ["announcement-banner"],
+  { revalidate: 1209600, tags: ["announcement-banner"] },
 );

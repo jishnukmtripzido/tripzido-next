@@ -19,15 +19,3 @@ export default function OfferBanner() {
     </div>
   );
 }
-
-// export default function OfferBanner() {
-//   return (
-//     <div className="hidden md:block bg-[#fed250] px-6 py-2.5">
-//       <div className="text-center ">
-//         <p className="text-[10px] md:text-[12.8px] font-thin text-[#3a2c00]">
-//           🎉 Limited time offer — Get <strong className="text-black">10% off</strong> on your first booking!
-//         </p>
-//       </div>
-//     </div>
-//   );
-// }
