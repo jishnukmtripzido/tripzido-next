@@ -84,7 +84,7 @@ export default function SearchResultHeader({
               onClick={() => setOpenModal("city")}
               hasError={!!errors.city_id}
               active={false}
-              className="flex-[2] min-w-[200px] border-r border-gray-300"
+              className="relative flex-[2] min-w-[200px] border-r border-gray-300"
             >
               <svg
                 className="w-6 h-6 text-gray-500 mr-2 shrink-0"
@@ -123,7 +123,7 @@ export default function SearchResultHeader({
                   />
                 </svg>
               )}
-              {errors.city_id && <AbsoluteError message={errors.city_id} />}
+              {errors.city_id && <FieldError message={errors.city_id} />}
             </SearchCell>
 
             {/* Pick-up date */}
@@ -149,7 +149,7 @@ export default function SearchResultHeader({
                 />
               )}
               {errors.pickup_datetime && (
-                <AbsoluteError message={errors.pickup_datetime} />
+                <FieldError message={errors.pickup_datetime} />
               )}
             </SearchCell>
 
@@ -202,7 +202,7 @@ export default function SearchResultHeader({
                 />
               )}
               {errors.dropoff_datetime && (
-                <AbsoluteError message={errors.dropoff_datetime} />
+                <FieldError message={errors.dropoff_datetime} />
               )}
             </SearchCell>
 
@@ -330,14 +330,6 @@ function CellLabel({ top, bottom }: { top: string; bottom: string }) {
       <span className="text-sm font-normal text-font-main-sub truncate leading-none">
         {bottom}
       </span>
-    </div>
-  );
-}
-
-function AbsoluteError({ message }: { message: string }) {
-  return (
-    <div className="absolute top-full left-0 mt-1 z-10">
-      <FieldError message={message} />
     </div>
   );
 }

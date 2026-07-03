@@ -125,17 +125,20 @@ export default function MobileSearchDrawer({
 
             {/* Date + time grid */}
             <div className="grid grid-cols-2 gap-2">
-              <DateTimeField
-                label="Pick-up date"
-                onClick={() => setOpenModal("date")}
-                hasError={!!errors.pickup_datetime}
-                icon="date"
-              >
-                <span className="text-sm font-medium whitespace-nowrap">
-                  {formatDate(dateRange.start)}
-                </span>
-              </DateTimeField>
-              <FieldError message={errors.pickup_datetime} />
+              {/* Pick-up date (wrapped with its own error so it stays in this grid cell) */}
+              <div className="relative">
+                <DateTimeField
+                  label="Pick-up date"
+                  onClick={() => setOpenModal("date")}
+                  hasError={!!errors.pickup_datetime}
+                  icon="date"
+                >
+                  <span className="text-sm font-medium whitespace-nowrap">
+                    {formatDate(dateRange.start)}
+                  </span>
+                </DateTimeField>
+                <FieldError message={errors.pickup_datetime} />
+              </div>
 
               <DateTimeField
                 label="Time"
@@ -147,17 +150,20 @@ export default function MobileSearchDrawer({
                 </span>
               </DateTimeField>
 
-              <DateTimeField
-                label="Drop-off date"
-                onClick={() => setOpenModal("date")}
-                hasError={!!errors.dropoff_datetime}
-                icon="date"
-              >
-                <span className="text-sm font-medium whitespace-nowrap">
-                  {formatDate(dateRange.end)}
-                </span>
-              </DateTimeField>
-              <FieldError message={errors.dropoff_datetime} />
+              {/* Drop-off date (wrapped with its own error so it stays in this grid cell) */}
+              <div className="relative">
+                <DateTimeField
+                  label="Drop-off date"
+                  onClick={() => setOpenModal("date")}
+                  hasError={!!errors.dropoff_datetime}
+                  icon="date"
+                >
+                  <span className="text-sm font-medium whitespace-nowrap">
+                    {formatDate(dateRange.end)}
+                  </span>
+                </DateTimeField>
+                <FieldError message={errors.dropoff_datetime} />
+              </div>
 
               <DateTimeField
                 label="Time"
