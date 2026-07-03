@@ -85,8 +85,8 @@ export default function HeaderClient({
 
   const navLinks = [
     {
-      href: "#",
-      label: "Bikes",
+      href: "/fleet", // ← was "#"
+      label: "Our Fleet", // ← was "Bikes"
       icon: (
         <svg
           className="w-5 h-5"
@@ -110,7 +110,7 @@ export default function HeaderClient({
       ),
     },
     {
-      href: "#",
+      href: "/destinations", // ← was "#"
       label: "Destinations",
       icon: (
         <svg
@@ -129,7 +129,7 @@ export default function HeaderClient({
       ),
     },
     {
-      href: "#",
+      href: "/how-it-works", // ← was "#"
       label: "How it works",
       icon: (
         <svg
@@ -148,7 +148,7 @@ export default function HeaderClient({
       ),
     },
     {
-      href: "#",
+      href: "/offers", // ← was "#"
       label: "Offers",
       icon: (
         <svg

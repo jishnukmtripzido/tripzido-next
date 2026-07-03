@@ -133,7 +133,7 @@ export default function BikeCard({
   };
 
   const SpecsList = () => (
-    <ul className="space-y-2">
+    <ul className="space-y-1.5">
       {[
         { icon: "user", label: seatsLabel },
         { icon: "gear", label: transmission },
