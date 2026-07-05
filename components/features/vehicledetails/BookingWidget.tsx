@@ -347,11 +347,11 @@ export default function BookingWidget({
         )}
       </div>
 
-      <div className="mt-4 text-center">
+      {/* <div className="mt-4 text-center">
         <a href="#" className="text-sm text-blue-600 hover:underline">
           Cancellation Policy
         </a>
-      </div>
+      </div> */}
 
       {/* ── Fixed mobile bottom bar ─────────────────────────────── */}
       <div

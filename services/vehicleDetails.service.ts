@@ -68,16 +68,28 @@ export async function getCityPickupLocationsApi(
 
 // ── Types for the new endpoints ───────────────────────────────────────
 
-export interface CancellationPolicy {
-  rules: CancellationRule[];
-  note?: string;
-}
+// export interface CancellationPolicy {
+//   rules: CancellationRule[];
+//   note?: string;
+// }
 
+// export interface CancellationRule {
+//   hours_before_pickup: number; // e.g. 24
+//   refund_percentage: number; // e.g. 100
+//   label: string; // e.g. "More than 24 hours before pickup"
+//   description: string; // e.g. "Full refund"
+// }
 export interface CancellationRule {
   hours_before_pickup: number; // e.g. 24
   refund_percentage: number; // e.g. 100
   label: string; // e.g. "More than 24 hours before pickup"
   description: string; // e.g. "Full refund"
+}
+
+export interface CancellationPolicy {
+  full_payment_rules: CancellationRule[];
+  partial_payment_rules: CancellationRule[];
+  note?: string;
 }
 
 export interface PaginationMeta {

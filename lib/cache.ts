@@ -12,6 +12,10 @@ import type {
   AnnouncementBanner,
   AnnouncementBannerPage,
 } from "@/types/search.types";
+import {
+  CancellationPolicy,
+  getCancellationPolicyApi,
+} from "@/services/vehicleDetails.service";
 
 export const getCitiesCached = unstable_cache(
   async (): Promise<City[]> => {
@@ -43,4 +47,12 @@ export const getAnnouncementBannerCached = unstable_cache(
   },
   ["announcement-banner"],
   { revalidate: 1209600, tags: ["announcement-banner"] },
+);
+
+export const getCancellationPolicyCached = unstable_cache(
+  async (vehicleId: number): Promise<CancellationPolicy> => {
+    return await getCancellationPolicyApi(vehicleId);
+  },
+  ["cancellation-policy"],
+  { revalidate: 1209600, tags: ["cancellation-policy"] },
 );

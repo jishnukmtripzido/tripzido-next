@@ -10,6 +10,8 @@ interface Props {
   searchParams: Promise<Partial<VehicleDetailsSearchParams>>;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function VehicleDetailsPage({
   params,
   searchParams,
