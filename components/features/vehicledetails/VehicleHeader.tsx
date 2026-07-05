@@ -55,7 +55,7 @@ export default function VehicleHeader({
               or similar
             </span>
           </h1>
-          <p className="text-font-main-sub text-[13px] mt-1">
+          <p className="text-font-main-sub text-sm mt-1">
             Make Year: {makeYear}
           </p>
         </div>
@@ -114,9 +114,9 @@ export default function VehicleHeader({
           <div className="mb-2">
             <h1 className="text-2xl font-bold text-font-main-sub inline-block mr-2">
               {name}{" "}
-              <span className="text-font-main-sub text-sm font-normal">
+              {/* <span className="text-font-main-sub text-sm font-normal">
                 or similar
-              </span>
+              </span> */}
             </h1>
             <p className="text-font-main-sub text-sm mt-1">
               Make Year: {makeYear}
