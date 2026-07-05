@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Header from "@/components/layout/Header";
+// import Header from "@/components/layout/Header";
 
 const offers = [
   {
@@ -126,123 +126,127 @@ function CopyButton({ code }: { code: string }) {
   );
 }
 
+// export default function OffersContent() {
+//   return (
+//     <main className="min-h-screen bg-gray-50">
+//       {/* <Header headerValues="w-full px-0 py-2 border-b border-gray-100 relative z-30 shadow-header" />
+//       {/* Hero */}
+//       <section className="bg-black text-white py-16 px-4 text-center">
+//         <span className="inline-block bg-brand-yellow text-black text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
+//           Offers & Deals
+//         </span>
+//         <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+//           Save more, ride more
+//         </h1>
+//         <p className="text-gray-400 max-w-xl mx-auto text-lg">
+//           Exclusive discounts and promo codes for every kind of rider. Copy a
+//           code and apply it at checkout.
+//         </p>
+//       </section>
+
+//       {/* Announcement banner */}
+//       <div className="bg-brand-yellow py-3 text-center px-4">
+//         <p className="text-sm font-semibold text-black">
+//           🎉 Limited time — Use{" "}
+//           <span className="font-mono font-black">TRIP10</span> for 10% off your
+//           first ride. No expiry conditions!
+//         </p>
+//       </div>
+
+//       {/* Offer Cards */}
+//       <section className="max-w-5xl mx-auto px-4 py-12">
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//           {offers.map((offer) => (
+//             <div
+//               key={offer.id}
+//               className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+//             >
+//               {/* Coloured top band */}
+//               <div
+//                 className={`bg-gradient-to-r ${offer.color} px-6 py-5 flex items-center justify-between`}
+//               >
+//                 <div>
+//                   <span
+//                     className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${offer.badgeBg} ${offer.badgeText}`}
+//                   >
+//                     {offer.tag}
+//                   </span>
+//                   <h3
+//                     className={`font-extrabold text-lg mt-1 ${offer.textColor}`}
+//                   >
+//                     {offer.title}
+//                   </h3>
+//                   <p
+//                     className={`text-sm font-medium ${offer.textColor} opacity-80`}
+//                   >
+//                     {offer.subtitle}
+//                   </p>
+//                 </div>
+//                 <div className="text-3xl font-black text-white/30 select-none">
+//                   {offer.discount}
+//                 </div>
+//               </div>
+
+//               {/* Body */}
+//               <div className="px-6 py-5">
+//                 <p className="text-sm text-gray-500 mb-4 leading-relaxed">
+//                   {offer.desc}
+//                 </p>
+
+//                 <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
+//                   <div className="bg-gray-50 rounded-lg p-3">
+//                     <p className="text-gray-400 uppercase tracking-wide font-semibold text-[10px]">
+//                       Min. Booking
+//                     </p>
+//                     <p className="font-bold text-gray-700 mt-0.5">
+//                       {offer.minBooking}
+//                     </p>
+//                   </div>
+//                   <div className="bg-gray-50 rounded-lg p-3">
+//                     <p className="text-gray-400 uppercase tracking-wide font-semibold text-[10px]">
+//                       Max Discount
+//                     </p>
+//                     <p className="font-bold text-gray-700 mt-0.5">
+//                       {offer.maxDiscount}
+//                     </p>
+//                   </div>
+//                 </div>
+
+//                 <div className="flex items-center justify-between">
+//                   <CopyButton code={offer.code} />
+//                   <p className="text-[10px] text-gray-400">
+//                     Valid till {offer.validUntil}
+//                   </p>
+//                 </div>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </section>
+
+//       {/* Terms */}
+//       <section className="max-w-3xl mx-auto px-4 pb-12">
+//         <div className="bg-white border border-gray-100 rounded-2xl px-6 py-5 text-xs text-gray-400 space-y-1">
+//           <p className="font-bold text-gray-600 mb-2">Terms & Conditions</p>
+//           <p>• Only one promo code can be applied per booking.</p>
+//           <p>• Offers are non-transferable and cannot be exchanged for cash.</p>
+//           <p>
+//             • tripzido reserves the right to modify or withdraw offers at any
+//             time.
+//           </p>
+//           <p>
+//             • Discounts apply to base rental price only, not to add-ons or
+//             deposits.
+//           </p>
+//           <p>
+//             • Some offers may be limited to specific cities or bike categories.
+//           </p>
+//         </div>
+//       </section>
+//     </main>
+//   );
+// }
+
 export default function OffersContent() {
-  return (
-    <main className="min-h-screen bg-gray-50">
-      <Header headerValues="w-full px-0 py-2 border-b border-gray-100 relative z-30 shadow-header" />
-      {/* Hero */}
-      <section className="bg-black text-white py-16 px-4 text-center">
-        <span className="inline-block bg-brand-yellow text-black text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
-          Offers & Deals
-        </span>
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-          Save more, ride more
-        </h1>
-        <p className="text-gray-400 max-w-xl mx-auto text-lg">
-          Exclusive discounts and promo codes for every kind of rider. Copy a
-          code and apply it at checkout.
-        </p>
-      </section>
-
-      {/* Announcement banner */}
-      <div className="bg-brand-yellow py-3 text-center px-4">
-        <p className="text-sm font-semibold text-black">
-          🎉 Limited time — Use{" "}
-          <span className="font-mono font-black">TRIP10</span> for 10% off your
-          first ride. No expiry conditions!
-        </p>
-      </div>
-
-      {/* Offer Cards */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {offers.map((offer) => (
-            <div
-              key={offer.id}
-              className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
-            >
-              {/* Coloured top band */}
-              <div
-                className={`bg-gradient-to-r ${offer.color} px-6 py-5 flex items-center justify-between`}
-              >
-                <div>
-                  <span
-                    className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${offer.badgeBg} ${offer.badgeText}`}
-                  >
-                    {offer.tag}
-                  </span>
-                  <h3
-                    className={`font-extrabold text-lg mt-1 ${offer.textColor}`}
-                  >
-                    {offer.title}
-                  </h3>
-                  <p
-                    className={`text-sm font-medium ${offer.textColor} opacity-80`}
-                  >
-                    {offer.subtitle}
-                  </p>
-                </div>
-                <div className="text-3xl font-black text-white/30 select-none">
-                  {offer.discount}
-                </div>
-              </div>
-
-              {/* Body */}
-              <div className="px-6 py-5">
-                <p className="text-sm text-gray-500 mb-4 leading-relaxed">
-                  {offer.desc}
-                </p>
-
-                <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <p className="text-gray-400 uppercase tracking-wide font-semibold text-[10px]">
-                      Min. Booking
-                    </p>
-                    <p className="font-bold text-gray-700 mt-0.5">
-                      {offer.minBooking}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 rounded-lg p-3">
-                    <p className="text-gray-400 uppercase tracking-wide font-semibold text-[10px]">
-                      Max Discount
-                    </p>
-                    <p className="font-bold text-gray-700 mt-0.5">
-                      {offer.maxDiscount}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <CopyButton code={offer.code} />
-                  <p className="text-[10px] text-gray-400">
-                    Valid till {offer.validUntil}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Terms */}
-      <section className="max-w-3xl mx-auto px-4 pb-12">
-        <div className="bg-white border border-gray-100 rounded-2xl px-6 py-5 text-xs text-gray-400 space-y-1">
-          <p className="font-bold text-gray-600 mb-2">Terms & Conditions</p>
-          <p>• Only one promo code can be applied per booking.</p>
-          <p>• Offers are non-transferable and cannot be exchanged for cash.</p>
-          <p>
-            • tripzido reserves the right to modify or withdraw offers at any
-            time.
-          </p>
-          <p>
-            • Discounts apply to base rental price only, not to add-ons or
-            deposits.
-          </p>
-          <p>
-            • Some offers may be limited to specific cities or bike categories.
-          </p>
-        </div>
-      </section>
-    </main>
-  );
+  return <></>;
 }

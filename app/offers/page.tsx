@@ -1,5 +1,5 @@
-// import OffersContent from "@/components/features/offers/OffersContent";
+import OffersContent from "@/components/features/offers/OffersContent";
 
-// export default function OffersPage() {
-//   return <OffersContent />;
-// }
+export default function OffersPage() {
+  return <OffersContent />;
+}
