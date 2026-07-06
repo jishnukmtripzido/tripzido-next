@@ -174,7 +174,7 @@ export default function EditSearchBar({
 
   return (
     <>
-      <div className="w-full md:bg-gray-500 border-b border-gray-100">
+      <div className="w-full md:bg-brand-secondary border-b border-gray-100">
         <div className="xl:mx-[80.5px] mx-auto px-4 xl:px-0 py-3">
           <form onSubmit={handleSubmit} noValidate>
             <div className="border-2 border-brand-yellow rounded-md p-3 bg-white">

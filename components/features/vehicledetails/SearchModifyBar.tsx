@@ -249,7 +249,7 @@ export default function SearchModifyBar({
   }
 
   return (
-    <div className="w-full md:bg-gray-500  pt-4 md:py-2 md:pt-2 border-none border-gray-100">
+    <div className="w-full md:bg-brand-secondary  pt-4 md:py-2 md:pt-2 border-none border-gray-100">
       <div className="xl:mx-[80.5px] mx-auto px-4 xl:px-0">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-2 md:border-3 border-brand-yellow rounded-md p-3 md:px-4 md:py-3 bg-white gap-0 md:gap-0">
           {/* ── MOBILE ── */}
