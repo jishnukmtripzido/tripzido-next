@@ -66,7 +66,7 @@ export default function VehicleFeatures({
           >
             <Icon className="w-5 h-5 flex-shrink-0" />
             <div className="flex flex-row items-baseline gap-1 mb-1">
-              <span className="text-sm md:text-sm mb-0.5">{value}</span>
+              <span className="text-sm md:text-sm mb-1">{value}</span>
               <span className="text-xs text-font-dim">• {label}</span>
             </div>
           </div>

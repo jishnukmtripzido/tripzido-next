@@ -365,10 +365,10 @@ export default function BookingWidget({
         aria-hidden={!showMobileBar}
       >
         <div className="flex flex-col leading-tight">
-          <span className="text-[11px] text-font-dim">
+          <span className="text-[11px] text-font-dim mb-1">
             Amount Payable Today
           </span>
-          <span className="font-bold text-font-main-sub text-base">
+          <span className="font-bold text-font-main-sub text-xl">
             ₹ {advancePayment.toFixed(2)}
           </span>
         </div>

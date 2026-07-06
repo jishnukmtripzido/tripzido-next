@@ -28,7 +28,7 @@ export default function SearchModifyBar({
   const pickupTime = formatTimeFromISO(pickup);
   const dropoffDate = formatDateFromISO(dropoff);
   const dropoffTime = formatTimeFromISO(dropoff);
-  const mobileRange = `${pickupDate} – ${dropoffDate}`;
+  const mobileRange = `${pickupDate},${pickupTime} – ${dropoffDate},${dropoffTime}`;
 
   async function handleEditClick() {
     if (locations.length === 0) {
