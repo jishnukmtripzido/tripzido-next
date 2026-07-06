@@ -46,3 +46,19 @@ export function ReviewsSkeleton() {
     </div>
   );
 }
+
+export function LocationTimingSkeleton() {
+  return (
+    <div className="mb-8 animate-pulse">
+      <div className="h-5 w-36 rounded bg-gray-200 mb-4" />
+      <div className="space-y-2">
+        {Array.from({ length: 7 }).map((_, i) => (
+          <div key={i} className="flex items-center justify-between py-1">
+            <div className="h-3.5 w-20 rounded bg-gray-100" />
+            <div className="h-3.5 w-28 rounded bg-gray-100" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

@@ -13,10 +13,12 @@ import Reviews from "@/components/features/vehicledetails/Reviews";
 import {
   CancellationPolicySkeleton,
   ReviewsSkeleton,
+  LocationTimingSkeleton,
 } from "@/components/features/vehicledetails/Skeletons";
 import { PackageSelectionProvider } from "@/contexts/PackageSelectionContext";
 import type { VehicleDetailsSearchParams } from "@/types/vehicleDetails.types";
 import { getVehicleDetailsApi } from "@/services/vehicleDetails.service";
+import LocationTiming from "./LocationTiming";
 
 interface Props {
   id: string;
@@ -118,6 +120,10 @@ export default async function VehicleDetailsData({ id, searchParams }: Props) {
               </div>
 
               <ThingsToRemember policies={vehicle.policies} />
+              <div className="border-t border-gray-200" />
+              <Suspense fallback={<LocationTimingSkeleton />}>
+                <LocationTiming listingId={Number(id)} />
+              </Suspense>
               <div className="border-t border-gray-200" />
               <TermsAndConditions terms={vehicle.terms_and_conditions} />
               <div className="border-t border-gray-200" />

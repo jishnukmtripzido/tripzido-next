@@ -15,6 +15,8 @@ import type {
 import {
   CancellationPolicy,
   getCancellationPolicyApi,
+  getLocationTimingApi,
+  LocationTiming,
 } from "@/services/vehicleDetails.service";
 
 export const getCitiesCached = unstable_cache(
@@ -56,3 +58,15 @@ export const getCancellationPolicyCached = unstable_cache(
   ["cancellation-policy"],
   { revalidate: 1209600, tags: ["cancellation-policy"] },
 );
+
+export function getLocationTimingCached(
+  listingId: string | number,
+): Promise<LocationTiming | null> {
+  return unstable_cache(
+    async (): Promise<LocationTiming | null> => {
+      return await getLocationTimingApi(listingId);
+    },
+    [`location-timing-${listingId}`],
+    { revalidate: 3600, tags: [`location-timing-${listingId}`] },
+  )();
+}

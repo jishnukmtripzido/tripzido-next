@@ -121,3 +121,25 @@ export interface PickupLocationOption {
   location_name: string;
   city_id: number;
 }
+
+export interface LocationTimingDay {
+  day_of_week: number;
+  day_name: string;
+  is_closed: boolean;
+  timing: string;
+}
+
+export interface LocationTiming {
+  has_schedule: boolean;
+  days: LocationTimingDay[];
+}
+
+export async function getLocationTimingApi(
+  listingId: string | number,
+): Promise<LocationTiming | null> {
+  const data = await api.get<{ data: LocationTiming | null }>(
+    `/api/vehicles/${listingId}/location-timing/`,
+    { cache: "force-cache" },
+  );
+  return data.data;
+}

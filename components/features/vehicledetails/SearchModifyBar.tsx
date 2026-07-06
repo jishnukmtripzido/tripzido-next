@@ -97,7 +97,7 @@ export default function SearchModifyBar({
             </div>
             {/* <div className="flex items-center gap-1.5 text-blue-500 text-sm mt-2">
               <InfoIcon />
-              <span>You'll need to pick up your bike at {pickupTime}</span>
+              <span>Make sure to grab your ride at {pickupTime}</span>
             </div> */}
           </div>
 
@@ -125,7 +125,7 @@ export default function SearchModifyBar({
           <div className="hidden md:flex items-center gap-6">
             <div className="flex items-center gap-1.5 text-blue-500 text-sm">
               <InfoIcon />
-              <span>You'll need to pick up your bike at {pickupTime}</span>
+              <span>Make sure to grab your ride at {pickupTime}</span>
             </div>
             <button
               onClick={handleEditClick}
