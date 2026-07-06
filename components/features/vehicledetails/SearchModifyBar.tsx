@@ -28,7 +28,16 @@ export default function SearchModifyBar({
   const pickupTime = formatTimeFromISO(pickup);
   const dropoffDate = formatDateFromISO(dropoff);
   const dropoffTime = formatTimeFromISO(dropoff);
-  const mobileRange = `${pickupDate},${pickupTime} – ${dropoffDate},${dropoffTime}`;
+
+  // Mobile-only short format: "Jul 6, 12:00 PM"
+  function formatShortDate(iso: string) {
+    return new Date(iso).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  }
+
+  const mobileRange = `${formatShortDate(pickup)}, ${pickupTime} – ${formatShortDate(dropoff)}, ${dropoffTime}`;
 
   async function handleEditClick() {
     if (locations.length === 0) {
