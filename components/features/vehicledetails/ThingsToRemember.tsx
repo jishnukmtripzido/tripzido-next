@@ -34,12 +34,12 @@ export default function ThingsToRemember({ policies }: Props) {
       icon: <BanknotesIcon className="w-5 h-5" />,
       color: "text-gray-500",
     },
-    {
-      label: "Location timings",
-      value: policies.location_timings,
-      icon: <ClockIcon className="w-5 h-5" />,
-      color: "text-gray-700",
-    },
+    // {
+    //   label: "Location timings",
+    //   value: policies.location_timings,
+    //   icon: <ClockIcon className="w-5 h-5" />,
+    //   color: "text-gray-700",
+    // },
     {
       label: "Distance limit",
       value: distanceLimit,
