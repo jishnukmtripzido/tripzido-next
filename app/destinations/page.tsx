@@ -1,106 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
-
-const destinations = [
-  {
-    id: 1,
-    name: "Wayanad",
-    state: "Kerala",
-    emoji: "🌿",
-    image: "/destinations/wayanad.jpg",
-    gradient: "from-green-400 to-emerald-600",
-    tag: "Trending",
-    tagColor: "bg-green-100 text-green-700",
-    bikes: 18,
-    desc: "Misty hills, coffee estates, and wildlife sanctuaries. Perfect for a scenic two-wheel escape.",
-    highlights: ["Chembra Peak", "Edakkal Caves", "Pookode Lake"],
-    bestFor: "Nature lovers",
-    distance: "270 km from Bangalore",
-  },
-  {
-    id: 2,
-    name: "Varkala",
-    state: "Kerala",
-    emoji: "🏝️",
-    image: "/destinations/varkala.jpg",
-    gradient: "from-sky-400 to-cyan-600",
-    tag: "Popular",
-    tagColor: "bg-amber-100 text-amber-700",
-    bikes: 22,
-    desc: "Dramatic red cliffs meeting the Arabian Sea, with cafes perched right on the edge. A rare mix of beach and highland views.",
-    highlights: ["Varkala Cliff", "Papanasam Beach"],
-    bestFor: "Weekend riders",
-    distance: "50 km from Trivandrum",
-  },
-  {
-    id: 3,
-    name: "Goa",
-    state: "Goa",
-    emoji: "🏖️",
-    image: "/destinations/goa.jpg",
-    gradient: "from-cyan-400 to-blue-500",
-    tag: "Beach Vibes",
-    tagColor: "bg-blue-100 text-blue-700",
-    bikes: 35,
-    desc: "Sun, sand and coastal roads. Bikes are the best way to hop between Goa's legendary beaches.",
-    highlights: ["Baga Beach", "Old Goa Church", "Dudhsagar Falls"],
-    bestFor: "Beach lovers",
-    distance: "600 km from Bangalore",
-  },
-  {
-    id: 4,
-    name: "Alleppey",
-    state: "Kerala",
-    emoji: "🛶",
-    image: "/destinations/alappuzha.jpg",
-    gradient: "from-emerald-500 to-teal-600",
-    tag: "Backwaters",
-    tagColor: "bg-emerald-100 text-emerald-700",
-    bikes: 19,
-    desc: "The Venice of the East — ride alongside palm-fringed canals, paddy fields and houseboats drifting through the backwaters.",
-    highlights: ["Alleppey Backwaters", "Marari Beach", "Punnamada Lake"],
-    bestFor: "Backwater explorers",
-    distance: "155 km from Kochi",
-  },
-  {
-    id: 5,
-    name: "Kochi",
-    state: "Kerala",
-    emoji: "⚓",
-    image: "/destinations/kochi.jpg",
-    gradient: "from-teal-500 to-blue-600",
-    tag: "Heritage",
-    tagColor: "bg-teal-100 text-teal-700",
-    bikes: 20,
-    desc: "A port city where Dutch, Portuguese and Chinese influences meet — ride past colonial streets, backwaters and Chinese fishing nets.",
-    highlights: ["Fort Kochi", "Chinese Fishing Nets", "Mattancherry Palace"],
-    bestFor: "Culture explorers",
-    distance: "220 km from Trivandrum",
-  },
-  {
-    id: 6,
-    name: "Munnar",
-    state: "Kerala",
-    emoji: "🍃",
-    image: "/destinations/munnar.jpg",
-    gradient: "from-lime-500 to-green-600",
-    tag: "Scenic",
-    tagColor: "bg-lime-100 text-lime-700",
-    bikes: 16,
-    desc: "Rolling tea gardens and cool mountain roads through Kerala's highest ranges.",
-    highlights: ["Top Station", "Eravikulam NP", "Mattupetty Dam"],
-    bestFor: "Scenic riders",
-    distance: "130 km from Kochi",
-  },
-];
-
-const stats = [
-  { value: "5+", label: "Cities" },
-  { value: "500+", label: "Bikes" },
-  { value: "50K+", label: "Happy Riders" },
-  { value: "4.8★", label: "Avg Rating" },
-];
+import { destinations, stats } from "./data";
 
 export default function DestinationsPage() {
   return (
@@ -142,7 +43,7 @@ export default function DestinationsPage() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {destinations.map((dest) => (
-            <Link href="/" key={dest.id}>
+            <Link href={`/destinations/${dest.slug}`} key={dest.id}>
               <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all group cursor-pointer">
                 {/* Visual banner */}
                 <div
@@ -203,9 +104,6 @@ export default function DestinationsPage() {
                       <p className="text-xs font-semibold text-font-main-sub mb-1">
                         {dest.distance}
                       </p>
-                      {/* <p className="text-xs font-semibold text-gray-700">
-                        {dest.bikes} bikes available
-                      </p> */}
                     </div>
                     <span className="text-sm font-bold text-yellow-600 group-hover:underline">
                       Explore →
