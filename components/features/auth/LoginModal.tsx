@@ -243,9 +243,10 @@ export default function LoginModal({
                 ? "Enter OTP"
                 : isRegister
                   ? "Create account"
-                  : "Welcome to"}{" "}
+                  : "Welcome back"}{" "}
               {!otpSent && !isRegister && (
-                <span className="text-brand-yellow">Tripzido</span>
+                // <span className="text-brand-yellow">Tripzido</span>
+                <span></span>
               )}
             </h2>
             <p className="text-sm text-gray-500 mb-6">
