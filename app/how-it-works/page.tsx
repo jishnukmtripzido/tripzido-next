@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 
@@ -15,7 +13,7 @@ const steps = [
   {
     step: "02",
     emoji: "🛵",
-    title: "Pick your perfect bike",
+    title: "Pick your perfect ride",
     desc: "Filter by price, model type, or fuel. Compare specs, read reviews, and choose the bike that fits your journey.",
     color: "bg-blue-50 border-blue-200",
     accent: "text-blue-600",
@@ -81,11 +79,11 @@ const perks = [
     title: "24/7 support",
     desc: "Our team is always a call or chat away.",
   },
-  {
-    emoji: "🛡️",
-    title: "Insured rides",
-    desc: "All bikes carry valid third-party insurance.",
-  },
+  // {
+  //   emoji: "🛡️",
+  //   title: "Insured rides",
+  //   desc: "All bikes carry valid third-party insurance.",
+  // },
   {
     emoji: "🔄",
     title: "Flexible returns",
@@ -206,7 +204,7 @@ export default function HowItWorksPage() {
           Ready to hit the road?
         </h2>
         <p className="text-sm text-black/70 mb-5">
-          Hundreds of bikes available across 20+ cities in India.
+          Hundreds of bikes available across 5+ cities in India.
         </p>
         <Link href="/">
           <button className="bg-black text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-900 transition-colors">
