@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 
@@ -7,6 +8,7 @@ const destinations = [
     name: "Wayanad",
     state: "Kerala",
     emoji: "🌿",
+    image: "/destinations/wayanad.jpg",
     gradient: "from-green-400 to-emerald-600",
     tag: "Trending",
     tagColor: "bg-green-100 text-green-700",
@@ -18,23 +20,25 @@ const destinations = [
   },
   {
     id: 2,
-    name: "Coorg",
-    state: "Karnataka",
-    emoji: "☕",
-    gradient: "from-amber-500 to-orange-600",
+    name: "Varkala",
+    state: "Kerala",
+    emoji: "🏝️",
+    image: "/destinations/varkala.jpg",
+    gradient: "from-sky-400 to-cyan-600",
     tag: "Popular",
     tagColor: "bg-amber-100 text-amber-700",
     bikes: 22,
-    desc: "Scotland of India — lush coffee plantations, cascading waterfalls and cool mountain air.",
-    highlights: ["Abbey Falls", "Raja's Seat", "Dubare Forest"],
+    desc: "Dramatic red cliffs meeting the Arabian Sea, with cafes perched right on the edge. A rare mix of beach and highland views.",
+    highlights: ["Varkala Cliff", "Papanasam Beach"],
     bestFor: "Weekend riders",
-    distance: "250 km from Bangalore",
+    distance: "50 km from Trivandrum",
   },
   {
     id: 3,
     name: "Goa",
     state: "Goa",
     emoji: "🏖️",
+    image: "/destinations/goa.jpg",
     gradient: "from-cyan-400 to-blue-500",
     tag: "Beach Vibes",
     tagColor: "bg-blue-100 text-blue-700",
@@ -46,37 +50,40 @@ const destinations = [
   },
   {
     id: 4,
-    name: "Manali",
-    state: "Himachal Pradesh",
-    emoji: "🏔️",
-    gradient: "from-blue-500 to-indigo-600",
-    tag: "Adventure",
-    tagColor: "bg-indigo-100 text-indigo-700",
-    bikes: 28,
-    desc: "Snow-capped peaks and winding Himalayan roads. A bucket-list destination for every biker.",
-    highlights: ["Rohtang Pass", "Solang Valley", "Old Manali"],
-    bestFor: "Adventure riders",
-    distance: "530 km from Delhi",
+    name: "Alleppey",
+    state: "Kerala",
+    emoji: "🛶",
+    image: "/destinations/alappuzha.jpg",
+    gradient: "from-emerald-500 to-teal-600",
+    tag: "Backwaters",
+    tagColor: "bg-emerald-100 text-emerald-700",
+    bikes: 19,
+    desc: "The Venice of the East — ride alongside palm-fringed canals, paddy fields and houseboats drifting through the backwaters.",
+    highlights: ["Alleppey Backwaters", "Marari Beach", "Punnamada Lake"],
+    bestFor: "Backwater explorers",
+    distance: "155 km from Kochi",
   },
   {
     id: 5,
-    name: "Rishikesh",
-    state: "Uttarakhand",
-    emoji: "🕉️",
-    gradient: "from-orange-400 to-red-500",
-    tag: "Spiritual",
-    tagColor: "bg-orange-100 text-orange-700",
-    bikes: 14,
-    desc: "Where the Ganges flows wild — ride through ashrams, suspension bridges and riverside cafes.",
-    highlights: ["Laxman Jhula", "Ram Jhula", "Triveni Ghat"],
-    bestFor: "Soul seekers",
-    distance: "240 km from Delhi",
+    name: "Kochi",
+    state: "Kerala",
+    emoji: "⚓",
+    image: "/destinations/kochi.jpg",
+    gradient: "from-teal-500 to-blue-600",
+    tag: "Heritage",
+    tagColor: "bg-teal-100 text-teal-700",
+    bikes: 20,
+    desc: "A port city where Dutch, Portuguese and Chinese influences meet — ride past colonial streets, backwaters and Chinese fishing nets.",
+    highlights: ["Fort Kochi", "Chinese Fishing Nets", "Mattancherry Palace"],
+    bestFor: "Culture explorers",
+    distance: "220 km from Trivandrum",
   },
   {
     id: 6,
     name: "Munnar",
     state: "Kerala",
     emoji: "🍃",
+    image: "/destinations/munnar.jpg",
     gradient: "from-lime-500 to-green-600",
     tag: "Scenic",
     tagColor: "bg-lime-100 text-lime-700",
@@ -89,7 +96,7 @@ const destinations = [
 ];
 
 const stats = [
-  { value: "20+", label: "Cities" },
+  { value: "5+", label: "Cities" },
   { value: "500+", label: "Bikes" },
   { value: "50K+", label: "Happy Riders" },
   { value: "4.8★", label: "Avg Rating" },
@@ -139,13 +146,33 @@ export default function DestinationsPage() {
               <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg transition-all group cursor-pointer">
                 {/* Visual banner */}
                 <div
-                  className={`h-40 bg-gradient-to-br ${dest.gradient} flex flex-col items-center justify-center relative`}
+                  className={`relative h-40 bg-gradient-to-br ${dest.gradient} flex flex-col items-center justify-center overflow-hidden`}
                 >
-                  <span className="text-6xl mb-1">{dest.emoji}</span>
-                  <span className="text-white font-bold text-lg">
-                    {dest.name}
-                  </span>
-                  <span className="text-white/70 text-xs">{dest.state}</span>
+                  {dest.image ? (
+                    <>
+                      <Image
+                        src={dest.image}
+                        alt={`${dest.name}, ${dest.state}`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      {/* Dark gradient overlay so the name/tag stay readable over any photo */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    </>
+                  ) : (
+                    <span className="text-6xl mb-1">{dest.emoji}</span>
+                  )}
+
+                  <div className="relative flex flex-col items-center">
+                    <span className="text-white font-bold text-lg drop-shadow-sm">
+                      {dest.name}
+                    </span>
+                    <span className="text-white/80 text-xs drop-shadow-sm">
+                      {dest.state}
+                    </span>
+                  </div>
+
                   {dest.tag && (
                     <span
                       className={`absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full ${dest.tagColor}`}
@@ -156,7 +183,7 @@ export default function DestinationsPage() {
                 </div>
 
                 <div className="p-5">
-                  <p className="text-sm text-gray-500 mb-3 leading-relaxed">
+                  <p className="text-sm text-font-main-sub mb-3 leading-relaxed">
                     {dest.desc}
                   </p>
 
@@ -173,12 +200,14 @@ export default function DestinationsPage() {
 
                   <div className="border-t border-gray-100 pt-3 flex items-center justify-between">
                     <div>
-                      <p className="text-xs text-gray-400">{dest.distance}</p>
-                      <p className="text-xs font-semibold text-gray-700">
-                        {dest.bikes} bikes available
+                      <p className="text-xs font-semibold text-font-main-sub mb-1">
+                        {dest.distance}
                       </p>
+                      {/* <p className="text-xs font-semibold text-gray-700">
+                        {dest.bikes} bikes available
+                      </p> */}
                     </div>
-                    <span className="text-sm font-bold text-brand-yellow group-hover:underline">
+                    <span className="text-sm font-bold text-yellow-600 group-hover:underline">
                       Explore →
                     </span>
                   </div>
@@ -195,9 +224,7 @@ export default function DestinationsPage() {
           <p className="text-xs font-bold uppercase tracking-widest text-brand-yellow mb-2">
             Expanding Soon
           </p>
-          <h3 className="text-xl font-extrabold mb-2">
-            Leh · Spiti · Ooty · Darjeeling · Andaman
-          </h3>
+          <h3 className="text-xl font-extrabold mb-2">Bangaluru · Ooty</h3>
           <p className="text-gray-400 text-sm">
             We&apos;re bringing tripzido to more destinations every month.
           </p>
