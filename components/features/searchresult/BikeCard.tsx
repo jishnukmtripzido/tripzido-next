@@ -912,7 +912,6 @@
 //     </svg>
 //   );
 // }
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -1055,7 +1054,14 @@ export default function BikeCard({
           key={label}
           className="flex items-center gap-2 text-[13px] text-black"
         >
-          <SpecIcon type={icon} />
+          {/* Bigger, black, and thinner-stroked only here (mobile spec
+              list) — desktop's SpecIcon calls below stay on defaults. */}
+          <SpecIcon
+            type={icon}
+            className="w-[18px] h-[18px]"
+            color="text-black"
+            strokeWidth={1}
+          />
           {label}
         </li>
       ))}
@@ -1708,14 +1714,24 @@ function PinIcon() {
   );
 }
 
-function SpecIcon({ type }: { type: string }) {
+function SpecIcon({
+  type,
+  className = "w-3.5 h-3.5",
+  color,
+  strokeWidth = 2,
+}: {
+  type: string;
+  className?: string;
+  color?: string;
+  strokeWidth?: number;
+}) {
   if (type === "seat") {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-3.5 h-3.5 text-gray-600 shrink-0"
+        className={`${className} ${color ?? "text-gray-600"} shrink-0`}
       >
         <path d="M16.5 6a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0M18 6A6 6 0 1 0 6 6a6 6 0 0 0 12 0M3 23.25a9 9 0 1 1 18 0 .75.75 0 0 0 1.5 0c0-5.799-4.701-10.5-10.5-10.5S1.5 17.451 1.5 23.25a.75.75 0 0 0 1.5 0" />
       </svg>
@@ -1728,7 +1744,7 @@ function SpecIcon({ type }: { type: string }) {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-3.5 h-3.5 text-gray-600 shrink-0"
+        className={`${className} ${color ?? "text-gray-600"} shrink-0`}
       >
         <path d="M19.25 14.25v-4.5l-1.374.416 3 4.5c.412.617 1.374.326 1.374-.416v-4.5a.75.75 0 0 0-1.5 0v4.5l1.374-.416-3-4.5c-.412-.617-1.374-.326-1.374.416v4.5a.75.75 0 0 0 1.5 0m3 6a3.75 3.75 0 0 0-3.75-3.75.75.75 0 0 0-.75.75v6c0 .414.336.75.75.75a3.75 3.75 0 0 0 3.75-3.75m-1.5 0a2.25 2.25 0 0 1-2.25 2.25l.75.75v-6l-.75.75a2.25 2.25 0 0 1 2.25 2.25M18.5 4.5H20A2.25 2.25 0 0 0 20 0h-1.5a.75.75 0 0 0-.75.75v6a.75.75 0 0 0 1.5 0v-6l-.75.75H20A.75.75 0 0 1 20 3h-1.5a.75.75 0 0 0 0 1.5M4.25 6.75v4.5A2.25 2.25 0 0 0 6.5 13.5H8a.75.75 0 0 1 .75.75v4.5A2.25 2.25 0 0 0 11 21h3a.75.75 0 0 0 0-1.5h-3a.75.75 0 0 1-.75-.75v-4.5A2.25 2.25 0 0 0 8 12H6.5a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-1.5 0m3-3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0m1.5 0a3.75 3.75 0 1 0-7.5 0 3.75 3.75 0 0 0 7.5 0" />
       </svg>
@@ -1738,7 +1754,7 @@ function SpecIcon({ type }: { type: string }) {
   if (type === "fuel") {
     return (
       <svg
-        className="w-3.5 h-3.5 text-gray-600 shrink-0"
+        className={`${className} ${color ?? "text-gray-600"} shrink-0`}
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -1746,7 +1762,7 @@ function SpecIcon({ type }: { type: string }) {
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth="2"
+          strokeWidth={strokeWidth}
           d="M13 10V3L4 14h7v7l9-11h-7z"
         />
       </svg>
@@ -1761,7 +1777,7 @@ function SpecIcon({ type }: { type: string }) {
 
   return (
     <svg
-      className="w-3.5 h-3.5 text-gray-500 shrink-0"
+      className={`${className} ${color ?? "text-gray-500"} shrink-0`}
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -1769,7 +1785,7 @@ function SpecIcon({ type }: { type: string }) {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="2"
+        strokeWidth={strokeWidth}
         d={paths[type]}
       />
     </svg>
