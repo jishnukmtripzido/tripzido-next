@@ -791,7 +791,8 @@
 
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { getLocationPrice } from "@/lib/vehicleUtils";
@@ -865,15 +866,6 @@ export default function BikeCard({
     return `/vehicledetails/${selectedLocation.id}?${params.toString()}`;
   }
 
-  // Ensures we always format a real number: some price fields come through
-  // as decimal strings (e.g. "1699.00"), and calling .toLocaleString() on a
-  // string just returns it unchanged instead of grouping/rounding it.
-  function formatPrice(value: number | string) {
-    return `₹${Number(value).toLocaleString("en-IN", {
-      maximumFractionDigits: 0,
-    })}`;
-  }
-
   const PriceDisplay = () => (
     <div>
       {rentalDays && totalPrice !== null ? (
@@ -882,13 +874,13 @@ export default function BikeCard({
             Price for {rentalDays} day{rentalDays > 1 ? "s" : ""} :
           </span>
           <span className="text-xl mt-1.5 md:mt-1 md:text-lg font-bold text-black leading-none">
-            {formatPrice(totalPrice!)}
+            {formatINR(totalPrice!)}
           </span>
         </div>
       ) : totalPrice !== null ? (
         <div className="flex flex-col items-start gap-0.5">
           <span className="text-xl md:text-lg font-bold text-black leading-none">
-            {formatPrice(totalPrice)}
+            {formatINR(totalPrice)}
           </span>
           <span className="text-[14px] text-font-main-sub">({kmLimit})</span>
         </div>
@@ -1223,49 +1215,30 @@ function LocationDropdown({
   }
 
   const [open, setOpen] = useState(false);
-  const [dropUp, setDropUp] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-        onOpenChange?.(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onOpenChange]);
-
-  function handleTriggerClick() {
-    if (!open && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      setDropUp(window.innerHeight - rect.bottom < 160);
-    }
-    const next = !open;
-    setOpen(next);
-    onOpenChange?.(next);
+  function handleOpen() {
+    setOpen(true);
+    onOpenChange?.(true);
   }
 
-  function handleSelect(loc: VehicleLocation) {
-    onSelect(loc);
+  function handleClose() {
     setOpen(false);
     onOpenChange?.(false);
   }
 
+  function handleSelect(loc: VehicleLocation) {
+    onSelect(loc);
+    handleClose();
+  }
+
   return (
-    <div className="relative mt-3" ref={dropdownRef} style={{ zIndex: 50 }}>
+    <>
       <div
-        ref={triggerRef}
-        onClick={handleTriggerClick}
-        className={`w-full flex items-center gap-2 border cursor-pointer bg-white transition-all overflow-hidden pl-3 py-2.5 ${
-          open
-            ? `border-gray-400 rounded-lg ${dropUp ? "" : "rounded-b-none"}`
-            : "border-gray-200 rounded-lg hover:border-gray-300"
+        onClick={handleOpen}
+        role="button"
+        tabIndex={0}
+        className={`w-full mt-3 flex items-center gap-2 border cursor-pointer bg-white transition-colors overflow-hidden pl-3 pr-2.5 py-2.5 rounded-lg ${
+          open ? "border-gray-400" : "border-gray-200 hover:border-gray-300"
         }`}
       >
         <PinIcon />
@@ -1278,65 +1251,163 @@ function LocationDropdown({
           </span>
         </span>
         <MapThumbnail lat={mapLat} lng={mapLng} />
+        <ChevronIcon open={open} />
       </div>
+
+      <LocationSheet
+        open={open}
+        onClose={handleClose}
+        locations={locations}
+        selectedLocation={selectedLocation}
+        onSelect={handleSelect}
+      />
+    </>
+  );
+}
+
+// Mobile location picker, rendered as a native-feeling bottom sheet via
+// portal so it always docks to the viewport instead of being positioned
+// (and potentially clipped) relative to a card sitting inside a scrolling
+// list. No viewport math needed since it never has to decide whether to
+// flip up or down.
+function LocationSheet({
+  open,
+  onClose,
+  locations,
+  selectedLocation,
+  onSelect,
+}: {
+  open: boolean;
+  onClose: () => void;
+  locations: VehicleLocation[];
+  selectedLocation: VehicleLocation;
+  onSelect: (loc: VehicleLocation) => void;
+}) {
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      const raf = requestAnimationFrame(() => setVisible(true));
+      document.body.style.overflow = "hidden";
+      return () => cancelAnimationFrame(raf);
+    }
+    setVisible(false);
+    document.body.style.overflow = "";
+    const timeout = setTimeout(() => setMounted(false), 300);
+    return () => clearTimeout(timeout);
+  }, [open]);
+
+  // Safety net: always release the scroll lock if the card unmounts mid-open.
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [open, onClose]);
+
+  if (!mounted || typeof document === "undefined") return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[100]" role="dialog" aria-modal="true">
       <div
-        className={`absolute left-0 right-0 bg-white border border-gray-200 shadow-xl overflow-hidden transition-all duration-200 ease-in-out z-50 ${
-          open
-            ? "opacity-100 translate-y-0 pointer-events-auto scale-100"
-            : "opacity-0 -translate-y-2 pointer-events-none scale-[0.98]"
-        } ${dropUp ? "bottom-full border-b-0 rounded-t-lg origin-bottom" : "top-full border-t-0 rounded-b-lg origin-top"}`}
+        onClick={onClose}
+        className={`absolute inset-0 bg-black/45 transition-opacity duration-300 ${
+          visible ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      <div
+        className={`absolute inset-x-0 bottom-0 bg-white rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out ${
+          visible ? "translate-y-0" : "translate-y-full"
+        }`}
+        style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
       >
-        <div className="max-h-60 overflow-y-auto divide-y divide-gray-100">
+        <div className="flex justify-center pt-2.5 pb-1">
+          <div className="w-9 h-1 rounded-full bg-gray-300" />
+        </div>
+        <div className="flex items-center justify-between px-4 pt-1 pb-3 border-b border-gray-100">
+          <h4 className="text-[15px] font-semibold text-gray-900">
+            Select pickup location
+          </h4>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="p-1 -mr-1 text-gray-400 hover:text-gray-600"
+          >
+            <CloseIcon />
+          </button>
+        </div>
+        <div className="max-h-[55vh] overflow-y-auto">
           {locations.map((loc) => {
             const locPrice = getLocationPrice(loc);
             const isSelected = loc.id === selectedLocation.id;
             const locSoldOut = loc.available_count <= 0;
             return (
-              <div
+              <button
                 key={loc.id}
-                onClick={() => handleSelect(loc)}
-                className={`flex items-center justify-between px-4 py-3 cursor-pointer text-[13px] transition-colors ${isSelected ? "bg-gray-50 font-medium" : "hover:bg-gray-50/60"}`}
+                type="button"
+                onClick={() => onSelect(loc)}
+                className={`w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left border-b border-gray-50 last:border-b-0 transition-colors ${
+                  isSelected ? "bg-amber-50/70" : "active:bg-gray-50"
+                }`}
               >
-                <div className="flex items-center gap-3 min-w-0">
+                <span className="flex items-center gap-3 min-w-0">
                   <span
-                    className={`w-3 h-3 rounded-[3px] shrink-0 ${
+                    className={`w-2 h-2 rounded-full shrink-0 ${
                       locSoldOut ? "bg-gray-300" : "bg-green-500"
                     }`}
                   />
-                  <div className="flex flex-col min-w-0">
+                  <span className="flex flex-col items-start min-w-0">
                     <span
-                      className={`truncate text-black ${isSelected ? "font-semibold" : ""}`}
+                      className={`text-[14px] truncate ${
+                        isSelected
+                          ? "font-semibold text-gray-900"
+                          : "font-medium text-gray-800"
+                      }`}
                     >
                       {loc.location_name}
                     </span>
+                    {locSoldOut && (
+                      <span className="text-[11px] text-red-500 font-medium mt-0.5">
+                        Sold out
+                      </span>
+                    )}
+                  </span>
+                </span>
+                <span className="flex items-center gap-2 shrink-0">
+                  {!locSoldOut && locPrice !== null && (
                     <span
-                      className={`text-[11px] mt-0.5 truncate ${
-                        locSoldOut ? "text-red-500" : "text-black"
-                      } ${isSelected ? "font-semibold" : ""}`}
+                      className={`text-[13.5px] ${
+                        isSelected
+                          ? "font-bold text-gray-900"
+                          : "font-semibold text-gray-500"
+                      }`}
                     >
-                      {locSoldOut
-                        ? "Sold out"
-                        : locPrice !== null
-                          ? `₹${locPrice.toLocaleString()}`
-                          : "No price"}
+                      {formatINR(locPrice)}
                     </span>
-                  </div>
-                </div>
-                <div className="shrink-0 ml-2">
-                  {isSelected ? (
-                    <div className="w-4 h-4 rounded-full border-[1.5px] border-gray-900 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-gray-900" />
-                    </div>
-                  ) : (
-                    <div className="w-4 h-4 rounded-full border-[1.5px] border-gray-300" />
                   )}
-                </div>
-              </div>
+                  {isSelected && (
+                    <span className="flex items-center justify-center w-5 h-5 rounded-full bg-brand-yellow shrink-0">
+                      <CheckIcon />
+                    </span>
+                  )}
+                </span>
+              </button>
             );
           })}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -1446,6 +1517,49 @@ function InlineLocationPicker({
         </div>
       )}
     </div>
+  );
+}
+
+// Shared price formatter: some price fields come through as decimal strings
+// (e.g. "1699.00"), and calling .toLocaleString() directly on a string just
+// returns it unchanged instead of grouping/rounding it.
+function formatINR(value: number | string) {
+  return `₹${Number(value).toLocaleString("en-IN", {
+    maximumFractionDigits: 0,
+  })}`;
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#6b3d00"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20 6L9 17l-5-5" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
   );
 }
 
