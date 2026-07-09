@@ -1122,7 +1122,7 @@ export default function BikeCard({
               onOpenChange={onDropdownOpenChange}
             />
           </div>
-          <div className="flex items-center justify-between px-4 pt-3 pb-2 mt-3 border-t border-gray-100">
+          <div className="flex items-center justify-between px-4 pt-3 pb-2 mt-2 ">
             <PriceDisplay />
             <BookButton />
           </div>
@@ -1346,7 +1346,7 @@ function LocationDropdown({
         role="button"
         tabIndex={0}
         className={`w-full mt-3 flex items-center gap-2.5 cursor-pointer transition-colors overflow-hidden pl-3.5 pr-3 py-2.5 rounded-lg ${
-          open ? "bg-gray-100" : "bg-gray-50 hover:bg-gray-100"
+          open ? "bg-gray-100" : "bg-gray-100 hover:bg-gray-100"
         }`}
       >
         <PinIcon />
