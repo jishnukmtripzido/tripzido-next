@@ -1053,7 +1053,7 @@ export default function BikeCard({
       ].map(({ icon, label }) => (
         <li
           key={label}
-          className="flex items-center gap-2 text-[14px] text-black"
+          className="flex items-center gap-2 text-[13px] text-black"
         >
           <SpecIcon type={icon} />
           {label}
@@ -1096,7 +1096,7 @@ export default function BikeCard({
         <div className="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-visible pb-2">
           <div className="p-4 pb-0">
             <Badges />
-            <h3 className="text-[20px] font-bold text-black leading-snug mb-3">
+            <h3 className="text-[18px] font-bold text-black leading-snug mb-3">
               {name}
             </h3>
             <div className="grid grid-cols-[1fr_160px] gap-2.5 items-start mb-5">
