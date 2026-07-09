@@ -184,13 +184,10 @@ export default function BikeCard({
         <div className="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-visible pb-2">
           <div className="p-4 pb-0">
             <Badges />
-            <h3 className="text-[20px] font-bold text-black leading-snug mb-4">
-              {name}{" "}
-              <span className="text-font-main-sub text-sm font-normal">
-                or similar
-              </span>
+            <h3 className="text-[20px] font-bold text-black leading-snug mb-3">
+              {name}
             </h3>
-            <div className="grid grid-cols-[1fr_160px] gap-2.5 items-start mb-6">
+            <div className="grid grid-cols-[1fr_160px] gap-2.5 items-start mb-5">
               <div className="min-w-0">
                 <SpecsList />
               </div>
@@ -202,7 +199,7 @@ export default function BikeCard({
                   width={160}
                   height={130}
                   sizes="160px"
-                  className="w-[160px] h-[130px] object-contain mt-[-25px]"
+                  className="w-[160px] h-[130px] object-contain mt-[-50px]"
                 />
               </div>
             </div>
