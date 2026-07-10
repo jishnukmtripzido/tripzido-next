@@ -29,6 +29,9 @@ export interface CheckoutSummary {
   dropoff_datetime: string;
   duration_label: string;
   pickup_location_name: string;
+  vendor_id: number;
+  vendor_name: string;
+  vendor_terms: string[];
   things_to_remember: ThingsToRemember;
 }
 
