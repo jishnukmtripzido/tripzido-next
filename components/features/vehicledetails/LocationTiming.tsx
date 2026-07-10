@@ -24,7 +24,7 @@ export default async function LocationTiming({ listingId }: Props) {
             >
               <span className="flex items-center gap-2 text-font-main-sub font-medium md:w-40 shrink-0">
                 <ClockIcon
-                  className={day.is_closed ? "text-red-400" : "text-gray-700"}
+                  className={day.is_closed ? "text-red-400" : "text-green-400"}
                 />
                 {day.day_name}
               </span>

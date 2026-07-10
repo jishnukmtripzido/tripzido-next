@@ -11,6 +11,42 @@ interface Props {
   payError: string | null;
 }
 
+type PaymentIcon = {
+  name: string;
+  src: string;
+};
+
+const UPI_APPS: PaymentIcon[] = [
+  { name: "UPI", src: "/payment-icons/upi.svg" },
+  { name: "Google Pay", src: "/payment-icons/gpay.svg" },
+  { name: "PhonePe", src: "/payment-icons/phonepe.svg" },
+  { name: "Paytm", src: "/payment-icons/paytm.svg" },
+];
+
+const CARD_NETWORKS: PaymentIcon[] = [
+  { name: "PayPal", src: "/payment-icons/paypal.svg" },
+  { name: "Visa", src: "/payment-icons/visa.svg" },
+  { name: "Mastercard", src: "/payment-icons/mastercard.svg" },
+  { name: "RuPay", src: "/payment-icons/rupay.svg" },
+];
+
+function PaymentChip({ name, src }: PaymentIcon) {
+  return (
+    <div
+      title={name}
+      className="h-8 min-w-[44px] px-2.5 flex items-center justify-center rounded-md border border-gray-200 bg-white"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={name}
+        className="h-4 w-auto object-contain"
+        loading="lazy"
+      />
+    </div>
+  );
+}
+
 export default function FareDetails({
   rentAmount,
   remainingRent,
@@ -102,6 +138,22 @@ export default function FareDetails({
       >
         {isPaying ? "Redirecting to payment..." : "Pay Now"}
       </button>
+
+      {/* Trust bar — accepted payment methods */}
+      <div className="mt-6 pt-5 border-t border-gray-100">
+        <p className="text-[11px] font-medium text-gray-400 text-center mb-3">
+          100% secure payments
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {UPI_APPS.map((m) => (
+            <PaymentChip key={m.name} {...m} />
+          ))}
+          <div className="w-px h-6 bg-gray-200 mx-1" />
+          {CARD_NETWORKS.map((m) => (
+            <PaymentChip key={m.name} {...m} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
