@@ -9,6 +9,7 @@ import {
   getBookingDetailApi,
   getCancellationPreviewApi,
   cancelBookingApi,
+  getBookingConfirmationApi,
   type CreateOrderParams,
   type CreateOrderResult,
   type PaymentStatusResult,
@@ -20,6 +21,7 @@ import type {
   CancellationPreview,
   CancellationReasonCode,
   BookingCancellation,
+  BookingConfirmationData,
 } from "@/types/booking.types";
 
 export interface CreateOrderActionResult {
@@ -133,6 +135,47 @@ export async function getBookingDetail(
     return await getBookingDetailApi(accessToken, bookingId);
   } catch {
     return null;
+  }
+}
+
+// ── Booking confirmation (post-checkout) ────────────────────────────────
+
+export interface BookingConfirmationActionResult {
+  success: boolean;
+  data?: BookingConfirmationData;
+  message?: string;
+}
+
+/**
+ * getBookingConfirmation
+ * -----------------------
+ * Fetches every booking in a checkout group for the post-payment
+ * confirmation page. Keyed by booking_group_id, not booking_reference —
+ * a bulk booking (quantity > 1 at checkout) creates several Booking
+ * rows sharing one group id and one Payment, so a single reference
+ * can't represent the whole order.
+ */
+export async function getBookingConfirmation(
+  groupId: string,
+): Promise<BookingConfirmationActionResult> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (!accessToken) {
+    return { success: false, message: "Please sign in to continue." };
+  }
+
+  try {
+    const data = await getBookingConfirmationApi(accessToken, groupId);
+    return { success: true, data };
+  } catch (err) {
+    return {
+      success: false,
+      message:
+        err instanceof Error
+          ? err.message
+          : "Unable to load booking confirmation.",
+    };
   }
 }
 

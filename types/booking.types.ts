@@ -140,3 +140,50 @@ export type BookingDetail = {
   cancellation: BookingCancellation | null;
   created_at: string;
 };
+
+// ── Confirmation (post-checkout) ─────────────────────────────────────
+
+// One vehicle's booking within a confirmation group. Note the amount
+// fields are `string`, not `number` — matches BookingDetail above,
+// since these come through as auto-generated DecimalField serializer
+// fields on the backend (DRF stringifies decimals by default), same as
+// listing_amount/advance_amount/etc. on BookingDetail.
+export type BookingConfirmationItem = {
+  id: number;
+  booking_reference: string;
+  vehicle_name: string;
+  vehicle_image: string | null;
+  transmission_type: string;
+  fuel_type: string;
+  vendor_name: string;
+  pickup_location_name: string;
+  package_name: string | null;
+  start_date: string;
+  end_date: string;
+  duration: string;
+  status: BookingStatus;
+  status_label: string;
+  listing_amount: string;
+  advance_amount: string;
+  remaining_amount: string;
+  security_deposit_amount: string;
+};
+
+// Response shape for GET /api/bookings/confirmation/?group=<uuid>.
+// Keyed by booking_group_id, not booking_reference — a bulk booking
+// (quantity > 1 at checkout) creates several Booking rows sharing one
+// group id and one Payment, so this always represents the whole order.
+//
+// total_paid/total_deposit ARE plain numbers here (unlike the per-item
+// amount fields above) — the backend computes these explicitly with
+// serializers.FloatField() rather than auto-generating them from a
+// DecimalField, so they come through as real JSON numbers.
+export type BookingConfirmationData = {
+  booking_group_id: string;
+  payment_status: string;
+  payment_mode: string;
+  total_paid: number;
+  total_deposit: number;
+  vehicle_count: number;
+  bookings: BookingConfirmationItem[];
+};

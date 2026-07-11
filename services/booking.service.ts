@@ -6,6 +6,7 @@ import type {
   CancellationPreview,
   CancellationReasonCode,
   BookingCancellation,
+  BookingConfirmationData,
 } from "@/types/booking.types";
 
 export interface CreateOrderParams {
@@ -37,6 +38,12 @@ export async function createBookingOrderApi(
 
 export interface PaymentStatusResult {
   status: "INITIATED" | "PENDING" | "SUCCESS" | "FAILED";
+  // Added: BookingCheckoutService.get_status() on the backend now
+  // returns this alongside booking_references. A bulk booking creates
+  // multiple Booking rows sharing one booking_group_id but each with
+  // its own booking_reference — the confirmation page needs the group
+  // id, since a list of references can't be looked up as one unit.
+  booking_group_id: string;
   booking_references: string[];
 }
 
@@ -76,6 +83,19 @@ export async function getBookingDetailApi(
 ): Promise<BookingDetail> {
   const data = await api.get<{ data: BookingDetail }>(
     `/api/bookings/${bookingId}/`,
+    { token, cache: "no-store" },
+  );
+  return data.data;
+}
+
+// ── Booking confirmation (post-checkout) ────────────────────────────────
+
+export async function getBookingConfirmationApi(
+  token: string,
+  groupId: string,
+): Promise<BookingConfirmationData> {
+  const data = await api.get<{ data: BookingConfirmationData }>(
+    `/api/bookings/confirmation/?group=${encodeURIComponent(groupId)}`,
     { token, cache: "no-store" },
   );
   return data.data;
