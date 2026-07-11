@@ -24,12 +24,16 @@ const STATUS_STYLES: Record<string, string> = {
   EXPIRED: "bg-gray-100 text-gray-600 border-gray-200",
 };
 
+// Was "/profile" — that URL is now the Profile *details* page, not
+// bookings, now that each booking status has its own route.
+const BOOKINGS_URL = "/profile/bookings";
+
 function EmptyState({ message }: { message: string }) {
   return (
     <div className="space-y-6">
       <Link
-        href="/profile"
-        className="text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors"
+        href={BOOKINGS_URL}
+        className="text-sm  font-medium text-gray-500 hover:text-gray-800 transition-colors"
       >
         &larr; Back to Bookings
       </Link>
@@ -53,7 +57,7 @@ function EmptyState({ message }: { message: string }) {
         <h2 className="text-lg font-bold text-gray-900">Booking not found</h2>
         <p className="text-sm text-gray-500 mt-1 max-w-sm">{message}</p>
         <Link
-          href="/profile"
+          href={BOOKINGS_URL}
           className="mt-6 px-5 py-2.5 text-sm font-semibold rounded-md bg-brand-yellow text-black hover:bg-[#e6ac00] transition-colors"
         >
           Back to my bookings
@@ -94,8 +98,8 @@ export default async function BookingDetailPage({
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <Link
-            href="/profile"
-            className="text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors"
+            href={BOOKINGS_URL}
+            className="text-sm  font-medium text-gray-500 hover:text-gray-800 transition-colors"
           >
             &larr; Back to Bookings
           </Link>

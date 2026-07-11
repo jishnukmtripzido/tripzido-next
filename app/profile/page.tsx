@@ -1,9 +1,5 @@
-import ProfileContainer from "@/components/features/profile/ProfileContainer";
+import BasicDetails from "@/components/features/profile/BasicDetails";
 
 export default function ProfilePage() {
-  return (
-    <main>
-      <ProfileContainer />
-    </main>
-  );
+  return <BasicDetails />;
 }

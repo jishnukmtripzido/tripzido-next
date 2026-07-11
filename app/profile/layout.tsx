@@ -1,14 +1,15 @@
-import { ReactNode } from "react";
+import ProfileSidebar from "@/components/features/profile/ProfileSidebar";
 import Header from "@/components/layout/Header";
 
-export const metadata = {
-  title: "My Profile | Tripzido",
-  description: "Manage your Tripzido account, bookings, and preferences.",
-};
-
-export default function ProfileLayout({ children }: { children: ReactNode }) {
+export default function ProfileLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
+      {/* Full-width header — sits outside the constrained content
+          wrapper so it stretches edge-to-edge like the rest of the site */}
       <Header
         logoWidth={4}
         logoHeight={4}
@@ -17,11 +18,18 @@ export default function ProfileLayout({ children }: { children: ReactNode }) {
         headerLgScreenMx="xl:mx-[80.5px] xl:px-0"
         headerValues=" w-full  py-2 border-b border-gray-100 text-gray-900 shadow-sm md:shadow-none"
       />
-      <div className="min-h-screen bg-gray-50 py-10">
-        <div className="mx-auto px-4 lg:px-8 xl:mx-[121.5px] xl:px-0">
-          {children}
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Sidebar Navigation — shared across every /profile/* route */}
+          <div className="w-full md:w-1/4 md:min-w-[280px]">
+            <ProfileSidebar />
+          </div>
+
+          {/* Main Content Area */}
+          <div className="w-full md:w-3/4">{children}</div>
         </div>
-      </div>
+      </main>
     </>
   );
 }
