@@ -129,6 +129,7 @@ export function useSearchForm(opts: UseSearchFormOptions = {}) {
       dropoffTime.minute,
     );
 
+    // Client-side validation only — no action call
     const result = searchSchema.safeParse({
       city_id: selectedCity?.id,
       city_name: selectedCity?.name,
@@ -156,16 +157,13 @@ export function useSearchForm(opts: UseSearchFormOptions = {}) {
         pickup: toISO(pickup_datetime),
         dropoff: toISO(dropoff_datetime),
       });
-
-      // let React flush the loading state to the screen before navigating away
-      await new Promise((resolve) => setTimeout(resolve, 0));
-
       router.push(`/searchresult?${params.toString()}`);
-      router.refresh();
+      router.refresh(); // bust the router cache
     } finally {
       setIsLoading(false);
     }
   }
+
   return {
     selectedCity,
     setSelectedCity,
