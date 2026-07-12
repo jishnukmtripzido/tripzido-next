@@ -73,7 +73,7 @@ export default function ImageGallery({ images = [] }: ImageGalleryProps) {
   return (
     <div className="flex flex-col w-full">
       {/* Main Image */}
-      <div className="md:bg-gray-50 md:rounded-md flex items-center justify-center p-0 md:p-6 md:border border-gray-100 h-32 md:h-72 relative">
+      <div className="md:bg-gray-50 md:rounded-md flex items-center justify-center p-0 md:p-6 md:border border-gray-100 h-24 md:h-72 relative">
         {mainImgSrc ? (
           <Image
             src={mainImgSrc}
