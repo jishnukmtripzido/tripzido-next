@@ -69,7 +69,7 @@ export default function VehicleFeatures({
             {/* <span className="text-sm md:text-sm mb-1">{value}</span>
             <span className="text-xs text-font-dim">• {label}</span> */}
             {/* </div> */}
-            {value} {label}
+            {value} <span className="hidden md:inline p-0 m-0">{label}</span>
           </div>
         ))}
         <div className="flex items-center gap-3  text-sm md:text-sm text-font-main-sub">
