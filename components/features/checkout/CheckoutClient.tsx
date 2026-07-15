@@ -4,7 +4,9 @@
 // import { load } from "@cashfreepayments/cashfree-js";
 // import OrderSummary from "./OrderSummary";
 // import FareDetails from "./FareDetails";
+// import TermsModal from "./TermsModal";
 // import { createBookingOrderAction } from "@/actions/bookings.actions";
+// import { getPlatformTermsApi } from "@/services/terms.service";
 // import type { CheckoutSummary } from "@/services/checkout.service";
 // import { useRouter } from "next/navigation";
 
@@ -13,15 +15,16 @@
 //   paymentMode: "partial" | "full";
 // }
 
+// interface PlatformTermsView {
+//   title: string;
+//   contentHtml: string;
+// }
+
 // export default function CheckoutClient({ summary, paymentMode }: Props) {
 //   const router = useRouter();
 
 //   useEffect(() => {
 //     function handlePageShow(event: PageTransitionEvent) {
-//       // event.persisted is true when the page was restored from
-//       // bfcache (e.g. via the back button) rather than freshly loaded.
-//       // Refresh so the checkout summary, availability, and any prior
-//       // payment attempt's state are re-validated against the server.
 //       if (event.persisted) {
 //         router.refresh();
 //       }
@@ -33,12 +36,56 @@
 //   const [quantity, setQuantity] = useState(1);
 //   const [isPaying, setIsPaying] = useState(false);
 //   const [payError, setPayError] = useState<string | null>(null);
+//   const [showTermsModal, setShowTermsModal] = useState(false);
+
+//   const [platformTerms, setPlatformTerms] = useState<PlatformTermsView | null>(
+//     null,
+//   );
+//   const [termsLoading, setTermsLoading] = useState(true);
+//   const [termsError, setTermsError] = useState<string | null>(null);
+
+//   useEffect(() => {
+//     let cancelled = false;
+
+//     async function loadPlatformTerms() {
+//       setTermsLoading(true);
+//       setTermsError(null);
+//       try {
+//         const platform = await getPlatformTermsApi();
+//         if (cancelled) return;
+//         setPlatformTerms({
+//           title: "Tripzido Platform Terms & Conditions",
+//           contentHtml: platform.content,
+//         });
+//       } catch (err) {
+//         if (cancelled) return;
+//         setTermsError(
+//           err instanceof Error
+//             ? err.message
+//             : "Unable to load terms and conditions.",
+//         );
+//       } finally {
+//         if (!cancelled) setTermsLoading(false);
+//       }
+//     }
+
+//     loadPlatformTerms();
+//     return () => {
+//       cancelled = true;
+//     };
+//   }, []);
+
+//   // Vendor terms travel with the checkout summary itself (same query
+//   // that builds things_to_remember already loads the vendor's current
+//   // VendorTerms row) — no separate fetch, no loading state needed.
+//   const vendorTerms = {
+//     title: `${summary.vendor_name} Terms & Conditions`,
+//     items: summary.vendor_terms,
+//   };
 
 //   const maxQuantity = Math.max(summary.available_count, 1);
-
 //   const rentAmount = summary.unit_rent_amount * quantity;
 //   const refundableDeposit = summary.unit_refundable_deposit * quantity;
-
 //   const effectiveMode = summary.can_pay_partial ? paymentMode : "full";
 //   const advancePayment =
 //     effectiveMode === "partial" && summary.partial_payment_percentage !== null
@@ -51,6 +98,14 @@
 //   }
 //   function decrement() {
 //     setQuantity((q) => Math.max(q - 1, 1));
+//   }
+//   function openTermsModal() {
+//     setPayError(null);
+//     setShowTermsModal(true);
+//   }
+//   function closeTermsModal() {
+//     if (isPaying) return;
+//     setShowTermsModal(false);
 //   }
 
 //   async function handlePayNow() {
@@ -76,9 +131,7 @@
 //             ? "production"
 //             : "sandbox",
 //       });
-//       if (!cashfree) {
-//         throw new Error("Failed to load payment SDK");
-//       }
+//       if (!cashfree) throw new Error("Failed to load payment SDK");
 
 //       await cashfree.checkout({
 //         paymentSessionId: result.data.payment_session_id,
@@ -113,11 +166,25 @@
 //           remainingRent={remainingRent}
 //           advancePayment={advancePayment}
 //           refundableDeposit={refundableDeposit}
-//           onPayNow={handlePayNow}
+//           onProceedToPay={openTermsModal}
 //           isPaying={isPaying}
 //           payError={payError}
 //         />
 //       </div>
+
+//       {showTermsModal && (
+//         <TermsModal
+//           isOpen={showTermsModal}
+//           onClose={closeTermsModal}
+//           onConfirm={handlePayNow}
+//           isSubmitting={isPaying}
+//           payError={payError}
+//           vendorTerms={vendorTerms}
+//           platformTerms={platformTerms}
+//           termsLoading={termsLoading}
+//           termsError={termsError}
+//         />
+//       )}
 //     </div>
 //   );
 // }
@@ -199,9 +266,6 @@ export default function CheckoutClient({ summary, paymentMode }: Props) {
     };
   }, []);
 
-  // Vendor terms travel with the checkout summary itself (same query
-  // that builds things_to_remember already loads the vendor's current
-  // VendorTerms row) — no separate fetch, no loading state needed.
   const vendorTerms = {
     title: `${summary.vendor_name} Terms & Conditions`,
     items: summary.vendor_terms,
@@ -272,8 +336,8 @@ export default function CheckoutClient({ summary, paymentMode }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      <div className="lg:col-span-8">
+    <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="lg:col-span-7 xl:col-span-8">
         <OrderSummary
           summary={summary}
           quantity={quantity}
@@ -284,7 +348,7 @@ export default function CheckoutClient({ summary, paymentMode }: Props) {
           onDecrement={decrement}
         />
       </div>
-      <div className="lg:col-span-4">
+      <div className="lg:col-span-5 xl:col-span-4 sticky top-6">
         <FareDetails
           rentAmount={rentAmount}
           remainingRent={remainingRent}
