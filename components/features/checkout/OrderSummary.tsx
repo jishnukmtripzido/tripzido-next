@@ -32,7 +32,7 @@ export default function OrderSummary({
   );
 
   return (
-    <div className="bg-white border border-gray-200 rounded-md p-6 shadow-none">
+    <div className="bg-white border border-gray-400 rounded-md p-6 shadow-none">
       {/* Vehicle Info */}
       <div>
         <h1 className="text-lg font-bold text-gray-900 mb-4">Summary</h1>
@@ -63,12 +63,12 @@ export default function OrderSummary({
               {summary.package_name} Package
             </p>
             <div className="mt-2 space-y-1 text-sm text-font-main-sub">
-              <p>
+              {/* <p>
                 Rent Amount :{" "}
                 <span className="font-semibold text-gray-900">
                   ₹ {rentAmount.toFixed(2)}
                 </span>
-              </p>
+              </p> */}
               <p>
                 Refundable Deposit :{" "}
                 <span className="font-semibold text-gray-900">
@@ -200,12 +200,12 @@ export default function OrderSummary({
                 {ttr.excess_charge}
               </span>
             </div>
-            <div className="flex justify-between items-center border-b md:border-none border-gray-200 pb-2 md:pb-0">
+            {/* <div className="flex justify-between items-center border-b md:border-none border-gray-200 pb-2 md:pb-0">
               <span className="text-font-main-sub">Location Timings</span>
               <span className="font-medium text-font-main-sub">
                 {ttr.location_timings}
               </span>
-            </div>
+            </div> */}
             <div className="flex justify-between items-center">
               <span className="text-font-main-sub">Late Drop Fee</span>
               <span className="font-medium text-font-main-sub">
