@@ -249,7 +249,7 @@ export default function FareDetails({
           <button
             onClick={onProceedToPay}
             disabled={isPaying}
-            className={`w-full py-3.5 px-4 rounded-xl font-bold text-lg text-center transition duration-200 ${
+            className={`w-full py-3.5 px-4 hover:cursor-pointer rounded-xl font-bold text-lg text-center transition duration-200 ${
               !isPaying
                 ? "bg-[#FFC700] hover:bg-yellow-500 text-black"
                 : "bg-gray-800 text-gray-500 cursor-not-allowed"
