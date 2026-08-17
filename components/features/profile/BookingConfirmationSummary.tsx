@@ -118,7 +118,7 @@ export default function BookingConfirmationSummary({
 
       <div className="text-center pt-2">
         <Link
-          href="/profile/bookings"
+          href="/profile/bookings/confirmed"
           className="inline-block px-6 py-3 text-sm font-semibold rounded-md bg-brand-yellow text-black hover:bg-[#e6ac00] transition-colors"
         >
           Go to my bookings

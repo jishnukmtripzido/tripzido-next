@@ -200,7 +200,7 @@ export default function FareDetails({
   return (
     <div className="flex flex-col gap-4">
       {/* Dark Theme Card Section */}
-      <div className="bg-black rounded-2xl p-6 shadow-lg text-white">
+      <div className="bg-black rounded-md p-6 shadow-lg text-white">
         <h3 className="text-lg font-bold mb-6">Fare Details</h3>
 
         <div className="space-y-4 text-sm mb-6">

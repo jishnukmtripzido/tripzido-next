@@ -34,7 +34,7 @@ export default async function BookingConfirmedPage({
               "This confirmation link may have expired or doesn't belong to your account."}
           </p>
           <Link
-            href="/profile/bookings"
+            href="/profile/bookings/confirmed"
             className="inline-block mt-6 px-5 py-2.5 text-sm font-semibold rounded-md bg-brand-yellow text-black hover:bg-[#e6ac00] transition-colors"
           >
             Go to my bookings
@@ -60,7 +60,7 @@ function MissingGroupState({ hasLegacyRef }: { hasLegacyRef: boolean }) {
             : "This page needs a booking group id in the URL to show your confirmation."}
         </p>
         <Link
-          href="/profile/bookings"
+          href="/profile/bookings/confirmed"
           className="inline-block mt-6 px-5 py-2.5 text-sm font-semibold rounded-md bg-brand-yellow text-black hover:bg-[#e6ac00] transition-colors"
         >
           Go to my bookings

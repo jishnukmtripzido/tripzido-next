@@ -7,7 +7,11 @@ interface FilterSortBarProps {
   scrolled: boolean;
 }
 
-export default function FilterSortBar({ onFilterClick, onSortClick, scrolled }: FilterSortBarProps) {
+export default function FilterSortBar({
+  onFilterClick,
+  onSortClick,
+  scrolled,
+}: FilterSortBarProps) {
   return (
     <div
       className={`lg:hidden sticky z-20 bg-white border-b border-gray-200 shadow-sm transition-[top] duration-300 ${
@@ -19,7 +23,12 @@ export default function FilterSortBar({ onFilterClick, onSortClick, scrolled }: 
           onClick={onFilterClick}
           className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold text-black border-r border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               d="M3 4h18M7 8h10M11 12h4"
               strokeLinecap="round"
@@ -33,7 +42,12 @@ export default function FilterSortBar({ onFilterClick, onSortClick, scrolled }: 
           onClick={onSortClick}
           className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold text-black hover:bg-gray-50 transition-colors cursor-pointer"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               d="M3 7h18M7 12h10M11 17h4"
               strokeLinecap="round"
