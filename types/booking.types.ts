@@ -108,6 +108,25 @@ export type BookingCancellation = {
   created_at: string;
 };
 
+// Mirrors AdminVendorTerms/VendorTermsSerializer on the backend —
+// exposed on BookingDetail only once the booking has reached CONFIRMED
+// or later (see get_vendor_terms on BookingDetailSerializer).
+//
+// terms_items is deliberately loose (unknown[]) rather than a firm
+// shape — the model stores it as a generic JSONField and the exact
+// per-item shape the vendor-side terms editor actually writes wasn't
+// confirmed. The page component normalizes each item defensively at
+// render time to handle either plain strings or {label/text}-style
+// objects; tighten this type once that shape is confirmed.
+export type VendorTerms = {
+  terms_items: unknown[];
+  security_deposit_note: string;
+  operating_hours_note: string;
+  distance_limit_note: string;
+  excess_charge_note: string;
+  late_penalty_note: string;
+};
+
 export type BookingDetail = {
   id: number;
   booking_reference: string;
@@ -138,6 +157,9 @@ export type BookingDetail = {
   payments: BookingPayment[];
   can_cancel: boolean;
   cancellation: BookingCancellation | null;
+  vendor_terms: VendorTerms | null;
+  things_to_remember: BookingPolicies | null;
+  pickup_point: BookingPickupPoint | null;
   created_at: string;
 };
 
@@ -186,4 +208,21 @@ export type BookingConfirmationData = {
   total_deposit: number;
   vehicle_count: number;
   bookings: BookingConfirmationItem[];
+};
+
+export type BookingPolicies = {
+  security_deposit: number;
+  distance_limit: string;
+  late_penalty_per_hour: number;
+  location_timings: string;
+  excess_charge: string;
+};
+
+export type BookingPickupPoint = {
+  label: string;
+  address: string;
+  contact_numbers: string[];
+  latitude: number | null;
+  longitude: number | null;
+  google_maps_link: string;
 };

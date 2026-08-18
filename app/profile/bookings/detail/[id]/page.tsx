@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getBookingDetail } from "@/actions/bookings.actions";
 import CancelBookingButton from "@/components/features/profile/CancelBookingButton";
 import BookingVehicleImage from "@/components/features/profile/BookingVehicleImage";
+import type { BookingPickupPoint } from "@/types/booking.types";
 
 function formatDateTime(iso: string): string {
   return new Date(iso).toLocaleString("en-IN", {
@@ -24,9 +25,189 @@ const STATUS_STYLES: Record<string, string> = {
   EXPIRED: "bg-gray-100 text-gray-600 border-gray-200",
 };
 
+// Statuses that unlock the invoice download button — mirrors
+// InvoiceService.INVOICE_ELIGIBLE_STATUSES on the backend, which is
+// the actual source of truth/enforcement; this only controls whether
+// the button is shown, not whether the download itself succeeds.
+const INVOICE_ELIGIBLE_STATUSES = ["CONFIRMED", "ONGOING", "COMPLETED"];
+
 // Was "/profile" — that URL is now the Profile *details* page, not
 // bookings, now that each booking status has its own route.
 const BOOKINGS_URL = "/profile/bookings";
+
+// Handles either a plain string item, or an object item shaped like
+// {text: "..."} / {label: "..."} / {description: "..."} — the exact
+// shape terms_items is stored in wasn't confirmed, so this stays
+// defensive rather than assuming one form.
+function normalizeTermsItem(item: unknown): string {
+  if (typeof item === "string") return item;
+  if (item && typeof item === "object") {
+    const obj = item as Record<string, unknown>;
+    if (typeof obj.text === "string") return obj.text;
+    if (typeof obj.label === "string") return obj.label;
+    if (typeof obj.description === "string") return obj.description;
+  }
+  return String(item);
+}
+
+type PolicyIconType = "deposit" | "distance" | "document" | "alert" | "clock";
+
+function PolicyIcon({ type }: { type: PolicyIconType }) {
+  const paths: Record<PolicyIconType, React.ReactNode> = {
+    deposit: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 10h18M3 6h18a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V7a1 1 0 011-1z"
+      />
+    ),
+    distance: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+      />
+    ),
+    document: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+      />
+    ),
+    alert: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    ),
+    clock: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    ),
+  };
+  return (
+    <svg
+      className="w-5 h-5 text-gray-400 shrink-0"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      {paths[type]}
+    </svg>
+  );
+}
+
+function PolicyRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: PolicyIconType;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <PolicyIcon type={icon} />
+      <p className="text-sm text-gray-700">
+        {label}: <span className="font-bold text-gray-900">{value}</span>
+      </p>
+    </div>
+  );
+}
+
+function buildMapsUrl(lat: number, lng: number): string {
+  return `https://www.google.com/maps?q=${lat},${lng}`;
+}
+
+function PickupPointCard({ pickupPoint }: { pickupPoint: BookingPickupPoint }) {
+  // Server-only env var — safe to read directly here since this whole
+  // page is a React Server Component. Deliberately NOT prefixed with
+  // NEXT_PUBLIC_.
+  const apiKey = process.env.GOOGLEMAP_API_KEY;
+  const hasCoords =
+    pickupPoint.latitude !== null && pickupPoint.longitude !== null;
+
+  return (
+    <div className="bg-white rounded-md shadow-sm border border-gray-100 p-8">
+      <h3 className="text-lg font-bold text-gray-900 mb-1">
+        {pickupPoint.label || "Pickup Point"}
+      </h3>
+      <p className="text-sm text-gray-700">{pickupPoint.address}</p>
+      {pickupPoint.contact_numbers.length > 0 && (
+        <p className="text-sm text-gray-500 mt-1">
+          Contact: {pickupPoint.contact_numbers.join(", ")}
+        </p>
+      )}
+
+      {/* lat/long takes priority — an interactive-preview embed that
+          opens the full Google Maps app on click. pointerEvents: none
+          on the iframe lets the click pass through to the wrapping
+          <a> instead of being captured inside the embed's own
+          browsing context. */}
+      {hasCoords && apiKey && (
+        <a
+          href={buildMapsUrl(pickupPoint.latitude!, pickupPoint.longitude!)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block mt-4 rounded-lg overflow-hidden border border-gray-100 hover:opacity-90 transition-opacity"
+        >
+          <iframe
+            src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${pickupPoint.latitude},${pickupPoint.longitude}`}
+            width="100%"
+            height="220"
+            style={{ border: 0, pointerEvents: "none" }}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </a>
+      )}
+
+      {/* Falls back to the raw share-link only when there are no
+          coordinates to embed — an arbitrary share-link URL can't be
+          embedded as a preview, only linked to directly. */}
+      {!hasCoords && pickupPoint.google_maps_link && (
+        <a
+          href={pickupPoint.google_maps_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 mt-4 px-4 py-2.5 rounded-md bg-gray-50 border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors"
+        >
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+          Open in Google Maps
+        </a>
+      )}
+    </div>
+  );
+}
 
 function EmptyState({ message }: { message: string }) {
   return (
@@ -93,6 +274,9 @@ export default async function BookingDetailPage({
     STATUS_STYLES[booking.status] ??
     "bg-gray-100 text-gray-600 border-gray-200";
 
+  const hasTermsAndConditions =
+    !!booking.vendor_terms && booking.vendor_terms.terms_items.length > 0;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
@@ -114,6 +298,27 @@ export default async function BookingDetailPage({
           >
             {booking.status_label}
           </span>
+          {INVOICE_ELIGIBLE_STATUSES.includes(booking.status) && (
+            <a
+              href={`/api/bookings/${booking.id}/invoice`}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              Download Invoice
+            </a>
+          )}
           {booking.can_cancel && <CancelBookingButton bookingId={booking.id} />}
         </div>
       </div>
@@ -281,6 +486,71 @@ export default async function BookingDetailPage({
             </div>
           )}
         </div>
+      </div>
+
+      {booking.pickup_point && (
+        <PickupPointCard pickupPoint={booking.pickup_point} />
+      )}
+
+      {booking.things_to_remember && (
+        <div className="bg-white rounded-md shadow-sm border border-gray-100 p-8">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">
+            Things to Remember
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <PolicyRow
+              icon="deposit"
+              label="Security Deposit"
+              value={`₹${booking.things_to_remember.security_deposit.toLocaleString("en-IN")}`}
+            />
+            <PolicyRow
+              icon="distance"
+              label="Distance Limit"
+              value={booking.things_to_remember.distance_limit}
+            />
+            <PolicyRow
+              icon="document"
+              label="Late Penalty"
+              value={
+                booking.things_to_remember.late_penalty_per_hour > 0
+                  ? `₹${booking.things_to_remember.late_penalty_per_hour}/hour`
+                  : "N/A"
+              }
+            />
+            <PolicyRow
+              icon="alert"
+              label="Excess Charge"
+              value={booking.things_to_remember.excess_charge}
+            />
+            {/* <PolicyRow
+              icon="clock"
+              label="Operating Hours"
+              value={booking.things_to_remember.location_timings}
+            /> */}
+          </div>
+        </div>
+      )}
+
+      {hasTermsAndConditions && (
+        <div className="bg-white rounded-md shadow-sm border border-gray-100 p-8">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">
+            {booking.vendor_name}&rsquo;s Terms &amp; Conditions
+          </h3>
+          <ul className="space-y-2.5 list-disc list-inside text-sm text-gray-700">
+            {booking.vendor_terms!.terms_items.map((item, i) => (
+              <li key={i}>{normalizeTermsItem(item)}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="flex items-center gap-3">
+        <span
+          className={`inline-flex items-center py-1.5 px-3 rounded-full text-xs font-semibold border ${statusStyle}`}
+        >
+          {booking.status_label}
+        </span>
+        {booking.can_cancel && <CancelBookingButton bookingId={booking.id} />}
       </div>
     </div>
   );
