@@ -7,6 +7,8 @@ import type {
   CancellationReasonCode,
   BookingCancellation,
   BookingConfirmationData,
+  BookingReview,
+  ReviewRatingInput,
 } from "@/types/booking.types";
 
 export interface CreateOrderParams {
@@ -126,4 +128,54 @@ export async function cancelBookingApi(
     { token },
   );
   return data.data;
+}
+
+// ── Reviews ─────────────────────────────────────────────────────────────
+
+export async function getBookingReviewApi(
+  token: string,
+  bookingId: number,
+): Promise<BookingReview | null> {
+  const data = await api.get<{ data: BookingReview | null }>(
+    `/api/bookings/${bookingId}/review/`,
+    { token, cache: "no-store" },
+  );
+  return data.data;
+}
+
+export async function submitBookingReviewApi(
+  token: string,
+  bookingId: number,
+  reviewText: string,
+  ratings: ReviewRatingInput[],
+): Promise<BookingReview> {
+  const data = await api.post<{ data: BookingReview }>(
+    `/api/bookings/${bookingId}/review/`,
+    { review_text: reviewText, ratings },
+    { token },
+  );
+  return data.data;
+}
+
+export async function updateBookingReviewApi(
+  token: string,
+  bookingId: number,
+  reviewText: string,
+  ratings: ReviewRatingInput[],
+): Promise<BookingReview> {
+  const data = await api.patch<{ data: BookingReview }>(
+    `/api/bookings/${bookingId}/review/`,
+    { review_text: reviewText, ratings },
+    { token },
+  );
+  return data.data;
+}
+
+export async function deleteBookingReviewApi(
+  token: string,
+  bookingId: number,
+): Promise<void> {
+  await api.delete<{ data: null }>(`/api/bookings/${bookingId}/review/`, {
+    token,
+  });
 }

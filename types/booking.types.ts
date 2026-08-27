@@ -161,6 +161,7 @@ export type BookingDetail = {
   things_to_remember: BookingPolicies | null;
   pickup_point: BookingPickupPoint | null;
   created_at: string;
+  verification_pin: string | null;
 };
 
 // ── Confirmation (post-checkout) ─────────────────────────────────────
@@ -225,4 +226,30 @@ export type BookingPickupPoint = {
   latitude: number | null;
   longitude: number | null;
   google_maps_link: string;
+};
+
+export type ReviewCriterion =
+  | "VEHICLE_CONDITION"
+  | "CLEANLINESS"
+  | "VENDOR_BEHAVIOR"
+  | "HANDOVER_PROCESS"
+  | "VALUE_FOR_MONEY";
+
+export type ReviewRatingInput = {
+  criterion: ReviewCriterion;
+  score: number;
+};
+
+export type BookingReviewRating = {
+  criterion: ReviewCriterion;
+  criterion_label: string;
+  score: number;
+};
+
+export type BookingReview = {
+  id: number;
+  review_text: string;
+  moderation_status: "PENDING" | "APPROVED" | "REMOVED" | "FLAGGED";
+  created_at: string;
+  ratings: BookingReviewRating[];
 };

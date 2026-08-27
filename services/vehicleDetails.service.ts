@@ -51,7 +51,7 @@ export async function getVehicleReviewsApi(
 ): Promise<ReviewsResponse> {
   const data = await api.get<{ data: ReviewsResponse }>(
     `/api/vehicles/${vehicleId}/reviews/?page=${page}&page_size=${pageSize}`,
-    { revalidate: 300 },
+    { cache: "no-store" },
   );
   return data.data;
 }
@@ -100,18 +100,33 @@ export interface PaginationMeta {
   next: string | null;
   previous: string | null;
 }
+export interface ReviewRatingItem {
+  criterion: string;
+  criterion_label: string;
+  score: number;
+}
+
+export interface RatingBreakdownItem {
+  criterion: string;
+  criterion_label: string;
+  average_score: number;
+  count: number;
+}
 
 export interface ReviewItem {
   id: number;
   author_name: string;
-  rating: number;
+  rating: number | null; // null when a review has no scored criteria yet
   comment: string;
   created_at: string;
   vehicle_name: string;
+  ratings: ReviewRatingItem[]; // per-criterion scores this reviewer gave
 }
 
 export interface ReviewsResponse {
   average_rating: number;
+  total_reviews: number;
+  rating_breakdown: RatingBreakdownItem[];
   pagination: PaginationMeta;
   results: ReviewItem[];
 }

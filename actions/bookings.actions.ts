@@ -10,6 +10,10 @@ import {
   getCancellationPreviewApi,
   cancelBookingApi,
   getBookingConfirmationApi,
+  getBookingReviewApi,
+  submitBookingReviewApi,
+  updateBookingReviewApi,
+  deleteBookingReviewApi,
   type CreateOrderParams,
   type CreateOrderResult,
   type PaymentStatusResult,
@@ -22,6 +26,8 @@ import type {
   CancellationReasonCode,
   BookingCancellation,
   BookingConfirmationData,
+  BookingReview,
+  ReviewRatingInput,
 } from "@/types/booking.types";
 
 export interface CreateOrderActionResult {
@@ -256,6 +262,139 @@ export async function cancelBooking(
     return {
       success: false,
       message: err instanceof Error ? err.message : "Unable to cancel booking.",
+    };
+  }
+}
+
+// ── Reviews ──────────────────────────────────────────────────────────
+
+/**
+ * getBookingReview
+ * ----------------
+ * Fetches this customer's review for a specific booking, or null if
+ * they haven't reviewed it yet.
+ */
+export async function getBookingReview(
+  bookingId: number,
+): Promise<BookingReview | null> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (!accessToken) {
+    return null;
+  }
+
+  try {
+    return await getBookingReviewApi(accessToken, bookingId);
+  } catch {
+    return null;
+  }
+}
+
+export interface BookingReviewActionResult {
+  success: boolean;
+  data?: BookingReview;
+  message?: string;
+}
+
+/**
+ * submitBookingReview
+ * --------------------
+ * Creates a new review for a COMPLETED booking. Fails with
+ * "already_reviewed" server-side if one already exists — use
+ * updateBookingReview for edits instead.
+ */
+export async function submitBookingReview(
+  bookingId: number,
+  reviewText: string,
+  ratings: ReviewRatingInput[],
+): Promise<BookingReviewActionResult> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (!accessToken) {
+    return { success: false, message: "Please sign in to continue." };
+  }
+
+  try {
+    const data = await submitBookingReviewApi(
+      accessToken,
+      bookingId,
+      reviewText,
+      ratings,
+    );
+    revalidatePath(`/profile/bookings/${bookingId}`);
+    return { success: true, data };
+  } catch (err) {
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Unable to submit review.",
+    };
+  }
+}
+
+/**
+ * updateBookingReview
+ * ---------------------
+ * Edits an existing review for this booking.
+ */
+export async function updateBookingReview(
+  bookingId: number,
+  reviewText: string,
+  ratings: ReviewRatingInput[],
+): Promise<BookingReviewActionResult> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (!accessToken) {
+    return { success: false, message: "Please sign in to continue." };
+  }
+
+  try {
+    const data = await updateBookingReviewApi(
+      accessToken,
+      bookingId,
+      reviewText,
+      ratings,
+    );
+    revalidatePath(`/profile/bookings/${bookingId}`);
+    return { success: true, data };
+  } catch (err) {
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Unable to update review.",
+    };
+  }
+}
+
+export interface DeleteReviewActionResult {
+  success: boolean;
+  message?: string;
+}
+
+/**
+ * deleteBookingReview
+ * ---------------------
+ * Deletes this customer's review for a booking.
+ */
+export async function deleteBookingReview(
+  bookingId: number,
+): Promise<DeleteReviewActionResult> {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (!accessToken) {
+    return { success: false, message: "Please sign in to continue." };
+  }
+
+  try {
+    await deleteBookingReviewApi(accessToken, bookingId);
+    revalidatePath(`/profile/bookings/${bookingId}`);
+    return { success: true };
+  } catch (err) {
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Unable to delete review.",
     };
   }
 }

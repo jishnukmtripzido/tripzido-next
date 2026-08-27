@@ -4,10 +4,44 @@ import {
   getVehicleReviewsApi,
   ReviewItem,
   ReviewsResponse,
+  RatingBreakdownItem,
 } from "@/services/vehicleDetails.service";
 
 const MOCK_REVIEWS: ReviewsResponse = {
   average_rating: 4.5,
+  total_reviews: 3,
+  rating_breakdown: [
+    {
+      criterion: "VEHICLE_CONDITION",
+      criterion_label: "Vehicle & Mechanical Condition",
+      average_score: 4.7,
+      count: 3,
+    },
+    {
+      criterion: "CLEANLINESS",
+      criterion_label: "Cleanliness & Hygiene",
+      average_score: 4.3,
+      count: 3,
+    },
+    {
+      criterion: "VENDOR_BEHAVIOR",
+      criterion_label: "Vendor Communication & Behavior",
+      average_score: 4.6,
+      count: 2,
+    },
+    {
+      criterion: "HANDOVER_PROCESS",
+      criterion_label: "Pickup & Return Experience",
+      average_score: 4.3,
+      count: 3,
+    },
+    {
+      criterion: "VALUE_FOR_MONEY",
+      criterion_label: "Value for Money",
+      average_score: 4.4,
+      count: 3,
+    },
+  ],
   pagination: {
     total: 3,
     page: 1,
@@ -25,6 +59,18 @@ const MOCK_REVIEWS: ReviewsResponse = {
         "Excellent bike, very smooth ride through the hills. Pickup was hassle-free and the staff were helpful. Would definitely rent again!",
       created_at: "2026-05-10T09:00:00Z",
       vehicle_name: "Yamaha Fascino",
+      ratings: [
+        {
+          criterion: "VEHICLE_CONDITION",
+          criterion_label: "Vehicle & Mechanical Condition",
+          score: 5,
+        },
+        {
+          criterion: "CLEANLINESS",
+          criterion_label: "Cleanliness & Hygiene",
+          score: 5,
+        },
+      ],
     },
     {
       id: 2,
@@ -34,6 +80,18 @@ const MOCK_REVIEWS: ReviewsResponse = {
         "Good condition scooter. The fuel economy was great for our day trip. Minor scratch on the body but nothing that affected the ride.",
       created_at: "2026-04-22T14:30:00Z",
       vehicle_name: "Yamaha Fascino",
+      ratings: [
+        {
+          criterion: "VEHICLE_CONDITION",
+          criterion_label: "Vehicle & Mechanical Condition",
+          score: 4,
+        },
+        {
+          criterion: "VALUE_FOR_MONEY",
+          criterion_label: "Value for Money",
+          score: 4,
+        },
+      ],
     },
     {
       id: 3,
@@ -43,6 +101,13 @@ const MOCK_REVIEWS: ReviewsResponse = {
         "Comfortable ride for two. Documents process was straightforward. Pickup location was easy to find once we got the confirmed address.",
       created_at: "2026-03-15T11:15:00Z",
       vehicle_name: "Yamaha Fascino",
+      ratings: [
+        {
+          criterion: "HANDOVER_PROCESS",
+          criterion_label: "Pickup & Return Experience",
+          score: 4,
+        },
+      ],
     },
   ],
 };
@@ -61,13 +126,20 @@ export default async function Reviews({ vehicleId, page = 1 }: Props) {
     data = MOCK_REVIEWS;
   }
 
-  const { average_rating, pagination, results } = data;
+  const {
+    average_rating,
+    total_reviews,
+    rating_breakdown,
+    pagination,
+    results,
+  } = data;
 
-  if (pagination.total === 0) return null;
+  if (total_reviews === 0) return null;
 
   return (
-    <div className="mb-8">
+    <div id="reviews" className="mb-8 scroll-mt-24">
       <div className="lg:border-t lg:border-gray-200 lg:mt-8 lg:mb-5 mb-8" />
+
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
         <h2 className="text-lg font-bold text-gray-900">Reviews</h2>
@@ -76,9 +148,16 @@ export default async function Reviews({ vehicleId, page = 1 }: Props) {
           <span className="text-sm font-semibold text-gray-900">
             {average_rating.toFixed(1)}
           </span>
-          <span className="text-sm text-gray-500">({pagination.total})</span>
+          <span className="text-sm text-gray-500">({total_reviews})</span>
         </div>
       </div>
+
+      {/* Rating breakdown by criterion */}
+      {rating_breakdown.length > 0 && (
+        <div className="border border-gray-200 rounded-md p-4 sm:p-5 mb-6">
+          <RatingBreakdown items={rating_breakdown} />
+        </div>
+      )}
 
       {/* Review cards */}
       <div className="space-y-4 border border-gray-200 lg:border-none rounded-md p-6 lg:p-0">
@@ -87,24 +166,47 @@ export default async function Reviews({ vehicleId, page = 1 }: Props) {
             key={review.id}
             className={`pb-4 ${idx < results.length - 1 ? "border-b border-gray-100" : ""}`}
           >
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
+            <div className="flex items-start justify-between gap-2 mb-2 flex-wrap">
+              <div className="flex items-center gap-2 min-w-0">
                 <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-semibold text-gray-600 shrink-0">
                   {review.author_name.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-sm font-semibold text-font-main-sub">
+                <span className="text-sm font-semibold text-font-main-sub truncate">
                   {review.author_name}
                 </span>
               </div>
-              <div className="flex items-center gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <StarIcon key={i} filled={i < review.rating} />
+              {review.rating !== null && (
+                <div className="flex items-center gap-0.5 shrink-0">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <StarIcon
+                      key={i}
+                      filled={i < Math.round(review.rating as number)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {review.comment && (
+              <p className="text-sm text-font-main-sub leading-relaxed ml-10 break-words">
+                {review.comment}
+              </p>
+            )}
+
+            {/* Per-criterion scores this reviewer actually gave */}
+            {review.ratings.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 ml-10 mt-2">
+                {review.ratings.map((r) => (
+                  <span
+                    key={r.criterion}
+                    className="text-[11px] bg-gray-50 border border-gray-200 text-font-dim rounded-full px-2.5 py-1"
+                  >
+                    {r.criterion_label}: {r.score}/5
+                  </span>
                 ))}
               </div>
-            </div>
-            <p className="text-sm text-font-main-sub leading-relaxed ml-10">
-              {review.comment}
-            </p>
+            )}
+
             <p className="text-xs text-font-dim mt-1.5 ml-10">
               {new Date(review.created_at).toLocaleDateString("en-IN", {
                 day: "numeric",
@@ -120,7 +222,7 @@ export default async function Reviews({ vehicleId, page = 1 }: Props) {
       {pagination.total_pages > 1 && (
         <div className="flex items-center justify-center gap-4 mt-6">
           <Link
-            href={`?reviews_page=${pagination.page - 1}`}
+            href={`?reviews_page=${pagination.page - 1}#reviews`}
             scroll={false}
             aria-disabled={!pagination.previous}
             className={`text-sm font-medium px-3 py-1.5 rounded-md border ${
@@ -135,7 +237,7 @@ export default async function Reviews({ vehicleId, page = 1 }: Props) {
             Page {pagination.page} of {pagination.total_pages}
           </span>
           <Link
-            href={`?reviews_page=${pagination.page + 1}`}
+            href={`?reviews_page=${pagination.page + 1}#reviews`}
             scroll={false}
             aria-disabled={!pagination.next}
             className={`text-sm font-medium px-3 py-1.5 rounded-md border ${
@@ -148,6 +250,29 @@ export default async function Reviews({ vehicleId, page = 1 }: Props) {
           </Link>
         </div>
       )}
+    </div>
+  );
+}
+
+function RatingBreakdown({ items }: { items: RatingBreakdownItem[] }) {
+  return (
+    <div className="space-y-2.5">
+      {items.map((item) => (
+        <div key={item.criterion} className="flex items-center gap-3">
+          <span className="text-xs text-font-main-sub w-36 sm:w-44 shrink-0 truncate">
+            {item.criterion_label}
+          </span>
+          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-yellow-400 rounded-full"
+              style={{ width: `${(item.average_score / 5) * 100}%` }}
+            />
+          </div>
+          <span className="text-xs font-semibold text-font-main-sub w-7 text-right shrink-0">
+            {item.average_score.toFixed(1)}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }

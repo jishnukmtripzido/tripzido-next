@@ -3,6 +3,7 @@ import { getBookingDetail } from "@/actions/bookings.actions";
 import CancelBookingButton from "@/components/features/profile/CancelBookingButton";
 import BookingVehicleImage from "@/components/features/profile/BookingVehicleImage";
 import type { BookingPickupPoint } from "@/types/booking.types";
+import WriteReviewSection from "@/components/features/profile/WriteReviewSection";
 
 function formatDateTime(iso: string): string {
   return new Date(iso).toLocaleString("en-IN", {
@@ -488,6 +489,30 @@ export default async function BookingDetailPage({
         </div>
       </div>
 
+      {booking.verification_pin && (
+        <div className="bg-brand-yellow/10 border border-brand-yellow/30 rounded-md p-5 flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <h3 className="text-sm font-bold text-gray-900">
+              Verification PIN
+            </h3>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Show this PIN to the vendor at pickup — they&rsquo;ll need it to
+              start your trip.
+            </p>
+          </div>
+          <p className="text-3xl font-bold tracking-[0.3em] text-brand-secondary">
+            {booking.verification_pin}
+          </p>
+        </div>
+      )}
+
+      {booking.status === "COMPLETED" && (
+        <WriteReviewSection
+          bookingId={booking.id}
+          vehicleName={booking.vehicle_name}
+        />
+      )}
+
       {booking.pickup_point && (
         <PickupPointCard pickupPoint={booking.pickup_point} />
       )}
@@ -544,14 +569,14 @@ export default async function BookingDetailPage({
         </div>
       )}
 
-      <div className="flex items-center gap-3">
+      {/* <div className="flex items-center gap-3">
         <span
           className={`inline-flex items-center py-1.5 px-3 rounded-full text-xs font-semibold border ${statusStyle}`}
         >
           {booking.status_label}
         </span>
         {booking.can_cancel && <CancelBookingButton bookingId={booking.id} />}
-      </div>
+      </div> */}
     </div>
   );
 }
