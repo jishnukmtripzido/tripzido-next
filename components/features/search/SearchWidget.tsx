@@ -666,11 +666,11 @@ export default function SearchWidget({
       />
 
       {/* MOBILE FULL SCREEN LOADING OVERLAY */}
-      {isLoading && (
+      {/* {isLoading && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm md:hidden">
           <div className="w-14 h-14 border-4 border-white/30 border-t-brand-yellow rounded-full animate-spin"></div>
         </div>
-      )}
+      )} */}
     </>
   );
 }
