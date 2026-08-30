@@ -14,6 +14,8 @@ interface Props {
 export default function PopularRentals({ initialRentals }: Props) {
   const { selectedCityId, selectedCityName } = useCityContext();
   const [rentals, setRentals] = useState<PopularRental[]>(initialRentals);
+
+  console.log("initial rentals:", rentals);
   const [loading, setLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
