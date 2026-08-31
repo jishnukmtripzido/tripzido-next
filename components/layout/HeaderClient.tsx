@@ -261,7 +261,10 @@ export default function HeaderClient({
             </div> */}
 
             {/* Help */}
-            <div className="relative group inline-flex items-center">
+            <Link
+              href="/contact"
+              className="relative group inline-flex items-center"
+            >
               {/* Icon */}
               <svg
                 className="w-5 h-5 cursor-pointer text-gray-600 hover:text-gray-900 transition-colors"
@@ -281,8 +284,7 @@ export default function HeaderClient({
               <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover:flex items-center px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded shadow-sm whitespace-nowrap z-50 pointer-events-none">
                 Customer Service
               </span>
-            </div>
-
+            </Link>
             {/* ── AUTH (desktop only) ── */}
             {isLoggedIn ? (
               <div className="relative hidden md:block" ref={dropdownRef}>
@@ -441,7 +443,6 @@ export default function HeaderClient({
                 </button>
               </div>
             )}
-
             {/* ── Mobile: user avatar (logged in) or person icon (logged out) ── */}
             {isLoggedIn ? (
               <Link
@@ -472,7 +473,6 @@ export default function HeaderClient({
                 </svg>
               </button>
             )}
-
             {/* Hamburger */}
             <button
               onClick={() => setMenuOpen(true)}
