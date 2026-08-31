@@ -92,20 +92,28 @@ export default function HeaderClient({
           className="w-5 h-5"
           fill="none"
           stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           viewBox="0 0 24 24"
         >
-          <path
-            d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-          />
-          <path
-            d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-          />
+          {/* Handlebar & Grips */}
+          <path d="M4 6h16" />
+          <path d="M4 6v2" />
+          <path d="M20 6v2" />
+
+          {/* Headlight */}
+          <circle cx="12" cy="7" r="2" />
+
+          {/* Front Shield / Body */}
+          <path d="M7 9h10l-1.5 8h-7L7 9z" />
+
+          {/* Turn Indicators */}
+          <path d="M8.5 11h.01" />
+          <path d="M15.5 11h.01" />
+
+          {/* Front Wheel */}
+          <path d="M10 17v4a2 2 0 0 0 4 0v-4" />
         </svg>
       ),
     },
@@ -244,29 +252,35 @@ export default function HeaderClient({
           {/* Right */}
           <div className="flex items-center space-x-3 text-sm font-medium">
             {/* Indian flag */}
-            <div className="w-6 h-4 overflow-hidden rounded-sm cursor-pointer border border-gray-300 hidden sm:block">
+            {/* <div className="w-6 h-4 overflow-hidden rounded-sm cursor-pointer border border-gray-300 hidden sm:block">
               <div className="h-1/3 bg-[#FF9933]" />
               <div className="h-1/3 bg-white flex items-center justify-center">
                 <div className="w-1 h-1 rounded-full bg-blue-800" />
               </div>
               <div className="h-1/3 bg-[#138808]" />
-            </div>
+            </div> */}
 
             {/* Help */}
-            <div className="text-gray-500 cursor-pointer hidden md:block">
+            <div className="relative group inline-flex items-center">
+              {/* Icon */}
               <svg
-                className="w-5 h-5"
+                className="w-5 h-5 cursor-pointer text-gray-600 hover:text-gray-900 transition-colors"
                 fill="none"
                 stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 viewBox="0 0 24 24"
               >
-                <path
-                  d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                />
+                <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+                <path d="M19 16v3a2 2 0 0 1-2 2h-5" />
               </svg>
+
+              {/* Tooltip positioned below */}
+              <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2 hidden group-hover:flex items-center px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded shadow-sm whitespace-nowrap z-50 pointer-events-none">
+                Customer Service
+              </span>
             </div>
 
             {/* ── AUTH (desktop only) ── */}

@@ -1,33 +1,61 @@
+"use client";
+
+import { useState } from "react";
 import { FAQ_LEFT, FAQ_RIGHT } from "@/lib/constants";
 import type { FAQItem } from "@/types/home.types";
 
-function FAQColumn({ items }: { items: FAQItem[] }) {
+function FAQAccordionItem({ item }: { item: FAQItem }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="flex flex-col divide-y divide-gray-200 border border-gray-200 rounded-md overflow-hidden">
-      {items.map((item) => (
-        <details key={item.question} className="group">
-          <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none select-none hover:bg-gray-50 transition-colors">
-            <span className="text-base font-semibold text-gray-900">
-              {item.question}
-            </span>
-            <svg
-              className="w-5 h-5 text-gray-500 transition-transform duration-200 group-open:rotate-180 shrink-0 ml-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M19 9l-7 7-7-7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-              />
-            </svg>
-          </summary>
+    <div>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        className="w-full flex items-center justify-between px-5 py-4 cursor-pointer text-left select-none hover:bg-gray-50 transition-colors"
+      >
+        <span className="text-base font-semibold text-gray-900">
+          {item.question}
+        </span>
+        <svg
+          className={`w-5 h-5 text-gray-500 transition-transform duration-300 shrink-0 ml-4 ${
+            isOpen ? "rotate-180" : "rotate-0"
+          }`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M19 9l-7 7-7-7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          />
+        </svg>
+      </button>
+
+      {/* Smooth Expand/Collapse Container */}
+      <div
+        className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+      >
+        <div className="overflow-hidden">
           <div className="px-5 py-4 text-sm text-gray-700 leading-relaxed border-t border-gray-200">
             {item.answer}
           </div>
-        </details>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FAQColumn({ items }: { items: FAQItem[] }) {
+  return (
+    <div className="flex flex-col divide-y divide-gray-200 border border-gray-200 rounded-md overflow-hidden bg-white">
+      {items.map((item) => (
+        <FAQAccordionItem key={item.question} item={item} />
       ))}
     </div>
   );

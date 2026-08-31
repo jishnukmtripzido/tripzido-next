@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/layout/Header";
 
 const bikes = [
@@ -6,15 +7,16 @@ const bikes = [
   {
     id: 1,
     category: "Scooter",
-    name: "Honda Activa 6G",
+    name: "Honda Activa 125",
     price: 299,
-    cc: "110cc",
+    cc: "125cc",
     fuel: "Petrol",
-    mileage: "60 km/l",
+    mileage: "47 km/l",
     seats: 2,
     tag: "Best Seller",
     tagColor: "bg-green-100 text-green-700",
     emoji: "🛵",
+    image: "/popular-rentals/activa.png",
     desc: "The most popular scooter in India. Smooth, reliable, and perfect for city rides.",
   },
   {
@@ -22,13 +24,14 @@ const bikes = [
     category: "Scooter",
     name: "TVS Jupiter",
     price: 279,
-    cc: "110cc",
+    cc: "113.3cc",
     fuel: "Petrol",
     mileage: "62 km/l",
     seats: 2,
     tag: "Great Value",
     tagColor: "bg-blue-100 text-blue-700",
     emoji: "🛵",
+    image: "/our-fleet/jupiter.png",
     desc: "Wide footboard and extra storage. Ideal for comfortable everyday commutes.",
   },
   {
@@ -38,11 +41,12 @@ const bikes = [
     price: 319,
     cc: "125cc",
     fuel: "Petrol",
-    mileage: "55 km/l",
+    mileage: "45 km/l",
     seats: 2,
     tag: null,
     tagColor: "",
     emoji: "🛵",
+    image: "/our-fleet/access.png",
     desc: "Premium feel with a punchy 125cc engine. Great for hilly terrain.",
   },
   // Motorcycles
@@ -53,11 +57,12 @@ const bikes = [
     price: 799,
     cc: "350cc",
     fuel: "Petrol",
-    mileage: "35 km/l",
+    mileage: "41 km/l",
     seats: 2,
     tag: "Top Pick",
     tagColor: "bg-amber-100 text-amber-700",
     emoji: "🏍️",
+    image: "/popular-rentals/classic.png",
     desc: "The quintessential touring bike. Built for long rides through mountains and valleys.",
   },
   {
@@ -67,11 +72,12 @@ const bikes = [
     price: 449,
     cc: "150cc",
     fuel: "Petrol",
-    mileage: "45 km/l",
+    mileage: "47 km/l",
     seats: 2,
     tag: null,
     tagColor: "",
     emoji: "🏍️",
+    image: "/our-fleet/pulsar.png",
     desc: "Sporty and agile. A go-to choice for riders who love a spirited ride.",
   },
   {
@@ -86,6 +92,7 @@ const bikes = [
     tag: "Performance",
     tagColor: "bg-orange-100 text-orange-700",
     emoji: "🏍️",
+    image: "/our-fleet/duke.png",
     desc: "Naked aggressor built for thrill-seekers. Lightweight frame, powerful engine.",
   },
   // Electric
@@ -96,11 +103,12 @@ const bikes = [
     price: 399,
     cc: "Electric",
     fuel: "Electric",
-    mileage: "181 km/charge",
+    mileage: "242 km/charge",
     seats: 2,
     tag: "⚡ Eco Pick",
     tagColor: "bg-teal-100 text-teal-700",
     emoji: "⚡",
+    image: "/our-fleet/ola.png",
     desc: "India's best-selling electric scooter. Fast charging, futuristic features.",
   },
   {
@@ -115,6 +123,7 @@ const bikes = [
     tag: "⚡ Eco Pick",
     tagColor: "bg-teal-100 text-teal-700",
     emoji: "⚡",
+    image: "/our-fleet/iqube.webp",
     desc: "Smooth, silent, and smart. Built for eco-conscious urban riders.",
   },
 ];
@@ -125,7 +134,7 @@ export default function FleetPage() {
   return (
     <main className="min-h-screen bg-gray-50">
       <Header headerValues="w-full px-0 py-2 border-b border-gray-100 relative z-30 shadow-header" />
-      {/* Hero */}
+
       {/* Hero */}
       <section className="bg-black text-white py-16 px-4 text-center">
         <span className="inline-block bg-brand-yellow text-black text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
@@ -141,7 +150,7 @@ export default function FleetPage() {
       </section>
 
       {/* Category tabs */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
+      {/* <div className="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex gap-2 overflow-x-auto">
           {categories.map((cat) => (
             <button
@@ -156,14 +165,14 @@ export default function FleetPage() {
             </button>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Grid */}
       <section className="max-w-6xl mx-auto px-4 py-10">
         {["Scooter", "Motorcycle", "Electric"].map((cat) => (
           <div key={cat} className="mb-12">
             <h2 className="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2">
-              {cat === "Electric" ? "⚡" : cat === "Motorcycle" ? "🏍️" : "🛵"}{" "}
+              {cat === "Electric" ? "" : cat === "Motorcycle" ? "" : ""}{" "}
               {cat === "Electric" ? "Electric Bikes" : `${cat}s`}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -174,9 +183,15 @@ export default function FleetPage() {
                     key={bike.id}
                     className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden group"
                   >
-                    {/* Image placeholder */}
-                    <div className="h-44 bg-gradient-to-br from-amber-50 to-yellow-100 flex items-center justify-center text-7xl">
-                      {bike.emoji}
+                    {/* Bike Image */}
+                    <div className="relative h-44 bg-gradient-to-br from-amber-50 to-yellow-100 flex items-center justify-center p-4">
+                      <Image
+                        src={bike.image}
+                        alt={bike.name}
+                        fill
+                        className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
                     </div>
 
                     <div className="p-5">
