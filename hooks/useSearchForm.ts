@@ -1,191 +1,3 @@
-// "use client";
-
-// import { useState, useEffect, useMemo } from "react";
-// import { useRouter } from "next/navigation";
-// import { searchSchema } from "@/validations/searchSchema.validations";
-// import { searchVehiclesAction } from "@/actions/vehicles.actions";
-// import { buildDatetime, toISO } from "@/lib/dateUtils";
-// import { getRentalDurationHint } from "@/lib/rentalUtils";
-// import type { DateRange } from "@/components/ui/DatePickerModal";
-// import type {
-//   DropdownType,
-//   SelectedCity,
-//   TimeState,
-// } from "@/types/search.types";
-
-// interface UseSearchFormOptions {
-//   initialCityId?: number | null;
-//   initialCityName?: string;
-//   initialPickupDate?: Date;
-//   initialDropoffDate?: Date;
-//   initialPickupHour?: number;
-//   initialPickupMinute?: number;
-//   initialDropoffHour?: number;
-//   initialDropoffMinute?: number;
-//   onSuccess?: () => void;
-// }
-
-// export function useSearchForm(opts: UseSearchFormOptions = {}) {
-//   const router = useRouter();
-
-//   const [selectedCity, setSelectedCity] = useState<SelectedCity | null>(
-//     opts.initialCityId
-//       ? { id: opts.initialCityId, name: opts.initialCityName ?? "" }
-//       : null,
-//   );
-//   const [dateRange, setDateRange] = useState<DateRange>({
-//     start: opts.initialPickupDate ?? new Date(),
-//     end: opts.initialDropoffDate ?? new Date(),
-//   });
-//   const [pickupTime, setPickupTime] = useState<TimeState>({
-//     hour: opts.initialPickupHour ?? 10,
-//     minute: opts.initialPickupMinute ?? 0,
-//   });
-//   const [dropoffTime, setDropoffTime] = useState<TimeState>({
-//     hour: opts.initialDropoffHour ?? 10,
-//     minute: opts.initialDropoffMinute ?? 0,
-//   });
-//   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
-//   const [errors, setErrors] = useState<Record<string, string>>({});
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [serverError, setServerError] = useState<string | null>(null);
-//   const [hintDismissed, setHintDismissed] = useState(false);
-
-//   const rentalHint = useMemo(() => {
-//     const pickup_datetime = buildDatetime(
-//       dateRange.start,
-//       pickupTime.hour,
-//       pickupTime.minute,
-//     );
-//     const dropoff_datetime = buildDatetime(
-//       dateRange.end,
-//       dropoffTime.hour,
-//       dropoffTime.minute,
-//     );
-//     return getRentalDurationHint(pickup_datetime, dropoff_datetime);
-//   }, [
-//     dateRange.start,
-//     dateRange.end,
-//     pickupTime.hour,
-//     pickupTime.minute,
-//     dropoffTime.hour,
-//     dropoffTime.minute,
-//   ]);
-
-//   // Re-show the hint if the user changes dates/times again after dismissing
-//   useEffect(() => {
-//     setHintDismissed(false);
-//   }, [
-//     dateRange.start,
-//     dateRange.end,
-//     pickupTime.hour,
-//     pickupTime.minute,
-//     dropoffTime.hour,
-//     dropoffTime.minute,
-//   ]);
-
-//   function dismissRentalHint() {
-//     setHintDismissed(true);
-//   }
-
-//   function handleDateSelect(range: DateRange) {
-//     setDateRange(
-//       range.end < range.start
-//         ? { start: range.start, end: range.start }
-//         : range,
-//     );
-//     setErrors((e) => ({ ...e, pickup_datetime: "", dropoff_datetime: "" }));
-//   }
-
-//   function handleDateChange(range: DateRange) {
-//     setDateRange(
-//       range.end < range.start
-//         ? { start: range.start, end: range.start }
-//         : range,
-//     );
-//     setErrors((e) => ({ ...e, pickup_datetime: "", dropoff_datetime: "" }));
-//   }
-
-//   function toggleDropdown(type: DropdownType) {
-//     setOpenDropdown((prev) => (prev === type ? null : type));
-//   }
-
-//   function clearCityError() {
-//     setErrors((e) => ({ ...e, city_id: "" }));
-//   }
-
-//   async function handleSearch() {
-//     setServerError(null);
-//     setOpenDropdown(null);
-
-//     const pickup_datetime = buildDatetime(
-//       dateRange.start,
-//       pickupTime.hour,
-//       pickupTime.minute,
-//     );
-//     const dropoff_datetime = buildDatetime(
-//       dateRange.end,
-//       dropoffTime.hour,
-//       dropoffTime.minute,
-//     );
-
-//     // Client-side validation only — no action call
-//     const result = searchSchema.safeParse({
-//       city_id: selectedCity?.id,
-//       city_name: selectedCity?.name,
-//       pickup_datetime,
-//       dropoff_datetime,
-//     });
-
-//     if (!result.success) {
-//       const fieldErrors: Record<string, string> = {};
-//       for (const issue of result.error.issues) {
-//         fieldErrors[issue.path[0] as string] = issue.message;
-//       }
-//       setErrors(fieldErrors);
-//       return;
-//     }
-
-//     setErrors({});
-//     setIsLoading(true);
-
-//     try {
-//       opts.onSuccess?.();
-//       const params = new URLSearchParams({
-//         city_id: String(selectedCity!.id),
-//         city_name: selectedCity!.name,
-//         pickup: toISO(pickup_datetime),
-//         dropoff: toISO(dropoff_datetime),
-//       });
-//       router.push(`/searchresult?${params.toString()}`);
-//       router.refresh(); // bust the router cache
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   }
-
-//   return {
-//     selectedCity,
-//     setSelectedCity,
-//     dateRange,
-//     pickupTime,
-//     setPickupTime,
-//     dropoffTime,
-//     setDropoffTime,
-//     openDropdown,
-//     toggleDropdown,
-//     errors,
-//     serverError,
-//     isLoading,
-//     handleDateSelect,
-//     handleDateChange,
-//     handleSearch,
-//     clearCityError,
-//     rentalHint: hintDismissed ? null : rentalHint,
-//     dismissRentalHint,
-//   };
-// }
-
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
@@ -272,6 +84,30 @@ export function useSearchForm(opts: UseSearchFormOptions = {}) {
     dropoffTime.minute,
   ]);
 
+  // Clears the loading state once this component has actually received
+  // fresh search results — i.e. once the navigation kicked off in
+  // handleSearch below has completed and the destination page
+  // re-rendered this header with newly resolved values. We can't use
+  // router.push()/refresh() directly for this signal: they return
+  // immediately, before the new route's data has loaded, and clearing
+  // isLoading right after calling them collapses into the same
+  // synchronous tick as setIsLoading(true) with nothing in between to
+  // force a paint — React's batching then merges the two updates and
+  // "Searching..." never becomes visible at all. Keying off these
+  // props instead ties the reset to real new data arriving.
+  useEffect(() => {
+    setIsLoading(false);
+  }, [
+    opts.initialCityId,
+    opts.initialCityName,
+    opts.initialPickupDate,
+    opts.initialDropoffDate,
+    opts.initialPickupHour,
+    opts.initialPickupMinute,
+    opts.initialDropoffHour,
+    opts.initialDropoffMinute,
+  ]);
+
   function dismissRentalHint() {
     setHintDismissed(true);
   }
@@ -347,9 +183,13 @@ export function useSearchForm(opts: UseSearchFormOptions = {}) {
       });
       router.push(`/searchresult?${params.toString()}`);
       router.refresh(); // bust the router cache
+      // isLoading intentionally stays true here — the effect above
+      // clears it once this component actually receives fresh
+      // initial* props from the navigated-to page, not the instant
+      // push()/refresh() are called.
     } catch (error) {
-      setIsLoading(false);
       setServerError("An unexpected error occurred. Please try again.");
+      setIsLoading(false);
     }
   }
 
