@@ -622,6 +622,21 @@ function OtpStep({
   verifyLabel: string;
 }) {
   const canVerify = otp.join("").length === 4 && !loading;
+
+  // Pressing Enter in any OTP box triggers the same action as clicking
+  // "Verify & Sign In" / "Verify & Create Account", as long as all 4
+  // digits are filled in and a verification isn't already in flight.
+  // Falls through to the existing per-box key handler (backspace/arrow
+  // navigation etc.) for every other key.
+  const handleBoxKeyDown = (i: number, e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (canVerify) onVerify();
+      return;
+    }
+    onKeyDown(i, e);
+  };
+
   return (
     <>
       <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
@@ -641,7 +656,7 @@ function OtpStep({
             maxLength={1}
             value={digit}
             onChange={(e) => onChange(i, e.target.value)}
-            onKeyDown={(e) => onKeyDown(i, e)}
+            onKeyDown={(e) => handleBoxKeyDown(i, e)}
             className={`w-11 h-12 text-center text-lg font-bold rounded-xl border-2 outline-none transition-all ${
               otpError
                 ? "border-red-400 bg-red-50"

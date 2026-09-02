@@ -54,6 +54,17 @@ export default function PhoneAuth() {
     setStatus("sent");
   };
 
+  // Pressing Enter in any of the form fields triggers the same action
+  // as clicking the "Send OTP" button.
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (status !== "loading") {
+        handleSendOtp();
+      }
+    }
+  };
+
   const formatPhone = (val: string) => val.replace(/\D/g, "").slice(0, 12);
 
   return (
@@ -152,6 +163,7 @@ export default function PhoneAuth() {
                       setFirstName(e.target.value);
                       setError("");
                     }}
+                    onKeyDown={handleKeyDown}
                     autoComplete="given-name"
                     className="w-full mb-5 h-11 border border-gray-300 rounded-xl px-3 text-sm text-[#1a1a1a] placeholder-gray-400 outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition"
                   />
@@ -160,6 +172,7 @@ export default function PhoneAuth() {
                     placeholder="Last name"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     autoComplete="family-name"
                     className="w-full h-11 border border-gray-300 rounded-xl px-3 text-sm text-[#1a1a1a] placeholder-gray-400 outline-none focus:border-brand-yellow focus:ring-2 focus:ring-brand-yellow/20 transition"
                   />
@@ -197,6 +210,7 @@ export default function PhoneAuth() {
                       setPhone(formatPhone(e.target.value));
                       setError("");
                     }}
+                    onKeyDown={handleKeyDown}
                     inputMode="numeric"
                     autoComplete="tel-national"
                     aria-label="Phone number"

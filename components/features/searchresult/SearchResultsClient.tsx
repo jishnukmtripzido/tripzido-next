@@ -135,6 +135,7 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
           {tabFilteredBikes.length === 0 ? (
             <EmptyState
               activeTab={activeTab}
+              hasResults={hasResults}
               onViewAll={() => setActiveTab("all")}
               onClearFilters={clearAll}
             />
@@ -299,27 +300,33 @@ function SortDropdown({
     </div>
   );
 }
-
 function EmptyState({
   activeTab,
+  hasResults,
   onViewAll,
   onClearFilters,
 }: {
   activeTab: string;
+  hasResults: boolean;
   onViewAll: () => void;
   onClearFilters: () => void;
 }) {
+  // No bikes came back from the search at all — nothing to filter.
+  const noSearchResults = !hasResults;
+
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
       <p className="text-gray-500 text-lg font-medium">
         {activeTab === "electric"
-          ? "No electric bikes available"
-          : "No bikes available"}
+          ? "No electric rides available"
+          : "No rides available"}
       </p>
       <p className="text-gray-400 text-sm mt-1">
-        {activeTab === "electric"
-          ? "Try switching to All models or adjusting your filters"
-          : "Try adjusting your filters or dates"}
+        {noSearchResults
+          ? "Try adjusting your dates"
+          : activeTab === "electric"
+            ? "Try switching to All models or adjusting your filters"
+            : "Try adjusting your filters or dates"}
       </p>
       <div className="flex items-center gap-3 mt-4">
         {activeTab === "electric" && (
@@ -330,12 +337,14 @@ function EmptyState({
             View all models
           </button>
         )}
-        <button
-          onClick={onClearFilters}
-          className="text-sm text-[#006CE4] hover:underline"
-        >
-          Clear all filters
-        </button>
+        {!noSearchResults && (
+          <button
+            onClick={onClearFilters}
+            className="text-sm text-[#006CE4] hover:underline"
+          >
+            Clear all filters
+          </button>
+        )}
       </div>
     </div>
   );
