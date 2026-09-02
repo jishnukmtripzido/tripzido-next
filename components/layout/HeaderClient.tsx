@@ -263,7 +263,7 @@ export default function HeaderClient({
             {/* Help */}
             <Link
               href="/contact"
-              className="relative group inline-flex items-center"
+              className={`relative group inline-flex items-center ${isLoggedIn ? "pr-4" : "pr-2"}`}
             >
               {/* Icon */}
               <svg
@@ -354,7 +354,7 @@ export default function HeaderClient({
                       Profile
                     </Link>
                     <Link
-                      href="/profile"
+                      href="/profile/bookings/confirmed"
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors"
                     >
