@@ -5,6 +5,7 @@ import BookingVehicleImage from "@/components/features/profile/BookingVehicleIma
 import type { BookingPickupPoint } from "@/types/booking.types";
 import WriteReviewSection from "@/components/features/profile/WriteReviewSection";
 
+// formatting
 function formatDateTime(iso: string): string {
   return new Date(iso).toLocaleString("en-IN", {
     month: "short",
