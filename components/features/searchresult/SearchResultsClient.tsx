@@ -1,28 +1,418 @@
+// "use client";
+
+// import { useState } from "react";
+// import BikeCard from "./BikeCard";
+// import FilterSidebar from "./FilterSidebar";
+// import MobileFilterDrawer from "./MobileFilterDrawer";
+// import VehicleDisclaimer from "./VehicleDisclaimer";
+// import { useDrawerMode } from "../../../contexts/DrawerModeContext";
+// import { useVehicleFilters } from "@/hooks/useVehicleFilters";
+// import { SORT_OPTIONS } from "@/lib/constants";
+// import type { VehicleSearchResult } from "@/types/vehicles.types";
+// import LoginBanner from "@/components/ui/LoginBanner";
+// import { useAuth } from "@/contexts/AuthContext";
+
+// interface Props {
+//   bikes: VehicleSearchResult[];
+//   pickup: string;
+//   dropoff: string;
+// }
+
+// export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
+//   const { drawerMode, setDrawerMode } = useDrawerMode();
+//   const [activeCardId, setActiveCardId] = useState<string | null>(null);
+//   const [activeTab, setActiveTab] = useState<"all" | "electric">("all");
+//   const { isLoggedIn } = useAuth();
+//   const {
+//     filters,
+//     options,
+//     filteredBikes,
+//     toggleArrayFilter,
+//     setPriceMax,
+//     setSortValue,
+//     clearAll,
+//   } = useVehicleFilters(bikes ?? []);
+
+//   const tabFilteredBikes =
+//     activeTab === "electric"
+//       ? filteredBikes.filter((b) => b.fuel_type === "ELECTRIC")
+//       : filteredBikes;
+
+//   const electricCount = (bikes ?? []).filter(
+//     (b) => b.fuel_type === "ELECTRIC",
+//   ).length;
+//   const allModelsCount = bikes?.length ?? 0;
+
+//   const filterSidebarProps = {
+//     filters,
+//     options,
+//     onToggle: toggleArrayFilter,
+//     onPriceMaxChange: setPriceMax,
+//     onClearAll: clearAll,
+//   };
+
+//   const hasResults = (bikes ?? []).length > 0;
+
+//   const BANNER_AFTER = Math.min(3, tabFilteredBikes.length);
+//   const firstChunk = tabFilteredBikes.slice(0, BANNER_AFTER);
+//   const restChunk = tabFilteredBikes.slice(BANNER_AFTER);
+//   const showBanner = tabFilteredBikes.length > 0;
+//   const rentalDays =
+//     pickup && dropoff
+//       ? Math.ceil(
+//           (new Date(dropoff).getTime() - new Date(pickup).getTime()) /
+//             (1000 * 60 * 60 * 24),
+//         )
+//       : undefined;
+
+//   function renderCard(bike: VehicleSearchResult) {
+//     const vendorId = bike.locations[0]?.vendor_id ?? 0;
+//     const cardKey = `${bike.id}-${vendorId}`;
+
+//     return (
+//       <div
+//         key={cardKey}
+//         style={{
+//           zIndex: activeCardId === cardKey ? 10 : 0,
+//           position: "relative",
+//         }}
+//         className={
+//           activeTab === "electric"
+//             ? "ring-1 ring-green-200 rounded-xl bg-green-50/30"
+//             : ""
+//         }
+//       >
+//         <BikeCard
+//           {...bike}
+//           pickup={pickup}
+//           dropoff={dropoff}
+//           rentalDays={rentalDays}
+//           onDropdownOpenChange={(open) =>
+//             setActiveCardId(open ? cardKey : null)
+//           }
+//         />
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="min-h-screen md:bg-[#f2f2f8]">
+//       <div className="mx-auto flex gap-4 items-start">
+//         {/* Desktop filter sidebar — hidden when no results */}
+//         {hasResults && (
+//           <aside className="hidden lg:block xl:w-75 shrink-0 sticky  self-start md:border-r border-gray-100 md:shadow-sm">
+//             <FilterSidebar {...filterSidebarProps} />
+//           </aside>
+//         )}
+
+//         <div className="flex-1 min-w-0">
+//           {/* Desktop: Tabs + Sort — hidden when no results */}
+//           {hasResults && (
+//             <div className="hidden md:block pt-3 pr-5 mb-4">
+//               <div className="bg-white flex items-center justify-between flex-wrap gap-3 px-5 py-2.5 shadow-sm rounded-md border border-gray-100">
+//                 <TabBar
+//                   activeTab={activeTab}
+//                   onTabChange={setActiveTab}
+//                   allCount={allModelsCount}
+//                   electricCount={electricCount}
+//                 />
+//                 <div className="w-px h-5 bg-gray-200" />
+//                 <SortDropdown
+//                   sortValue={filters.sortValue}
+//                   onChange={setSortValue}
+//                 />
+//               </div>
+//             </div>
+//           )}
+
+//           {tabFilteredBikes.length > 0 && (
+//             <div className="hidden md:block">
+//               <VehicleDisclaimer />
+//             </div>
+//           )}
+
+//           {/* Results */}
+//           {tabFilteredBikes.length === 0 ? (
+//             <EmptyState
+//               activeTab={activeTab}
+//               hasResults={hasResults}
+//               onViewAll={() => setActiveTab("all")}
+//               onClearFilters={clearAll}
+//             />
+//           ) : (
+//             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 items-start px-5 py-5 md:px-0 md:py-0 md:pt-1 md:pr-5">
+//               {firstChunk.map(renderCard)}
+//               {showBanner && !isLoggedIn && (
+//                 <div className="col-span-full">
+//                   <LoginBanner />
+//                 </div>
+//               )}
+//               {restChunk.map(renderCard)}
+//             </div>
+//           )}
+//         </div>
+//       </div>
+
+//       <MobileFilterDrawer
+//         isOpen={drawerMode !== null}
+//         onClose={() => setDrawerMode(null)}
+//         mode={drawerMode ?? "filter"}
+//         sortValue={filters.sortValue}
+//         onSortChange={(val) => {
+//           setSortValue(val);
+//           setDrawerMode(null);
+//         }}
+//         {...filterSidebarProps}
+//       />
+//     </div>
+//   );
+// }
+
+// // ── Sub-components ────────────────────────────────────────────────────
+
+// function TabBar({
+//   activeTab,
+//   onTabChange,
+//   allCount,
+//   electricCount,
+// }: {
+//   activeTab: "all" | "electric";
+//   onTabChange: (tab: "all" | "electric") => void;
+//   allCount: number;
+//   electricCount: number;
+// }) {
+//   return (
+//     <div className="flex items-center gap-1">
+//       <span className="text-[13px] font-semibold text-gray-700 mr-2 whitespace-nowrap">
+//         Sort by:
+//       </span>
+//       <TabButton
+//         active={activeTab === "all"}
+//         onClick={() => onTabChange("all")}
+//         activeClass="bg-yellow-50 border-yellow-50 text-gray-900"
+//         activeBadgeClass="bg-yellow-200 text-yellow-900"
+//         label="All models"
+//         count={allCount}
+//       />
+//       <TabButton
+//         active={activeTab === "electric"}
+//         onClick={() => onTabChange("electric")}
+//         activeClass="bg-green-50 border-green-50 text-green-800"
+//         activeBadgeClass="bg-green-200 text-green-800"
+//         label="Electric"
+//         count={electricCount}
+//         icon={
+//           <svg
+//             className={`w-3 h-3 flex-shrink-0 ${
+//               activeTab === "electric" ? "text-green-600" : "text-gray-400"
+//             }`}
+//             viewBox="0 0 24 24"
+//             fill="currentColor"
+//           >
+//             <path d="M13 2L4.09 13H12L11 22L19.91 11H12L13 2Z" />
+//           </svg>
+//         }
+//       />
+//     </div>
+//   );
+// }
+
+// function TabButton({
+//   active,
+//   onClick,
+//   activeClass,
+//   activeBadgeClass,
+//   label,
+//   count,
+//   icon,
+// }: {
+//   active: boolean;
+//   onClick: () => void;
+//   activeClass: string;
+//   activeBadgeClass: string;
+//   label: string;
+//   count: number;
+//   icon?: React.ReactNode;
+// }) {
+//   return (
+//     <button
+//       onClick={onClick}
+//       className={`flex items-center gap-1.5 px-3 py-1 rounded-md border-[1.5px] text-[13.5px] font-medium transition-all cursor-pointer
+//         ${
+//           active
+//             ? activeClass
+//             : "border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+//         }`}
+//     >
+//       {icon}
+//       {label}
+//       <span
+//         className={`text-[11px] font-semibold px-1.5 py-px rounded-full leading-[18px]
+//           ${active ? activeBadgeClass : "bg-gray-100 text-gray-500"}`}
+//       >
+//         {count}
+//       </span>
+//     </button>
+//   );
+// }
+
+// function SortDropdown({
+//   sortValue,
+//   onChange,
+// }: {
+//   sortValue: string;
+//   onChange: (v: string) => void;
+// }) {
+//   return (
+//     <div className="flex items-center gap-2">
+//       <span className="text-[13px] font-semibold text-gray-700 whitespace-nowrap">
+//         Sort by:
+//       </span>
+//       <div className="relative">
+//         <select
+//           value={sortValue === "none" ? "" : sortValue}
+//           onChange={(e) => onChange(e.target.value || "none")}
+//           className="appearance-none bg-white border-[1.5px] border-gray-200 rounded-lg py-1.5 pl-3 pr-8 text-[13px] font-medium text-gray-700 cursor-pointer transition-colors hover:border-gray-300 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 min-w-[130px]"
+//         >
+//           <option value="" disabled>
+//             Select
+//           </option>
+//           {SORT_OPTIONS.map((opt) => (
+//             <option key={opt.value} value={opt.value}>
+//               {opt.label}
+//             </option>
+//           ))}
+//         </select>
+//         <svg
+//           className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none"
+//           fill="none"
+//           stroke="currentColor"
+//           viewBox="0 0 24 24"
+//         >
+//           <path
+//             d="M6 9l6 6 6-6"
+//             strokeLinecap="round"
+//             strokeLinejoin="round"
+//             strokeWidth="2.5"
+//           />
+//         </svg>
+//       </div>
+//     </div>
+//   );
+// }
+// function EmptyState({
+//   activeTab,
+//   hasResults,
+//   onViewAll,
+//   onClearFilters,
+// }: {
+//   activeTab: string;
+//   hasResults: boolean;
+//   onViewAll: () => void;
+//   onClearFilters: () => void;
+// }) {
+//   // No bikes came back from the search at all — nothing to filter.
+//   const noSearchResults = !hasResults;
+
+//   return (
+//     <div className="flex flex-col items-center justify-center py-20 text-center">
+//       <p className="text-gray-500 text-lg font-medium">
+//         {activeTab === "electric"
+//           ? "No electric rides available"
+//           : "No rides available"}
+//       </p>
+//       <p className="text-gray-400 text-sm mt-1">
+//         {noSearchResults
+//           ? "Try adjusting your dates"
+//           : activeTab === "electric"
+//             ? "Try switching to All models or adjusting your filters"
+//             : "Try adjusting your filters or dates"}
+//       </p>
+//       <div className="flex items-center gap-3 mt-4">
+//         {activeTab === "electric" && (
+//           <button
+//             onClick={onViewAll}
+//             className="text-sm text-[#006CE4] hover:underline"
+//           >
+//             View all models
+//           </button>
+//         )}
+//         {!noSearchResults && (
+//           <button
+//             onClick={onClearFilters}
+//             className="text-sm text-[#006CE4] hover:underline"
+//           >
+//             Clear all filters
+//           </button>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+// components/features/searchresult/SearchResultsClient.tsx
+// Replace the existing file entirely.
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BikeCard from "./BikeCard";
 import FilterSidebar from "./FilterSidebar";
 import MobileFilterDrawer from "./MobileFilterDrawer";
 import VehicleDisclaimer from "./VehicleDisclaimer";
 import { useDrawerMode } from "../../../contexts/DrawerModeContext";
 import { useVehicleFilters } from "@/hooks/useVehicleFilters";
+import { useInfiniteVehicleSearch } from "@/hooks/useInfiniteVehicleSearch";
 import { SORT_OPTIONS } from "@/lib/constants";
 import type { VehicleSearchResult } from "@/types/vehicles.types";
 import LoginBanner from "@/components/ui/LoginBanner";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface Props {
-  bikes: VehicleSearchResult[];
+  initialBikes: VehicleSearchResult[];
+  initialHasNext: boolean;
+  cityId: string;
   pickup: string;
   dropoff: string;
 }
 
-export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
+export default function SearchResultsClient({
+  initialBikes,
+  initialHasNext,
+  cityId,
+  pickup,
+  dropoff,
+}: Props) {
   const { drawerMode, setDrawerMode } = useDrawerMode();
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"all" | "electric">("all");
   const { isLoggedIn } = useAuth();
+
+  // ── Infinite scroll ───────────────────────────────────────────────
+  const { bikes, hasNext, status, loadMore } = useInfiniteVehicleSearch({
+    cityId,
+    pickup,
+    dropoff,
+    initialBikes,
+    initialHasNext,
+  });
+
+  // Sentinel div at the bottom — triggers loadMore when it enters viewport
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) loadMore();
+      },
+      { rootMargin: "200px" }, // start loading 200px before the bottom
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loadMore]);
+
+  // ── Filters (operate on the accumulated bikes list) ───────────────
   const {
     filters,
     options,
@@ -31,17 +421,15 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
     setPriceMax,
     setSortValue,
     clearAll,
-  } = useVehicleFilters(bikes ?? []);
+  } = useVehicleFilters(bikes);
 
   const tabFilteredBikes =
     activeTab === "electric"
       ? filteredBikes.filter((b) => b.fuel_type === "ELECTRIC")
       : filteredBikes;
 
-  const electricCount = (bikes ?? []).filter(
-    (b) => b.fuel_type === "ELECTRIC",
-  ).length;
-  const allModelsCount = bikes?.length ?? 0;
+  const electricCount = bikes.filter((b) => b.fuel_type === "ELECTRIC").length;
+  const allModelsCount = bikes.length;
 
   const filterSidebarProps = {
     filters,
@@ -51,12 +439,8 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
     onClearAll: clearAll,
   };
 
-  const hasResults = (bikes ?? []).length > 0;
+  const hasResults = initialBikes.length > 0 || bikes.length > 0;
 
-  const BANNER_AFTER = Math.min(3, tabFilteredBikes.length);
-  const firstChunk = tabFilteredBikes.slice(0, BANNER_AFTER);
-  const restChunk = tabFilteredBikes.slice(BANNER_AFTER);
-  const showBanner = tabFilteredBikes.length > 0;
   const rentalDays =
     pickup && dropoff
       ? Math.ceil(
@@ -65,10 +449,15 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
         )
       : undefined;
 
+  // Login banner: show after first 3 cards
+  const BANNER_AFTER = Math.min(3, tabFilteredBikes.length);
+  const firstChunk = tabFilteredBikes.slice(0, BANNER_AFTER);
+  const restChunk = tabFilteredBikes.slice(BANNER_AFTER);
+  const showBanner = tabFilteredBikes.length > 0;
+
   function renderCard(bike: VehicleSearchResult) {
     const vendorId = bike.locations[0]?.vendor_id ?? 0;
     const cardKey = `${bike.id}-${vendorId}`;
-
     return (
       <div
         key={cardKey}
@@ -98,15 +487,15 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
   return (
     <div className="min-h-screen md:bg-[#f2f2f8]">
       <div className="mx-auto flex gap-4 items-start">
-        {/* Desktop filter sidebar — hidden when no results */}
+        {/* Desktop filter sidebar */}
         {hasResults && (
-          <aside className="hidden lg:block xl:w-75 shrink-0 sticky  self-start md:border-r border-gray-100 md:shadow-sm">
+          <aside className="hidden lg:block xl:w-75 shrink-0 sticky self-start md:border-r border-gray-100 md:shadow-sm">
             <FilterSidebar {...filterSidebarProps} />
           </aside>
         )}
 
         <div className="flex-1 min-w-0">
-          {/* Desktop: Tabs + Sort — hidden when no results */}
+          {/* Desktop: tabs + sort bar */}
           {hasResults && (
             <div className="hidden md:block pt-3 pr-5 mb-4">
               <div className="bg-white flex items-center justify-between flex-wrap gap-3 px-5 py-2.5 shadow-sm rounded-md border border-gray-100">
@@ -131,8 +520,8 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
             </div>
           )}
 
-          {/* Results */}
-          {tabFilteredBikes.length === 0 ? (
+          {/* Results grid */}
+          {tabFilteredBikes.length === 0 && status !== "loading" ? (
             <EmptyState
               activeTab={activeTab}
               hasResults={hasResults}
@@ -140,19 +529,55 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
               onClearFilters={clearAll}
             />
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 items-start px-5 py-5 md:px-0 md:py-0 md:pt-1 md:pr-5">
-              {firstChunk.map(renderCard)}
-              {showBanner && !isLoggedIn && (
-                <div className="col-span-full">
-                  <LoginBanner />
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 items-start px-5 py-5 md:px-0 md:py-0 md:pt-1 md:pr-5">
+                {firstChunk.map(renderCard)}
+                {showBanner && !isLoggedIn && (
+                  <div className="col-span-full">
+                    <LoginBanner />
+                  </div>
+                )}
+                {restChunk.map(renderCard)}
+
+                {/* Skeleton cards while loading next page */}
+                {status === "loading" &&
+                  Array.from({ length: 3 }).map((_, i) => (
+                    <CardSkeleton key={`skeleton-${i}`} />
+                  ))}
+              </div>
+
+              {/* Invisible sentinel — IntersectionObserver watches this */}
+              {hasNext && (
+                <div ref={sentinelRef} className="h-1" aria-hidden="true" />
+              )}
+
+              {/* End-of-results message */}
+              {!hasNext && bikes.length > 0 && status !== "loading" && (
+                <p className="text-center text-sm text-gray-400 py-8 pr-5">
+                  All {bikes.length} vehicles shown
+                </p>
+              )}
+
+              {/* Error retry */}
+              {status === "error" && (
+                <div className="flex flex-col items-center py-6 pr-5 gap-2">
+                  <p className="text-sm text-gray-500">
+                    Failed to load more vehicles
+                  </p>
+                  <button
+                    onClick={loadMore}
+                    className="text-sm text-[#006CE4] hover:underline"
+                  >
+                    Try again
+                  </button>
                 </div>
               )}
-              {restChunk.map(renderCard)}
-            </div>
+            </>
           )}
         </div>
       </div>
 
+      {/* Mobile drawer */}
       <MobileFilterDrawer
         isOpen={drawerMode !== null}
         onClose={() => setDrawerMode(null)}
@@ -168,7 +593,27 @@ export default function SearchResultsClient({ bikes, pickup, dropoff }: Props) {
   );
 }
 
-// ── Sub-components ────────────────────────────────────────────────────
+// ── Skeleton card ─────────────────────────────────────────────────────
+
+function CardSkeleton() {
+  return (
+    <div className="bg-white rounded-xl border border-gray-100 overflow-hidden animate-pulse">
+      <div className="h-44 bg-gray-100" />
+      <div className="p-4 space-y-3">
+        <div className="h-4 bg-gray-100 rounded w-2/3" />
+        <div className="h-3 bg-gray-100 rounded w-1/2" />
+        <div className="flex gap-2 pt-1">
+          <div className="h-3 bg-gray-100 rounded w-1/4" />
+          <div className="h-3 bg-gray-100 rounded w-1/4" />
+          <div className="h-3 bg-gray-100 rounded w-1/4" />
+        </div>
+        <div className="h-9 bg-gray-100 rounded-lg mt-2" />
+      </div>
+    </div>
+  );
+}
+
+// ── Sub-components (unchanged from original) ──────────────────────────
 
 function TabBar({
   activeTab,
@@ -184,7 +629,7 @@ function TabBar({
   return (
     <div className="flex items-center gap-1">
       <span className="text-[13px] font-semibold text-gray-700 mr-2 whitespace-nowrap">
-        Sort by:
+        Filter by:
       </span>
       <TabButton
         active={activeTab === "all"}
@@ -203,9 +648,7 @@ function TabBar({
         count={electricCount}
         icon={
           <svg
-            className={`w-3 h-3 flex-shrink-0 ${
-              activeTab === "electric" ? "text-green-600" : "text-gray-400"
-            }`}
+            className={`w-3 h-3 flex-shrink-0 ${activeTab === "electric" ? "text-green-600" : "text-gray-400"}`}
             viewBox="0 0 24 24"
             fill="currentColor"
           >
@@ -238,11 +681,7 @@ function TabButton({
     <button
       onClick={onClick}
       className={`flex items-center gap-1.5 px-3 py-1 rounded-md border-[1.5px] text-[13.5px] font-medium transition-all cursor-pointer
-        ${
-          active
-            ? activeClass
-            : "border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-        }`}
+        ${active ? activeClass : "border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-700"}`}
     >
       {icon}
       {label}
@@ -300,6 +739,7 @@ function SortDropdown({
     </div>
   );
 }
+
 function EmptyState({
   activeTab,
   hasResults,
@@ -311,9 +751,7 @@ function EmptyState({
   onViewAll: () => void;
   onClearFilters: () => void;
 }) {
-  // No bikes came back from the search at all — nothing to filter.
   const noSearchResults = !hasResults;
-
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
       <p className="text-gray-500 text-lg font-medium">

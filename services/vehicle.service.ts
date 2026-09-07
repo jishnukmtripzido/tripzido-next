@@ -7,23 +7,60 @@ import type {
   AnnouncementBannerPage,
 } from "@/types/search.types";
 
+// export type VehicleSearchParams = {
+//   city_id: string;
+//   pickup_datetime: string;
+//   dropoff_datetime: string;
+//   vehicle_type_id?: string;
+// };
+
+// export async function searchVehiclesApi(
+//   params: VehicleSearchParams,
+// ): Promise<VehicleSearchResult[]> {
+//   const query = new URLSearchParams({
+//     city_id: params.city_id,
+//     pickup_datetime: params.pickup_datetime,
+//     dropoff_datetime: params.dropoff_datetime,
+//     ...(params.vehicle_type_id && { vehicle_type_id: params.vehicle_type_id }),
+//   });
+//   const data = await api.get<{ data: VehicleSearchResult[] }>(
+//     `/api/vehicles/search/?${query.toString()}`,
+//     { cache: "no-store" },
+//   );
+//   return data.data;
+// }
+
 export type VehicleSearchParams = {
   city_id: string;
   pickup_datetime: string;
   dropoff_datetime: string;
   vehicle_type_id?: string;
+  page?: number;
+};
+
+export type VehicleSearchPage = {
+  results: VehicleSearchResult[];
+  pagination: {
+    total: number;
+    page: number;
+    page_size: number;
+    total_pages: number;
+    has_next: boolean;
+  };
 };
 
 export async function searchVehiclesApi(
   params: VehicleSearchParams,
-): Promise<VehicleSearchResult[]> {
+): Promise<VehicleSearchPage> {
   const query = new URLSearchParams({
     city_id: params.city_id,
     pickup_datetime: params.pickup_datetime,
     dropoff_datetime: params.dropoff_datetime,
     ...(params.vehicle_type_id && { vehicle_type_id: params.vehicle_type_id }),
+    ...(params.page && params.page > 1 && { page: String(params.page) }),
   });
-  const data = await api.get<{ data: VehicleSearchResult[] }>(
+
+  const data = await api.get<{ data: VehicleSearchPage }>(
     `/api/vehicles/search/?${query.toString()}`,
     { cache: "no-store" },
   );
