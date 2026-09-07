@@ -134,7 +134,7 @@ export default function EditSearchBar({
     setIsResolving(true);
 
     try {
-      const results = await searchVehiclesApi({
+      const { results } = await searchVehiclesApi({
         city_id: String(cityId),
         vehicle_type_id: String(vehicleTypeId),
         pickup_datetime: toISO(pickup_datetime),
