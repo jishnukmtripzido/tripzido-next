@@ -11,6 +11,7 @@ interface Props {
   dropoff: string;
   cityId: number;
   vehicleTypeId: number;
+  isAvailable?: boolean;
 }
 
 export default function SearchModifyBar({
@@ -19,6 +20,7 @@ export default function SearchModifyBar({
   dropoff,
   cityId,
   vehicleTypeId,
+  isAvailable = true,
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const [locations, setLocations] = useState<PickupLocationOption[]>([]);
@@ -123,10 +125,12 @@ export default function SearchModifyBar({
           </div>
 
           <div className="hidden md:flex items-center gap-6">
-            <div className="flex items-center gap-1.5 text-blue-500 text-sm">
-              <InfoIcon />
-              <span>Make sure to grab your ride at {pickupTime}</span>
-            </div>
+            {isAvailable && (
+              <div className="flex items-center gap-1.5 text-blue-500 text-sm">
+                <InfoIcon />
+                <span>Make sure to grab your ride at {pickupTime}</span>
+              </div>
+            )}
             <button
               onClick={handleEditClick}
               disabled={isOpeningEditor}

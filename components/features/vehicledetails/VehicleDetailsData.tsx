@@ -85,6 +85,7 @@ export default async function VehicleDetailsData({ id, searchParams }: Props) {
         dropoff={dropoff!}
         cityId={Number(city_id ?? 0)}
         vehicleTypeId={vehicle.vehicle_type_id}
+        isAvailable={vehicle.is_available}
       />
       <div className="min-h-screen">
         <PackageSelectionProvider
