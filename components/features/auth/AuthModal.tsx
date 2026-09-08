@@ -34,11 +34,14 @@
 //   const [email, setEmail] = useState("");
 //   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
+//   // Turnstile stays active for as long as the modal is open — not just
+//   // while the phone-entry step is visible — so there's always a fresh
+//   // token ready when the user hits "Resend" from the OTP screen.
 //   const {
 //     token: turnstileToken,
 //     tokenRef,
 //     reset: resetTurnstile,
-//   } = useTurnstile(isOpen && !otpSent, mode);
+//   } = useTurnstile(isOpen, mode);
 
 //   const {
 //     otp,
@@ -110,12 +113,15 @@
 //     setResendSeconds(RESEND_COOLDOWN_SECONDS);
 //   };
 
-//   const handleSendLoginOTP = async () => {
-//     setSendError(null);
+//   // ── Core senders ──────────────────────────────────────────────────────
+//   // These do the actual API call + shared bookkeeping (loading state,
+//   // cooldown, clearing the OTP boxes). Both the initial "Send OTP" button
+//   // and the "Resend" link on the OTP screen call into these, so a resend
+//   // reuses whatever phone number / register fields are already in state
+//   // instead of forcing the user back to the entry form.
 
-//     if (resendSeconds > 0) {
-//       return;
-//     }
+//   const sendLoginOtp = async () => {
+//     setSendError(null);
 
 //     const token = tokenRef.current;
 
@@ -138,6 +144,11 @@
 //       setOtpError(null);
 //       resetOtp();
 //       startOtpCooldown();
+//       // The token we just used is single-use and now consumed. Ask
+//       // Cloudflare for a fresh one in the background so it's ready
+//       // if the user hits Resend before this widget would otherwise
+//       // remount.
+//       resetTurnstile();
 //     } catch (error) {
 //       setSendError(
 //         error instanceof Error
@@ -150,16 +161,8 @@
 //     }
 //   };
 
-//   const handleSendRegisterOTP = async () => {
+//   const sendRegisterOtp = async () => {
 //     setSendError(null);
-
-//     if (resendSeconds > 0) {
-//       return;
-//     }
-
-//     if (!validateRegisterFields()) {
-//       return;
-//     }
 
 //     const token = tokenRef.current;
 
@@ -188,6 +191,7 @@
 //       setOtpError(null);
 //       resetOtp();
 //       startOtpCooldown();
+//       resetTurnstile();
 //     } catch (error) {
 //       setSendError(
 //         error instanceof Error
@@ -198,6 +202,28 @@
 //     } finally {
 //       setLoading(false);
 //     }
+//   };
+
+//   // ── Button handlers (phone-entry / register-entry steps) ────────────────
+
+//   const handleSendLoginOTP = async () => {
+//     if (resendSeconds > 0 || loading) {
+//       return;
+//     }
+
+//     await sendLoginOtp();
+//   };
+
+//   const handleSendRegisterOTP = async () => {
+//     if (resendSeconds > 0 || loading) {
+//       return;
+//     }
+
+//     if (!validateRegisterFields()) {
+//       return;
+//     }
+
+//     await sendRegisterOtp();
 //   };
 
 //   const handleVerifyLoginOTP = async () => {
@@ -252,16 +278,20 @@
 //     }
 //   };
 
-//   const handleResend = () => {
+//   // Resend: stays on the OTP screen and re-sends to the number already
+//   // entered, instead of bouncing the user back to the phone-entry step.
+//   const handleResend = async () => {
 //     if (resendSeconds > 0 || loading) {
 //       return;
 //     }
 
-//     setOtpSent(false);
 //     setOtpError(null);
-//     setSendError(null);
-//     resetOtp();
-//     resetTurnstile();
+
+//     if (isRegister) {
+//       await sendRegisterOtp();
+//     } else {
+//       await sendLoginOtp();
+//     }
 //   };
 
 //   const handleChangeNumber = () => {
@@ -345,7 +375,7 @@
 //                   : "Commuting made Easy, Affordable and Quick"}
 //             </p>
 
-//             {!otpSent && sendError && (
+//             {sendError && (
 //               <div className="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5 text-sm text-red-700">
 //                 <svg
 //                   className="w-4 h-4 mt-0.5 shrink-0"
@@ -364,6 +394,21 @@
 //                 <span>{sendError}</span>
 //               </div>
 //             )}
+
+//             {/*
+//               Turnstile widget: always mounted while the modal is open so a
+//               valid token is ready whether we're on the phone-entry step or
+//               already on the OTP screen (needed for Resend). It's just
+//               visually hidden — not unmounted — once otpSent is true.
+//             */}
+//             <div
+//               id="cf-turnstile-container"
+//               className={
+//                 otpSent
+//                   ? "invisible h-0 overflow-hidden"
+//                   : "mb-4 flex justify-center"
+//               }
+//             />
 
 //             {!otpSent ? (
 //               isRegister ? (
@@ -482,8 +527,6 @@
 //           className="flex-1 px-4 py-3 text-sm outline-none bg-white placeholder-gray-400"
 //         />
 //       </div>
-
-//       <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
 
 //       <SendOtpButton
 //         loading={loading}
@@ -658,8 +701,6 @@
 
 //         <FieldError msg={fieldErrors.phone} />
 //       </div>
-
-//       <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
 
 //       <SendOtpButton
 //         loading={loading}
@@ -948,14 +989,22 @@ export default function AuthModal({
   const [email, setEmail] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-  // Turnstile stays active for as long as the modal is open — not just
-  // while the phone-entry step is visible — so there's always a fresh
-  // token ready when the user hits "Resend" from the OTP screen.
+  // The visible widget: same behaviour as before — mounted only while the
+  // phone-entry / register step is showing, rendered into the container
+  // that lives inline inside PhoneStep / RegisterStep.
   const {
     token: turnstileToken,
     tokenRef,
     reset: resetTurnstile,
-  } = useTurnstile(isOpen, mode);
+  } = useTurnstile(isOpen && !otpSent, mode);
+
+  // A second, independent, invisible widget that's only active while the
+  // OTP screen is showing. It never appears in the UI — it exists purely
+  // to keep a fresh token ready in the background, so "Resend" can fire a
+  // real request instead of bouncing the user back to the phone step to
+  // re-solve a visible widget.
+  const { tokenRef: resendTokenRef, reset: resetResendTurnstile } =
+    useTurnstile(isOpen && otpSent, mode, "cf-turnstile-container-resend");
 
   const {
     otp,
@@ -988,6 +1037,7 @@ export default function AuthModal({
     setFieldErrors({});
     resetOtp();
     resetTurnstile();
+    resetResendTurnstile();
   };
 
   const handleClose = () => {
@@ -1028,16 +1078,16 @@ export default function AuthModal({
   };
 
   // ── Core senders ──────────────────────────────────────────────────────
-  // These do the actual API call + shared bookkeeping (loading state,
-  // cooldown, clearing the OTP boxes). Both the initial "Send OTP" button
-  // and the "Resend" link on the OTP screen call into these, so a resend
-  // reuses whatever phone number / register fields are already in state
-  // instead of forcing the user back to the entry form.
+  // Both the initial "Send OTP" button and the "Resend" link call into
+  // these. Each caller supplies its own token (visible widget for the
+  // initial send, background widget for a resend) and its own recovery
+  // callback to run if that token turns out to be invalid.
 
-  const sendLoginOtp = async () => {
+  const sendLoginOtp = async (
+    token: string | null,
+    onInvalidToken: () => void,
+  ) => {
     setSendError(null);
-
-    const token = tokenRef.current;
 
     if (phone.length !== 10 || !token) {
       return;
@@ -1050,7 +1100,7 @@ export default function AuthModal({
 
       if (!data.success) {
         setSendError(data.message || "Failed to send OTP. Please try again.");
-        resetTurnstile();
+        onInvalidToken();
         return;
       }
 
@@ -1058,27 +1108,23 @@ export default function AuthModal({
       setOtpError(null);
       resetOtp();
       startOtpCooldown();
-      // The token we just used is single-use and now consumed. Ask
-      // Cloudflare for a fresh one in the background so it's ready
-      // if the user hits Resend before this widget would otherwise
-      // remount.
-      resetTurnstile();
     } catch (error) {
       setSendError(
         error instanceof Error
           ? error.message
           : "Something went wrong. Please try again.",
       );
-      resetTurnstile();
+      onInvalidToken();
     } finally {
       setLoading(false);
     }
   };
 
-  const sendRegisterOtp = async () => {
+  const sendRegisterOtp = async (
+    token: string | null,
+    onInvalidToken: () => void,
+  ) => {
     setSendError(null);
-
-    const token = tokenRef.current;
 
     if (!token) {
       return;
@@ -1097,7 +1143,7 @@ export default function AuthModal({
 
       if (!data.success) {
         setSendError(data.message || "Could not send OTP. Please try again.");
-        resetTurnstile();
+        onInvalidToken();
         return;
       }
 
@@ -1105,14 +1151,13 @@ export default function AuthModal({
       setOtpError(null);
       resetOtp();
       startOtpCooldown();
-      resetTurnstile();
     } catch (error) {
       setSendError(
         error instanceof Error
           ? error.message
           : "Could not send OTP. Please try again.",
       );
-      resetTurnstile();
+      onInvalidToken();
     } finally {
       setLoading(false);
     }
@@ -1125,7 +1170,7 @@ export default function AuthModal({
       return;
     }
 
-    await sendLoginOtp();
+    await sendLoginOtp(tokenRef.current, resetTurnstile);
   };
 
   const handleSendRegisterOTP = async () => {
@@ -1137,7 +1182,7 @@ export default function AuthModal({
       return;
     }
 
-    await sendRegisterOtp();
+    await sendRegisterOtp(tokenRef.current, resetTurnstile);
   };
 
   const handleVerifyLoginOTP = async () => {
@@ -1193,7 +1238,9 @@ export default function AuthModal({
   };
 
   // Resend: stays on the OTP screen and re-sends to the number already
-  // entered, instead of bouncing the user back to the phone-entry step.
+  // entered, using the background widget's token — no trip back to the
+  // phone-entry step. Whatever happens, the background token is now
+  // consumed or invalid, so it's refreshed either way for next time.
   const handleResend = async () => {
     if (resendSeconds > 0 || loading) {
       return;
@@ -1201,11 +1248,16 @@ export default function AuthModal({
 
     setOtpError(null);
 
+    const token = resendTokenRef.current;
+    const noop = () => {};
+
     if (isRegister) {
-      await sendRegisterOtp();
+      await sendRegisterOtp(token, noop);
     } else {
-      await sendLoginOtp();
+      await sendLoginOtp(token, noop);
     }
+
+    resetResendTurnstile();
   };
 
   const handleChangeNumber = () => {
@@ -1310,18 +1362,14 @@ export default function AuthModal({
             )}
 
             {/*
-              Turnstile widget: always mounted while the modal is open so a
-              valid token is ready whether we're on the phone-entry step or
-              already on the OTP screen (needed for Resend). It's just
-              visually hidden — not unmounted — once otpSent is true.
+              Background widget for Resend. Always in the DOM while the
+              modal is open — it just never needs to be seen — so it can
+              solve quietly the moment the OTP screen appears.
             */}
             <div
-              id="cf-turnstile-container"
-              className={
-                otpSent
-                  ? "invisible h-0 overflow-hidden"
-                  : "mb-4 flex justify-center"
-              }
+              id="cf-turnstile-container-resend"
+              className="invisible h-0 w-0 overflow-hidden"
+              aria-hidden="true"
             />
 
             {!otpSent ? (
@@ -1441,6 +1489,8 @@ function PhoneStep({
           className="flex-1 px-4 py-3 text-sm outline-none bg-white placeholder-gray-400"
         />
       </div>
+
+      <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
 
       <SendOtpButton
         loading={loading}
@@ -1615,6 +1665,8 @@ function RegisterStep({
 
         <FieldError msg={fieldErrors.phone} />
       </div>
+
+      <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
 
       <SendOtpButton
         loading={loading}
