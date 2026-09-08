@@ -1,3 +1,794 @@
+// "use client";
+
+// import { useState, useEffect } from "react";
+// import { useRouter } from "next/navigation";
+// import { verifyOtpAndLogin, registerAndLogin } from "@/actions/auth.actions";
+// import { sendOtpApi, registerSendOtpApi } from "@/services/auth.service";
+// import { useTurnstile } from "@/hooks/useTurnstile";
+// import { useOtpInput } from "@/hooks/useOtpInput";
+// import { LOGIN_MODAL_CITIES, LOGIN_MODAL_STATS } from "@/lib/constants";
+// import { SpinnerIcon, CloseButton } from "@/components/ui/icons";
+// import type { LoginModalProps } from "@/types/auth.types";
+
+// type ModalMode = "login" | "register";
+
+// export default function LoginModal({
+//   isOpen,
+//   onClose,
+//   initialMode = "login",
+// }: LoginModalProps & { initialMode?: ModalMode }) {
+//   const router = useRouter();
+
+//   const [mode, setMode] = useState<ModalMode>(initialMode);
+
+//   useEffect(() => {
+//     if (isOpen) setMode(initialMode);
+//   }, [isOpen, initialMode]);
+
+//   const [phone, setPhone] = useState("");
+//   const [otpSent, setOtpSent] = useState(false);
+//   const [loading, setLoading] = useState(false);
+//   const [otpError, setOtpError] = useState<string | null>(null);
+//   const [sendError, setSendError] = useState<string | null>(null);
+
+//   const [firstName, setFirstName] = useState("");
+//   const [lastName, setLastName] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+//   const {
+//     token: turnstileToken,
+//     tokenRef,
+//     reset: resetTurnstile,
+//   } = useTurnstile(isOpen && !otpSent, mode);
+
+//   const {
+//     otp,
+//     refs: otpRefs,
+//     handleChange: handleOtpChange,
+//     handleKeyDown: handleOtpKeyDown,
+//     reset: resetOtp,
+//   } = useOtpInput(otpSent);
+
+//   const fullReset = () => {
+//     setPhone("");
+//     setOtpSent(false);
+//     resetOtp();
+//     setLoading(false);
+//     setOtpError(null);
+//     setSendError(null);
+//     setFirstName("");
+//     setLastName("");
+//     setEmail("");
+//     setFieldErrors({});
+//   };
+
+//   const handleClose = () => {
+//     onClose();
+//     fullReset();
+//     setTimeout(() => setMode("login"), 300);
+//   };
+
+//   const switchMode = (next: ModalMode) => {
+//     fullReset();
+//     setMode(next);
+//   };
+
+//   const validateRegisterFields = (): boolean => {
+//     const errors: Record<string, string> = {};
+//     if (!firstName.trim()) errors.firstName = "First name is required.";
+//     if (phone.length !== 10) errors.phone = "Enter a valid 10-digit number.";
+//     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+//       errors.email = "Enter a valid email address.";
+//     setFieldErrors(errors);
+//     return Object.keys(errors).length === 0;
+//   };
+
+//   const handleSendLoginOTP = async () => {
+//     setSendError(null);
+//     const token = tokenRef.current;
+//     if (phone.length !== 10 || !token) return;
+//     setLoading(true);
+//     try {
+//       const data = await sendOtpApi(`+91${phone}`, token);
+//       if (!data.success) {
+//         setSendError(data.message || "Failed to send OTP. Please try again.");
+//         resetTurnstile();
+//         return;
+//       }
+//       setOtpSent(true);
+//     } catch (err) {
+//       setSendError(
+//         err instanceof Error
+//           ? err.message
+//           : "Something went wrong. Please try again.",
+//       );
+//       resetTurnstile();
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleSendRegisterOTP = async () => {
+//     setSendError(null);
+//     if (!validateRegisterFields()) return;
+//     const token = tokenRef.current;
+//     if (!token) return;
+//     setLoading(true);
+//     try {
+//       const data = await registerSendOtpApi({
+//         phone_number: `+91${phone}`,
+//         first_name: firstName.trim(),
+//         last_name: lastName.trim() || undefined,
+//         email: email.trim() || undefined,
+//         turnstile_token: token,
+//       });
+//       if (!data.success) {
+//         setSendError(data.message || "Could not send OTP. Please try again.");
+//         resetTurnstile();
+//         return;
+//       }
+//       setOtpSent(true);
+//     } catch (err: unknown) {
+//       setSendError(
+//         err instanceof Error
+//           ? err.message
+//           : "Could not send OTP. Please try again.",
+//       );
+//       resetTurnstile();
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleVerifyLoginOTP = async () => {
+//     const code = otp.join("");
+//     if (code.length !== 6) return;
+//     setLoading(true);
+//     setOtpError(null);
+//     try {
+//       const result = await verifyOtpAndLogin(phone, code);
+//       if (!result.success) {
+//         setOtpError(result.message || "Invalid OTP. Please try again.");
+//         resetOtp();
+//         return;
+//       }
+//       handleClose();
+//       router.refresh();
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleVerifyRegisterOTP = async () => {
+//     const code = otp.join("");
+//     if (code.length !== 6) return;
+//     setLoading(true);
+//     setOtpError(null);
+//     try {
+//       const result = await registerAndLogin(`+91${phone}`, code);
+//       if (!result.success) {
+//         setOtpError(result.message || "Invalid OTP. Please try again.");
+//         resetOtp();
+//         return;
+//       }
+//       handleClose();
+//       router.refresh();
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleResend = () => {
+//     setOtpSent(false);
+//     resetOtp();
+//     setOtpError(null);
+//     setSendError(null);
+//   };
+
+//   if (!isOpen) return null;
+
+//   const isRegister = mode === "register";
+//   const canSendOtp =
+//     phone.length === 10 &&
+//     !!turnstileToken &&
+//     !loading &&
+//     (!isRegister || !!firstName.trim());
+
+//   return (
+//     <>
+//       <div
+//         onClick={handleClose}
+//         className="animate-fade-in fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+//         aria-hidden="true"
+//       />
+
+//       <div
+//         role="dialog"
+//         aria-modal="true"
+//         aria-label={isRegister ? "Create your account" : "Sign in to Tripzido"}
+//         className="fixed z-50 bg-white overflow-hidden animate-slide-up sm:animate-scale-in inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[600px] md:px-10 md:max-h-[90vh] md:overflow-y-auto md:rounded-2xl md:shadow-2xl [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200"
+//       >
+//         <div className="flex flex-col p-6 md:p-10 relative">
+//           <CloseButton
+//             onClick={handleClose}
+//             className="absolute top-4 right-4"
+//           />
+
+//           <div className="flex items-center space-x-2 mb-8">
+//             <BrandLogo />
+//           </div>
+
+//           <div className="w-full">
+//             {!otpSent && (
+//               <div className="flex bg-gray-100 rounded-xl p-1 mb-6 gap-1">
+//                 {(["login", "register"] as ModalMode[]).map((m) => (
+//                   <button
+//                     key={m}
+//                     onClick={() => switchMode(m)}
+//                     className={`flex-1 py-2 text-sm rounded-lg font-medium transition-all duration-150 ${
+//                       mode === m
+//                         ? "bg-white text-gray-900 font-semibold shadow-sm"
+//                         : "text-gray-400 hover:text-gray-600"
+//                     }`}
+//                   >
+//                     {m === "login" ? "Sign in" : "Register"}
+//                   </button>
+//                 ))}
+//               </div>
+//             )}
+
+//             <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-1">
+//               {otpSent
+//                 ? "Enter OTP"
+//                 : isRegister
+//                   ? "Create account"
+//                   : "Welcome back"}{" "}
+//               {!otpSent && !isRegister && (
+//                 // <span className="text-brand-yellow">Tripzido</span>
+//                 <span></span>
+//               )}
+//             </h2>
+//             <p className="text-sm text-gray-500 mb-6">
+//               {otpSent
+//                 ? `We've sent a 4-digit OTP to +91 ${phone}`
+//                 : isRegister
+//                   ? "Join in seconds — name and mobile number required"
+//                   : "Commuting made Easy, Affordable and Quick"}
+//             </p>
+
+//             {!otpSent && sendError && (
+//               <div className="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5 text-sm text-red-700">
+//                 <svg
+//                   className="w-4 h-4 mt-0.5 shrink-0"
+//                   fill="none"
+//                   stroke="currentColor"
+//                   viewBox="0 0 24 24"
+//                 >
+//                   <path
+//                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+//                     strokeLinecap="round"
+//                     strokeLinejoin="round"
+//                     strokeWidth="2"
+//                   />
+//                 </svg>
+//                 <span>{sendError}</span>
+//               </div>
+//             )}
+
+//             {!otpSent ? (
+//               isRegister ? (
+//                 <RegisterStep
+//                   firstName={firstName}
+//                   setFirstName={setFirstName}
+//                   lastName={lastName}
+//                   setLastName={setLastName}
+//                   email={email}
+//                   setEmail={setEmail}
+//                   phone={phone}
+//                   setPhone={setPhone}
+//                   fieldErrors={fieldErrors}
+//                   setFieldErrors={setFieldErrors}
+//                   loading={loading}
+//                   turnstileToken={turnstileToken}
+//                   canSend={canSendOtp}
+//                   onSend={handleSendRegisterOTP}
+//                   onSwitchToLogin={() => switchMode("login")}
+//                 />
+//               ) : (
+//                 <PhoneStep
+//                   phone={phone}
+//                   setPhone={setPhone}
+//                   loading={loading}
+//                   turnstileToken={turnstileToken}
+//                   onSend={handleSendLoginOTP}
+//                   onSwitchToRegister={() => switchMode("register")}
+//                 />
+//               )
+//             ) : (
+//               <OtpStep
+//                 otp={otp}
+//                 otpRefs={otpRefs}
+//                 otpError={otpError}
+//                 loading={loading}
+//                 onChange={handleOtpChange}
+//                 onKeyDown={handleOtpKeyDown}
+//                 onVerify={
+//                   isRegister ? handleVerifyRegisterOTP : handleVerifyLoginOTP
+//                 }
+//                 onChangeNumber={() => {
+//                   setOtpSent(false);
+//                   resetOtp();
+//                   setOtpError(null);
+//                   setSendError(null);
+//                 }}
+//                 onResend={handleResend}
+//                 verifyLabel={
+//                   isRegister ? "Verify & Create Account" : "Verify & Sign In"
+//                 }
+//               />
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// }
+
+// // ── Sub-components ─────────────────────────────────────────────────────────
+
+// function BrandLogo() {
+//   return (
+//     <div className="flex items-center space-x-2">
+//       <div className="bg-brand-yellow p-1.5 rounded-lg">
+//         <svg
+//           className="w-5 h-5 text-white"
+//           fill="none"
+//           stroke="currentColor"
+//           viewBox="0 0 24 24"
+//         >
+//           <path
+//             d="M13 10V3L4 14h7v7l9-11h-7z"
+//             strokeLinecap="round"
+//             strokeLinejoin="round"
+//             strokeWidth="2"
+//           />
+//         </svg>
+//       </div>
+//       <span className="text-xl font-extrabold tracking-tight">tripzido</span>
+//     </div>
+//   );
+// }
+
+// // ── PhoneStep (login) ──────────────────────────────────────────────────────
+
+// function PhoneStep({
+//   phone,
+//   setPhone,
+//   loading,
+//   turnstileToken,
+//   onSend,
+//   onSwitchToRegister,
+// }: {
+//   phone: string;
+//   setPhone: (v: string) => void;
+//   loading: boolean;
+//   turnstileToken: string | null;
+//   onSend: () => void;
+//   onSwitchToRegister: () => void;
+// }) {
+//   const canSend = phone.length === 10 && !!turnstileToken && !loading;
+//   return (
+//     <>
+//       <div className="flex items-center border-2 border-brand-yellow rounded-xl overflow-hidden mb-4 focus-within:ring-2 focus-within:ring-[#ffc10740]">
+//         <IndiaPrefixBadge />
+//         <input
+//           type="tel"
+//           inputMode="numeric"
+//           maxLength={10}
+//           value={phone}
+//           onChange={(e) =>
+//             setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
+//           }
+//           placeholder="Phone Number"
+//           className="flex-1 px-4 py-3 text-sm outline-none bg-white placeholder-gray-400"
+//         />
+//       </div>
+
+//       <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
+
+//       <SendOtpButton
+//         loading={loading}
+//         canSend={canSend}
+//         onSend={onSend}
+//         label="Send OTP"
+//       />
+
+//       <p className="text-xs text-black text-center mt-4">
+//         By continuing, you agree to our{" "}
+//         <a
+//           href="/terms"
+//           className="text-brand-yellow hover:underline font-medium"
+//         >
+//           Terms of Service
+//         </a>{" "}
+//         &amp;{" "}
+//         <a
+//           href="/privacy"
+//           className="text-brand-yellow hover:underline font-medium"
+//         >
+//           Privacy Policy
+//         </a>
+//       </p>
+
+//       <div className="mt-6 pt-6 border-t border-gray-100 text-center">
+//         <p className="text-sm text-black">
+//           Don&apos;t have an account?{" "}
+//           <button
+//             onClick={onSwitchToRegister}
+//             className="font-semibold text-brand-yellow hover:underline"
+//           >
+//             Register now
+//           </button>
+//         </p>
+//       </div>
+//     </>
+//   );
+// }
+
+// // ── RegisterStep ───────────────────────────────────────────────────────────
+
+// function RegisterStep({
+//   firstName,
+//   setFirstName,
+//   lastName,
+//   setLastName,
+//   email,
+//   setEmail,
+//   phone,
+//   setPhone,
+//   fieldErrors,
+//   setFieldErrors,
+//   loading,
+//   turnstileToken,
+//   canSend,
+//   onSend,
+//   onSwitchToLogin,
+// }: {
+//   firstName: string;
+//   setFirstName: (v: string) => void;
+//   lastName: string;
+//   setLastName: (v: string) => void;
+//   email: string;
+//   setEmail: (v: string) => void;
+//   phone: string;
+//   setPhone: (v: string) => void;
+//   fieldErrors: Record<string, string>;
+//   setFieldErrors: (e: Record<string, string>) => void;
+//   loading: boolean;
+//   turnstileToken: string | null;
+//   canSend: boolean;
+//   onSend: () => void;
+//   onSwitchToLogin: () => void;
+// }) {
+//   const clearError = (key: string) =>
+//     setFieldErrors({ ...fieldErrors, [key]: "" });
+
+//   return (
+//     <>
+//       <div className="md:grid md:grid-cols-2 md:gap-3">
+//         <div className="mb-3">
+//           <label className="block text-xs font-semibold text-gray-600 mb-1">
+//             First name <span className="text-red-500">*</span>
+//           </label>
+//           <input
+//             type="text"
+//             placeholder="First name"
+//             value={firstName}
+//             onChange={(e) => {
+//               setFirstName(e.target.value);
+//               clearError("firstName");
+//             }}
+//             autoComplete="given-name"
+//             className={inputCls(!!fieldErrors.firstName)}
+//           />
+//           <FieldError msg={fieldErrors.firstName} />
+//         </div>
+
+//         <div className="mb-3">
+//           <label className="block text-xs font-semibold text-gray-600 mb-1">
+//             Last name{" "}
+//             <span className="text-gray-400 font-normal">(optional)</span>
+//           </label>
+//           <input
+//             type="text"
+//             placeholder="Last name"
+//             value={lastName}
+//             onChange={(e) => setLastName(e.target.value)}
+//             autoComplete="family-name"
+//             className={inputCls(false)}
+//           />
+//         </div>
+//       </div>
+
+//       <div className="mb-3 hidden">
+//         <label className="block text-xs font-semibold text-gray-600 mb-1">
+//           Email <span className="text-gray-400 font-normal">(optional)</span>
+//         </label>
+//         <input
+//           type="email"
+//           placeholder="you@example.com"
+//           value={email}
+//           onChange={(e) => {
+//             setEmail(e.target.value);
+//             clearError("email");
+//           }}
+//           autoComplete="email"
+//           className={inputCls(!!fieldErrors.email)}
+//         />
+//         <FieldError msg={fieldErrors.email} />
+//       </div>
+
+//       <div className="mb-4">
+//         <label className="block text-xs font-semibold text-gray-600 mb-1">
+//           Mobile number <span className="text-red-500">*</span>
+//         </label>
+//         <div
+//           className={`flex items-center border-2 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-[#ffc10740] ${
+//             fieldErrors.phone ? "border-red-400" : "border-brand-yellow"
+//           }`}
+//         >
+//           <IndiaPrefixBadge />
+//           <input
+//             type="tel"
+//             inputMode="numeric"
+//             maxLength={10}
+//             value={phone}
+//             onChange={(e) => {
+//               setPhone(e.target.value.replace(/\D/g, "").slice(0, 10));
+//               clearError("phone");
+//             }}
+//             placeholder="Phone Number"
+//             className="flex-1 px-4 py-3 text-sm outline-none bg-white placeholder-gray-400"
+//           />
+//         </div>
+//         <FieldError msg={fieldErrors.phone} />
+//       </div>
+
+//       <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
+
+//       <SendOtpButton
+//         loading={loading}
+//         canSend={canSend}
+//         onSend={onSend}
+//         label="Send OTP"
+//       />
+
+//       <p className="text-xs text-black text-center mt-4">
+//         By continuing, you agree to our{" "}
+//         <a
+//           href="/terms"
+//           className="text-brand-yellow hover:underline font-medium"
+//         >
+//           Terms of Service
+//         </a>{" "}
+//         &amp;{" "}
+//         <a
+//           href="/privacy"
+//           className="text-brand-yellow hover:underline font-medium"
+//         >
+//           Privacy Policy
+//         </a>
+//       </p>
+
+//       <div className="mt-6 pt-6 border-t border-gray-100 text-center">
+//         <p className="text-sm text-black">
+//           Already have an account?{" "}
+//           <button
+//             onClick={onSwitchToLogin}
+//             className="font-semibold text-brand-yellow hover:underline"
+//           >
+//             Sign in
+//           </button>
+//         </p>
+//       </div>
+//     </>
+//   );
+// }
+
+// // ── OtpStep ────────────────────────────────────────────────────────────────
+
+// function OtpStep({
+//   otp,
+//   otpRefs,
+//   otpError,
+//   loading,
+//   onChange,
+//   onKeyDown,
+//   onVerify,
+//   onChangeNumber,
+//   onResend,
+//   verifyLabel,
+// }: {
+//   otp: string[];
+//   otpRefs: React.MutableRefObject<(HTMLInputElement | null)[]>;
+//   otpError: string | null;
+//   loading: boolean;
+//   onChange: (i: number, v: string) => void;
+//   onKeyDown: (i: number, e: React.KeyboardEvent) => void;
+//   onVerify: () => void;
+//   onChangeNumber: () => void;
+//   onResend: () => void;
+//   verifyLabel: string;
+// }) {
+//   const canVerify = otp.join("").length === 6 && !loading;
+
+//   // Pressing Enter in any OTP box triggers the same action as clicking
+//   // "Verify & Sign In" / "Verify & Create Account", as long as all 4
+//   // digits are filled in and a verification isn't already in flight.
+//   // Falls through to the existing per-box key handler (backspace/arrow
+//   // navigation etc.) for every other key.
+//   const handleBoxKeyDown = (i: number, e: React.KeyboardEvent) => {
+//     if (e.key === "Enter") {
+//       e.preventDefault();
+//       if (canVerify) onVerify();
+//       return;
+//     }
+//     onKeyDown(i, e);
+//   };
+
+//   return (
+//     <>
+//       <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+//         Enter 4-digit OTP
+//       </label>
+//       <p className="text-xs text-gray-400 mb-3">OTP is valid for 5 minutes</p>
+
+//       <div className="flex gap-2 mb-2">
+//         {otp.map((digit, i) => (
+//           <input
+//             key={i}
+//             ref={(el) => {
+//               otpRefs.current[i] = el;
+//             }}
+//             type="text"
+//             inputMode="numeric"
+//             maxLength={1}
+//             value={digit}
+//             onChange={(e) => onChange(i, e.target.value)}
+//             onKeyDown={(e) => handleBoxKeyDown(i, e)}
+//             className={`w-11 h-12 text-center text-lg font-bold rounded-xl border-2 outline-none transition-all ${
+//               otpError
+//                 ? "border-red-400 bg-red-50"
+//                 : digit
+//                   ? "border-brand-yellow bg-[#fffbea]"
+//                   : "border-gray-200 bg-gray-50"
+//             } focus:border-brand-yellow focus:ring-2 focus:ring-[#ffc10730]`}
+//           />
+//         ))}
+//       </div>
+
+//       {otpError ? (
+//         <p className="text-xs text-red-500 mb-4 flex items-center gap-1">
+//           <svg
+//             className="w-3.5 h-3.5 shrink-0"
+//             fill="none"
+//             stroke="currentColor"
+//             viewBox="0 0 24 24"
+//           >
+//             <path
+//               d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+//               strokeLinecap="round"
+//               strokeLinejoin="round"
+//               strokeWidth="2"
+//             />
+//           </svg>
+//           {otpError}
+//         </p>
+//       ) : (
+//         <div className="mb-4" />
+//       )}
+
+//       <button
+//         onClick={onVerify}
+//         disabled={!canVerify}
+//         className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${
+//           canVerify
+//             ? "bg-brand-yellow text-white hover:bg-[#e6ac00] shadow-md"
+//             : "bg-gray-200 text-gray-400 cursor-not-allowed"
+//         }`}
+//       >
+//         {loading ? (
+//           <span className="flex items-center justify-center space-x-2">
+//             <SpinnerIcon />
+//             <span>Verifying...</span>
+//           </span>
+//         ) : (
+//           verifyLabel
+//         )}
+//       </button>
+
+//       <button
+//         onClick={onChangeNumber}
+//         className="w-full mt-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+//       >
+//         &larr; Change number
+//       </button>
+
+//       <p className="text-xs text-gray-400 text-center mt-4">
+//         Didn&apos;t receive an OTP?{" "}
+//         <button
+//           onClick={onResend}
+//           className="text-brand-yellow font-semibold hover:underline"
+//         >
+//           Resend
+//         </button>
+//       </p>
+//     </>
+//   );
+// }
+
+// // ── Shared micro-components ────────────────────────────────────────────────
+
+// function IndiaPrefixBadge() {
+//   return (
+//     <div className="flex items-center space-x-1.5 px-3 py-3 border-r border-gray-200 bg-gray-50 select-none">
+//       <div className="w-5 h-3.5 overflow-hidden rounded-sm border border-gray-200 flex-shrink-0">
+//         <div className="h-1/3 bg-[#FF9933]" />
+//         <div className="h-1/3 bg-white" />
+//         <div className="h-1/3 bg-[#138808]" />
+//       </div>
+//       <span className="text-sm font-semibold text-gray-700">+91</span>
+//     </div>
+//   );
+// }
+
+// function SendOtpButton({
+//   loading,
+//   canSend,
+//   onSend,
+//   label,
+// }: {
+//   loading: boolean;
+//   canSend: boolean;
+//   onSend: () => void;
+//   label: string;
+// }) {
+//   return (
+//     <button
+//       onClick={onSend}
+//       disabled={!canSend}
+//       className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${
+//         canSend
+//           ? "bg-brand-yellow text-white hover:bg-[#e6ac00] shadow-md"
+//           : "bg-gray-200 text-gray-400 cursor-not-allowed"
+//       }`}
+//     >
+//       {loading ? (
+//         <span className="flex items-center justify-center space-x-2">
+//           <SpinnerIcon />
+//           <span>Sending...</span>
+//         </span>
+//       ) : (
+//         label
+//       )}
+//     </button>
+//   );
+// }
+
+// function FieldError({ msg }: { msg?: string }) {
+//   if (!msg) return null;
+//   return <p className="text-xs text-red-500 mt-1">{msg}</p>;
+// }
+
+// function inputCls(hasError: boolean) {
+//   return `w-full h-11 border-2 rounded-xl px-3 text-sm text-gray-900 placeholder-gray-400 outline-none transition-all ${
+//     hasError
+//       ? "border-red-400 focus:ring-2 focus:ring-red-200"
+//       : "border-gray-200 focus:border-brand-yellow focus:ring-2 focus:ring-[#ffc10740]"
+//   }`;
+// }
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -11,6 +802,9 @@ import { SpinnerIcon, CloseButton } from "@/components/ui/icons";
 import type { LoginModalProps } from "@/types/auth.types";
 
 type ModalMode = "login" | "register";
+
+const OTP_LENGTH = 6;
+const RESEND_COOLDOWN_SECONDS = 60;
 
 export default function LoginModal({
   isOpen,
@@ -30,17 +824,21 @@ export default function LoginModal({
   const [loading, setLoading] = useState(false);
   const [otpError, setOtpError] = useState<string | null>(null);
   const [sendError, setSendError] = useState<string | null>(null);
+  const [resendSeconds, setResendSeconds] = useState(0);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
+  // Active for as long as the modal is open — not just while the phone-entry
+  // step is visible — so there's always a usable token ready when the user
+  // hits "Resend" from the OTP screen instead of having to go back.
   const {
     token: turnstileToken,
     tokenRef,
     reset: resetTurnstile,
-  } = useTurnstile(isOpen && !otpSent, mode);
+  } = useTurnstile(isOpen, mode);
 
   const {
     otp,
@@ -50,9 +848,20 @@ export default function LoginModal({
     reset: resetOtp,
   } = useOtpInput(otpSent);
 
+  useEffect(() => {
+    if (resendSeconds <= 0) return;
+
+    const timer = window.setInterval(() => {
+      setResendSeconds((seconds) => Math.max(0, seconds - 1));
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [resendSeconds]);
+
   const fullReset = () => {
     setPhone("");
     setOtpSent(false);
+    setResendSeconds(0);
     resetOtp();
     setLoading(false);
     setOtpError(null);
@@ -61,6 +870,7 @@ export default function LoginModal({
     setLastName("");
     setEmail("");
     setFieldErrors({});
+    resetTurnstile();
   };
 
   const handleClose = () => {
@@ -84,7 +894,17 @@ export default function LoginModal({
     return Object.keys(errors).length === 0;
   };
 
-  const handleSendLoginOTP = async () => {
+  const startOtpCooldown = () => {
+    setResendSeconds(RESEND_COOLDOWN_SECONDS);
+  };
+
+  // ── Core senders ──────────────────────────────────────────────────────
+  // Both the initial "Send OTP" button and the "Resend" link on the OTP
+  // screen call into these, so a resend reuses whatever phone number /
+  // register fields are already in state instead of forcing the user back
+  // to the entry form.
+
+  const sendLoginOtp = async () => {
     setSendError(null);
     const token = tokenRef.current;
     if (phone.length !== 10 || !token) return;
@@ -97,6 +917,14 @@ export default function LoginModal({
         return;
       }
       setOtpSent(true);
+      setOtpError(null);
+      resetOtp();
+      startOtpCooldown();
+      // The token we just used is single-use and now consumed. Ask
+      // Cloudflare for a fresh one in the background so it's ready
+      // if the user hits Resend before this widget would otherwise
+      // remount.
+      resetTurnstile();
     } catch (err) {
       setSendError(
         err instanceof Error
@@ -109,9 +937,8 @@ export default function LoginModal({
     }
   };
 
-  const handleSendRegisterOTP = async () => {
+  const sendRegisterOtp = async () => {
     setSendError(null);
-    if (!validateRegisterFields()) return;
     const token = tokenRef.current;
     if (!token) return;
     setLoading(true);
@@ -129,6 +956,10 @@ export default function LoginModal({
         return;
       }
       setOtpSent(true);
+      setOtpError(null);
+      resetOtp();
+      startOtpCooldown();
+      resetTurnstile();
     } catch (err: unknown) {
       setSendError(
         err instanceof Error
@@ -141,9 +972,22 @@ export default function LoginModal({
     }
   };
 
+  // ── Button handlers (phone-entry / register-entry steps) ────────────────
+
+  const handleSendLoginOTP = async () => {
+    if (resendSeconds > 0 || loading) return;
+    await sendLoginOtp();
+  };
+
+  const handleSendRegisterOTP = async () => {
+    if (resendSeconds > 0 || loading) return;
+    if (!validateRegisterFields()) return;
+    await sendRegisterOtp();
+  };
+
   const handleVerifyLoginOTP = async () => {
     const code = otp.join("");
-    if (code.length !== 6) return;
+    if (code.length !== OTP_LENGTH || loading) return;
     setLoading(true);
     setOtpError(null);
     try {
@@ -162,7 +1006,7 @@ export default function LoginModal({
 
   const handleVerifyRegisterOTP = async () => {
     const code = otp.join("");
-    if (code.length !== 6) return;
+    if (code.length !== OTP_LENGTH || loading) return;
     setLoading(true);
     setOtpError(null);
     try {
@@ -179,11 +1023,26 @@ export default function LoginModal({
     }
   };
 
-  const handleResend = () => {
+  // Resend: stays on the OTP screen and re-sends to the number already
+  // entered, instead of bouncing the user back to the phone-entry step.
+  const handleResend = async () => {
+    if (resendSeconds > 0 || loading) return;
+    setOtpError(null);
+
+    if (isRegister) {
+      await sendRegisterOtp();
+    } else {
+      await sendLoginOtp();
+    }
+  };
+
+  const handleChangeNumber = () => {
     setOtpSent(false);
+    setResendSeconds(0);
     resetOtp();
     setOtpError(null);
     setSendError(null);
+    resetTurnstile();
   };
 
   if (!isOpen) return null;
@@ -193,6 +1052,7 @@ export default function LoginModal({
     phone.length === 10 &&
     !!turnstileToken &&
     !loading &&
+    resendSeconds === 0 &&
     (!isRegister || !!firstName.trim());
 
   return (
@@ -251,13 +1111,13 @@ export default function LoginModal({
             </h2>
             <p className="text-sm text-gray-500 mb-6">
               {otpSent
-                ? `We've sent a 4-digit OTP to +91 ${phone}`
+                ? `We've sent a 6-digit OTP to +91 ${phone}`
                 : isRegister
                   ? "Join in seconds — name and mobile number required"
                   : "Commuting made Easy, Affordable and Quick"}
             </p>
 
-            {!otpSent && sendError && (
+            {sendError && (
               <div className="flex items-start gap-2.5 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5 text-sm text-red-700">
                 <svg
                   className="w-4 h-4 mt-0.5 shrink-0"
@@ -276,6 +1136,24 @@ export default function LoginModal({
               </div>
             )}
 
+            {/*
+              Turnstile widget: always mounted while the modal is open so a
+              valid token is ready whether we're on the phone-entry step or
+              already on the OTP screen (needed for Resend). It's just
+              visually hidden — not unmounted — once otpSent is true, and
+              visibility:hidden (rather than display:none) is used so the
+              widget keeps refreshing its token in the background instead
+              of being suspended by the browser.
+            */}
+            <div
+              id="cf-turnstile-container"
+              className={
+                otpSent
+                  ? "invisible h-0 overflow-hidden"
+                  : "mb-4 flex justify-center"
+              }
+            />
+
             {!otpSent ? (
               isRegister ? (
                 <RegisterStep
@@ -291,6 +1169,7 @@ export default function LoginModal({
                   setFieldErrors={setFieldErrors}
                   loading={loading}
                   turnstileToken={turnstileToken}
+                  resendSeconds={resendSeconds}
                   canSend={canSendOtp}
                   onSend={handleSendRegisterOTP}
                   onSwitchToLogin={() => switchMode("login")}
@@ -301,6 +1180,7 @@ export default function LoginModal({
                   setPhone={setPhone}
                   loading={loading}
                   turnstileToken={turnstileToken}
+                  resendSeconds={resendSeconds}
                   onSend={handleSendLoginOTP}
                   onSwitchToRegister={() => switchMode("register")}
                 />
@@ -311,17 +1191,13 @@ export default function LoginModal({
                 otpRefs={otpRefs}
                 otpError={otpError}
                 loading={loading}
+                resendSeconds={resendSeconds}
                 onChange={handleOtpChange}
                 onKeyDown={handleOtpKeyDown}
                 onVerify={
                   isRegister ? handleVerifyRegisterOTP : handleVerifyLoginOTP
                 }
-                onChangeNumber={() => {
-                  setOtpSent(false);
-                  resetOtp();
-                  setOtpError(null);
-                  setSendError(null);
-                }}
+                onChangeNumber={handleChangeNumber}
                 onResend={handleResend}
                 verifyLabel={
                   isRegister ? "Verify & Create Account" : "Verify & Sign In"
@@ -367,6 +1243,7 @@ function PhoneStep({
   setPhone,
   loading,
   turnstileToken,
+  resendSeconds,
   onSend,
   onSwitchToRegister,
 }: {
@@ -374,10 +1251,12 @@ function PhoneStep({
   setPhone: (v: string) => void;
   loading: boolean;
   turnstileToken: string | null;
+  resendSeconds: number;
   onSend: () => void;
   onSwitchToRegister: () => void;
 }) {
-  const canSend = phone.length === 10 && !!turnstileToken && !loading;
+  const canSend =
+    phone.length === 10 && !!turnstileToken && !loading && resendSeconds === 0;
   return (
     <>
       <div className="flex items-center border-2 border-brand-yellow rounded-xl overflow-hidden mb-4 focus-within:ring-2 focus-within:ring-[#ffc10740]">
@@ -395,13 +1274,15 @@ function PhoneStep({
         />
       </div>
 
-      <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
-
       <SendOtpButton
         loading={loading}
         canSend={canSend}
         onSend={onSend}
-        label="Send OTP"
+        label={
+          resendSeconds > 0
+            ? `Resend available in ${resendSeconds}s`
+            : "Send OTP"
+        }
       />
 
       <p className="text-xs text-black text-center mt-4">
@@ -451,6 +1332,7 @@ function RegisterStep({
   setFieldErrors,
   loading,
   turnstileToken,
+  resendSeconds,
   canSend,
   onSend,
   onSwitchToLogin,
@@ -467,6 +1349,7 @@ function RegisterStep({
   setFieldErrors: (e: Record<string, string>) => void;
   loading: boolean;
   turnstileToken: string | null;
+  resendSeconds: number;
   canSend: boolean;
   onSend: () => void;
   onSwitchToLogin: () => void;
@@ -555,13 +1438,15 @@ function RegisterStep({
         <FieldError msg={fieldErrors.phone} />
       </div>
 
-      <div id="cf-turnstile-container" className="mb-4 flex justify-center" />
-
       <SendOtpButton
         loading={loading}
         canSend={canSend}
         onSend={onSend}
-        label="Send OTP"
+        label={
+          resendSeconds > 0
+            ? `Resend available in ${resendSeconds}s`
+            : "Send OTP"
+        }
       />
 
       <p className="text-xs text-black text-center mt-4">
@@ -603,6 +1488,7 @@ function OtpStep({
   otpRefs,
   otpError,
   loading,
+  resendSeconds,
   onChange,
   onKeyDown,
   onVerify,
@@ -614,6 +1500,7 @@ function OtpStep({
   otpRefs: React.MutableRefObject<(HTMLInputElement | null)[]>;
   otpError: string | null;
   loading: boolean;
+  resendSeconds: number;
   onChange: (i: number, v: string) => void;
   onKeyDown: (i: number, e: React.KeyboardEvent) => void;
   onVerify: () => void;
@@ -621,10 +1508,11 @@ function OtpStep({
   onResend: () => void;
   verifyLabel: string;
 }) {
-  const canVerify = otp.join("").length === 6 && !loading;
+  const canVerify = otp.join("").length === OTP_LENGTH && !loading;
+  const canResend = resendSeconds === 0 && !loading;
 
   // Pressing Enter in any OTP box triggers the same action as clicking
-  // "Verify & Sign In" / "Verify & Create Account", as long as all 4
+  // "Verify & Sign In" / "Verify & Create Account", as long as all 6
   // digits are filled in and a verification isn't already in flight.
   // Falls through to the existing per-box key handler (backspace/arrow
   // navigation etc.) for every other key.
@@ -640,7 +1528,7 @@ function OtpStep({
   return (
     <>
       <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
-        Enter 4-digit OTP
+        Enter 6-digit OTP
       </label>
       <p className="text-xs text-gray-400 mb-3">OTP is valid for 5 minutes</p>
 
@@ -719,9 +1607,14 @@ function OtpStep({
         Didn&apos;t receive an OTP?{" "}
         <button
           onClick={onResend}
-          className="text-brand-yellow font-semibold hover:underline"
+          disabled={!canResend}
+          className={`font-semibold ${
+            canResend
+              ? "text-brand-yellow hover:underline"
+              : "text-gray-400 cursor-not-allowed"
+          }`}
         >
-          Resend
+          {resendSeconds > 0 ? `Resend in ${resendSeconds}s` : "Resend"}
         </button>
       </p>
     </>
