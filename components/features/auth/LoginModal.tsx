@@ -143,7 +143,7 @@ export default function LoginModal({
 
   const handleVerifyLoginOTP = async () => {
     const code = otp.join("");
-    if (code.length !== 4) return;
+    if (code.length !== 6) return;
     setLoading(true);
     setOtpError(null);
     try {
@@ -162,7 +162,7 @@ export default function LoginModal({
 
   const handleVerifyRegisterOTP = async () => {
     const code = otp.join("");
-    if (code.length !== 4) return;
+    if (code.length !== 6) return;
     setLoading(true);
     setOtpError(null);
     try {
@@ -621,7 +621,7 @@ function OtpStep({
   onResend: () => void;
   verifyLabel: string;
 }) {
-  const canVerify = otp.join("").length === 4 && !loading;
+  const canVerify = otp.join("").length === 6 && !loading;
 
   // Pressing Enter in any OTP box triggers the same action as clicking
   // "Verify & Sign In" / "Verify & Create Account", as long as all 4
