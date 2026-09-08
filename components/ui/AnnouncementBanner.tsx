@@ -2,6 +2,8 @@ interface Props {
   content: string | null | undefined; // ← accept null/undefined
 }
 
+import { sanitizeHtml } from "@/lib/sanitizeHtml";
+
 export default function AnnouncementBanner({ content }: Props) {
   if (!content) return null; // ← guard here, never pass null to __html
 
@@ -13,7 +15,9 @@ export default function AnnouncementBanner({ content }: Props) {
                    [&_p]:inline [&_p]:m-0
                    [&_strong]:font-bold [&_strong]:text-black
                    [&_a]:underline [&_a]:text-blue-900 [&_a]:hover:text-blue-700"
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{
+          __html: sanitizeHtml(content),
+        }}
       />
     </div>
   );

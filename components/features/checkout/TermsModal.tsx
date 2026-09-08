@@ -23,6 +23,7 @@ interface Props {
   termsLoading: boolean;
   termsError: string | null;
 }
+import { sanitizeHtml } from "@/lib/sanitizeHtml";
 
 export default function TermsModal({
   isOpen,
@@ -92,7 +93,9 @@ export default function TermsModal({
               */}
               <div
                 className="prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: platformTerms.contentHtml }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(platformTerms.contentHtml),
+                }}
               />
             </section>
           )}
