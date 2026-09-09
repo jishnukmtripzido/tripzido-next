@@ -469,7 +469,7 @@ export default async function BookingDetailPage({
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-semibold text-gray-900">
-                      ₹ {payment.amount}
+                      ₹ {booking.advance_amount}
                     </span>
                     <span className="text-xs font-medium text-gray-500">
                       {payment.status}
