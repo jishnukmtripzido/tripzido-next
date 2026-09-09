@@ -24,6 +24,7 @@ import {
 import type { PickupLocationOption } from "@/services/vehicleDetails.service";
 import type { DateRange } from "@/components/ui/DatePickerModal";
 import RentalHint from "@/components/ui/RentalHint";
+import Toast from "@/components/ui/Toast";
 
 interface EditSearchBarProps {
   onClose: () => void;
@@ -148,7 +149,7 @@ export default function EditSearchBar({
 
       if (!match) {
         setResolveError(
-          "This vehicle isn't available at the selected location for these dates.",
+          `This vehicle isn't available at ${selectedLocationName} for these dates.`,
         );
         return;
       }
@@ -401,9 +402,6 @@ export default function EditSearchBar({
                 </div>
               </div>
               <RentalHint message={rentalHint} onDismiss={dismissRentalHint} />
-              {resolveError && (
-                <p className="text-xs text-red-500 mt-2 ml-1">{resolveError}</p>
-              )}
             </div>
           </form>
         </div>
@@ -427,6 +425,14 @@ export default function EditSearchBar({
         mode="dropoff"
         pickupDate={dateRange.start}
       />
+
+      {/* Search-resolution errors (e.g. "not available at this location
+          for these dates") surface as an auto-dismissing toast instead
+          of inline text — fixed-positioned, so its place in the JSX
+          tree doesn't affect layout. */}
+      {resolveError && (
+        <Toast message={resolveError} onDismiss={() => setResolveError(null)} />
+      )}
     </>
   );
 }
