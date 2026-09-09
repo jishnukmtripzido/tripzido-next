@@ -412,11 +412,20 @@ export default async function BookingDetailPage({
               label="Rent Amount"
               value={`₹ ${booking.listing_amount}`}
             />
-            <DetailItem label="Paid" value={`₹ ${booking.advance_amount}`} />
-            <DetailItem
-              label="Remaining"
-              value={`₹ ${booking.remaining_amount}`}
-            />
+            {booking.payments.map((payment) =>
+              payment.status === "Success" ? (
+                <div key={payment.id}>
+                  <DetailItem
+                    label="Paid"
+                    value={`₹ ${booking.advance_amount}`}
+                  />
+                  <DetailItem
+                    label="Remaining"
+                    value={`₹ ${booking.remaining_amount}`}
+                  />
+                </div>
+              ) : null,
+            )}
             <DetailItem
               label="Security Deposit"
               value={`₹ ${booking.security_deposit_amount}`}
