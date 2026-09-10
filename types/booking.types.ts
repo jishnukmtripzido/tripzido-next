@@ -30,6 +30,7 @@ export type BookingListItem = {
   deposit: number;
   status: BookingStatus;
   status_label: string;
+  listing_amount: number;
 };
 
 export type PaginatedBookings = {

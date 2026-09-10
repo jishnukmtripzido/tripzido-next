@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Fragment } from "react";
 import { getBookingDetail } from "@/actions/bookings.actions";
 import CancelBookingButton from "@/components/features/profile/CancelBookingButton";
 import BookingVehicleImage from "@/components/features/profile/BookingVehicleImage";
@@ -413,8 +414,8 @@ export default async function BookingDetailPage({
               value={`₹ ${booking.listing_amount}`}
             />
             {booking.payments.map((payment) =>
-              payment.status === "Success" ? (
-                <div key={payment.id}>
+              payment.status == "SUCCESS" ? (
+                <Fragment key={payment.id}>
                   <DetailItem
                     label="Paid"
                     value={`₹ ${booking.advance_amount}`}
@@ -423,7 +424,7 @@ export default async function BookingDetailPage({
                     label="Remaining"
                     value={`₹ ${booking.remaining_amount}`}
                   />
-                </div>
+                </Fragment>
               ) : null,
             )}
             <DetailItem
